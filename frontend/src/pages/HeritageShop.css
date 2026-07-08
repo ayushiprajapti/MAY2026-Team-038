@@ -1,9 +1,6 @@
 /* Viewport Breakout Override - Forces application to extend 100% full width */
 .full-screen-shop-wrapper {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
   background-color: #F8F1E5;
   color: #4A3A2C;

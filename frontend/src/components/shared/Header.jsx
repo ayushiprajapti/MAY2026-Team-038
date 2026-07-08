@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 
 export default function Header() {
@@ -6,17 +7,18 @@ export default function Header() {
   const [profileOpen, setProfileOpen] = useState(false);
 
   const navLinks = [
-    { name: "Heritage Trails", href: "#get-involved" },
-    { name: "Events", href: "#pillars" },
-    { name: "Marketplace", href: "#warsaa" },
+    { name: "Heritage Trails", to: "/trails" },
+    { name: "Events", to: "/events" },
+    { name: "Marketplace", to: "/shop" },
+    { name: "Admin", to: "/admin" },
   ];
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-md bg-heritage-cream-light/95 border-b border-heritage-border/40 transition-all duration-300">
+    <header className="sticky top-0 z-[1100] backdrop-blur-md bg-heritage-cream-light/95 border-b border-heritage-border/40 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo & Branding */}
-          <div className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3">
             <img src={logo} alt="INTACH Pune Logo" className="w-14 h-14 object-contain" />
             <div className="flex flex-col text-left">
               <span className="font-serif font-bold text-lg tracking-tight text-heritage-espresso leading-tight">
@@ -26,19 +28,19 @@ export default function Header() {
                 Heritage Conservation chapter
               </span>
             </div>
-          </div>
+          </Link>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
             <nav className="flex items-center gap-8">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.name}
-                  href={link.href}
-                  className="font-sans text-sm font-medium text-heritage-charcoal hover:text-heritage-red transition-colors duration-200 relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-heritage-red after:transition-all after:duration-350 hover:after:w-full"
+                  to={link.to}
+                  className="font-sans text-sm font-medium text-heritage-espresso hover:text-heritage-red transition-colors duration-200 relative py-1 after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-heritage-red after:transition-all after:duration-350 hover:after:w-full"
                 >
                   {link.name}
-                </a>
+                </Link>
               ))}
             </nav>
 
@@ -138,14 +140,14 @@ export default function Header() {
       >
         <div className="px-2 pt-2 pb-4 space-y-1 sm:px-3 text-left">
           {navLinks.map((link) => (
-            <a
+            <Link
               key={link.name}
-              href={link.href}
+              to={link.to}
               onClick={() => setIsOpen(false)}
-              className="block px-3 py-2.5 rounded-md text-base font-medium text-heritage-charcoal hover:text-heritage-red hover:bg-heritage-cream-dark/40 transition-colors"
+              className="block px-3 py-2.5 rounded-md text-base font-medium text-heritage-espresso hover:text-heritage-red hover:bg-heritage-cream-dark/40 transition-colors"
             >
               {link.name}
-            </a>
+            </Link>
           ))}
           
           {/* Mobile Profile Actions */}

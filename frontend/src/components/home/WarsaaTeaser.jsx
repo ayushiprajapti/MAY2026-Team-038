@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import copperCarafe from "../../assets/home/copper-carafe.jpg";
 import heritageMap from "../../assets/home/heritage-map.jpg";
 import puneBook from "../../assets/home/pune-book.jpg";
@@ -125,19 +126,15 @@ export default function WarsaaTeaser() {
 
         {/* Marketplace Redirect Link */}
         <div className="mt-16 text-center">
-          <a
-            href="/shop"
-            onClick={(e) => {
-              e.preventDefault();
-              alert("Navigating to the new Warsaa Online Marketplace Page...");
-            }}
+          <Link
+            to="/shop"
             className="inline-flex items-center gap-2 px-8 py-3.5 bg-heritage-red hover:bg-heritage-red/90 text-[#FFFDF9] rounded font-medium shadow-md hover:shadow-lg transition-all duration-200 text-base"
           >
             <span>Visit the Online Marketplace</span>
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
               <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
-          </a>
+          </Link>
         </div>
 
       </div>

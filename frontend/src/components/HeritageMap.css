@@ -1,5 +1,6 @@
 .heritage-map {
   position: relative;
+  isolation: isolate;
   width: 100%;
   border: 1px solid rgba(176, 141, 79, 0.4);
   border-radius: var(--radius);

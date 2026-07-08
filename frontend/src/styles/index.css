@@ -27,40 +27,42 @@
   --radius: 3px;
 }
 
-* { box-sizing: border-box; }
-html, body, #root { height: 100%; }
+@layer base {
+  * { box-sizing: border-box; }
+  html, body, #root { min-height: 100%; }
 
-body {
-  margin: 0;
-  background: var(--ink);
-  color: var(--parchment);
-  font-family: var(--font-body);
-  -webkit-font-smoothing: antialiased;
-}
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--parchment);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
 
-button {
-  font-family: inherit;
-  cursor: pointer;
-}
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
 
-a { color: inherit; }
+  a { color: inherit; }
 
-::selection {
-  background: var(--ochre);
-  color: var(--ink);
-}
+  ::selection {
+    background: var(--ochre);
+    color: var(--ink);
+  }
 
-.eyebrow {
-  font-family: var(--font-data);
-  font-size: 0.7rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--ochre);
-}
+  .eyebrow {
+    font-family: var(--font-data);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ochre);
+  }
 
-.scroll-thin {
-  scrollbar-width: thin;
-  scrollbar-color: var(--brass) transparent;
+  .scroll-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--brass) transparent;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

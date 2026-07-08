@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -159,21 +160,17 @@ export default function GetInvolved() {
                 className="h-72 w-full rounded bg-heritage-cream-dark border border-heritage-border shadow-inner z-10"
               />
 
-              {/* Placeholder button/link that opens the new page */}
+              {/* Link to the full Trails explorer page */}
               <div className="mt-6">
-                <a
-                  href="/trails-map"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    alert("Redirecting to the new Interactive Trails & Map Page...");
-                  }}
+                <Link
+                  to="/trails"
                   className="w-full py-3 bg-heritage-espresso hover:bg-heritage-espresso/90 text-heritage-cream text-xs font-semibold uppercase tracking-wider rounded transition-colors flex items-center justify-center gap-2"
                 >
                   <span>Open Full Screen Trails Map</span>
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                   </svg>
-                </a>
+                </Link>
               </div>
             </div>
           </div>

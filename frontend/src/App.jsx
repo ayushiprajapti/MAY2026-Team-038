@@ -1,4 +1,5 @@
-import { Routes, Route, Outlet } from "react-router-dom";
+import { useEffect } from "react";
+import { Routes, Route, Outlet, useLocation } from "react-router-dom";
 import Header from "./components/shared/Header";
 import Footer from "./components/shared/Footer";
 import Home from "./pages/Home";
@@ -21,19 +22,32 @@ function SiteLayout() {
   );
 }
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 export default function App() {
   return (
-    <Routes>
-      <Route element={<SiteLayout />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/shop" element={<HeritageShop />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/admin" element={<AdminPage />} />
-        <Route path="/volunteer" element={<VolunteerPage />} />
-        <Route path="/events" element={<EventPage />} />
-      </Route>
-      <Route path="/trails" element={<GlobeHome />} />
-      <Route path="/trails/:trailId" element={<TrailExperience />} />
-    </Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
+        <Route element={<SiteLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/volunteer" element={<VolunteerPage />} />
+          <Route path="/events" element={<EventPage />} />
+          <Route path="/shop" element={<HeritageShop />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/trails" element={<GlobeHome />} />
+          <Route path="/trails/:trailId" element={<TrailExperience />} />
+        </Route>
+      </Routes>
+    </>
   );
 }
