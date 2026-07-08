@@ -1,0 +1,180 @@
+.trail {
+  min-height: 100%;
+  background:
+    radial-gradient(ellipse at 70% 0%, rgba(200,134,46,0.10), transparent 55%),
+    var(--ink);
+  display: flex;
+  flex-direction: column;
+}
+
+.trail__header {
+  padding: 1.6rem 2.4rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(176,141,79,0.25);
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  padding-bottom: 1rem;
+}
+
+.trail__back {
+  font-family: var(--font-data);
+  font-size: 0.78rem;
+  color: var(--brass-bright);
+  text-decoration: none;
+  border: 1px solid rgba(176,141,79,0.4);
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+}
+.trail__back:hover { border-color: var(--brass-bright); }
+
+.trail__heading h1 {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  margin: 0.2rem 0 0;
+  color: var(--cream);
+}
+
+.trail__progress {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 1.2rem 2.4rem 0;
+}
+
+.trail__dot {
+  width: 100%;
+  height: 3px;
+  background: rgba(176,141,79,0.3);
+  border-radius: 2px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  flex: 1;
+}
+.trail__dot--done, .trail__dot--active { background: var(--ochre); }
+
+.trail__stage {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: 2rem;
+  padding: 2rem 2.4rem;
+  align-items: center;
+}
+
+@media (max-width: 860px) {
+  .trail__stage { grid-template-columns: 1fr; }
+}
+
+.trail__medallion-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4rem;
+}
+
+.trail__medallion {
+  width: min(280px, 60vw);
+  height: min(280px, 60vw);
+  border-radius: 50%;
+  border: 1px solid rgba(176,141,79,0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: radial-gradient(circle at 35% 30%, rgba(200,134,46,0.14), rgba(36,26,16,0.4));
+}
+
+.trail__medallion::before {
+  content: '';
+  position: absolute;
+  inset: 14px;
+  border: 1px dashed rgba(226,185,105,0.4);
+  border-radius: 50%;
+}
+
+.trail__site-name {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.6vw, 2rem);
+  font-weight: 500;
+  color: var(--cream);
+  text-align: center;
+  margin: 0;
+}
+
+.trail__site-meta {
+  font-family: var(--font-data);
+  font-size: 0.78rem;
+  color: var(--brass-bright);
+  text-align: center;
+}
+
+.trail__caption {
+  background: rgba(36,26,16,0.55);
+  border: 1px solid rgba(176,141,79,0.35);
+  border-radius: var(--radius);
+  padding: 1.3rem 1.4rem;
+}
+
+.trail__caption p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--parchment);
+  margin: 0.8rem 0 1.2rem;
+}
+
+.voice-guide { display: flex; flex-direction: column; gap: 0.9rem; }
+.voice-guide__lang { display: flex; flex-direction: column; gap: 0.45rem; }
+
+.voice-guide__play {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: flex-start;
+  background: var(--ochre);
+  color: var(--ink);
+  border: none;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 2px;
+  transition: background 0.15s ease;
+}
+.voice-guide__play:hover { background: var(--brass-bright); }
+.voice-guide__play:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.voice-guide__fallback {
+  font-size: 0.76rem;
+  color: var(--parchment-dim);
+  opacity: 0.8;
+}
+
+.trail__nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2.4rem 2.2rem;
+}
+
+.trail__nav-btn {
+  background: transparent;
+  border: 1px solid rgba(176,141,79,0.5);
+  color: var(--parchment);
+  font-family: var(--font-data);
+  font-size: 0.8rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 2px;
+}
+.trail__nav-btn:hover:not(:disabled) { border-color: var(--brass-bright); color: var(--cream); }
+.trail__nav-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+.trail__nav-btn--primary {
+  background: var(--ochre);
+  border-color: var(--ochre);
+  color: var(--ink);
+  font-weight: 600;
+}
+.trail__nav-btn--primary:hover { background: var(--brass-bright); }
