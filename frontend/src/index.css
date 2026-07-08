@@ -7,16 +7,16 @@
   --font-display: "Fraunces", serif;
   --font-ui: "Satoshi", sans-serif;
   --font-mono: "Space Grotesk", "Space Mono", monospace;
-  
-  --color-heritage-red: #8C2D19;
-  --color-heritage-green: #2E5A44;
-  --color-heritage-bronze: #B87333;
-  --color-heritage-cream-light: #FFFDF9;
-  --color-heritage-cream-dark: #F4E3C1;
-  --color-heritage-charcoal: #2B2118;
-  --color-heritage-espresso: #1A110B;
-  --color-heritage-cream: #F9EBD4;
-  --color-heritage-border: #E6D0AC;
+
+  --color-heritage-red: #8c2d19;
+  --color-heritage-green: #2e5a44;
+  --color-heritage-bronze: #b87333;
+  --color-heritage-cream-light: #FAF1DD;
+  --color-heritage-cream-dark: #f4e3c1;
+  --color-heritage-charcoal: #2b2118;
+  --color-heritage-espresso: #1a110b;
+  --color-heritage-cream: #f9ebd4;
+  --color-heritage-border: #e6d0ac;
 }
 
 :root {
@@ -34,7 +34,8 @@
   --accent-border: rgba(140, 45, 25, 0.4);
   --social-bg: rgba(244, 227, 193, 0.4);
   --shadow:
-    rgba(26, 17, 11, 0.08) 0 10px 15px -3px, rgba(26, 17, 11, 0.04) 0 4px 6px -2px;
+    rgba(26, 17, 11, 0.08) 0 10px 15px -3px,
+    rgba(26, 17, 11, 0.04) 0 4px 6px -2px;
 
   --sans: var(--font-sans);
   --heading: var(--font-serif);
@@ -54,6 +55,10 @@
   @media (max-width: 1024px) {
     font-size: 16px;
   }
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -112,4 +117,9 @@ code {
   line-height: 135%;
   padding: 4px 8px;
   background: var(--code-bg);
+}
+
+button,
+a {
+  cursor: pointer;
 }

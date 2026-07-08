@@ -115,7 +115,7 @@ export default function GetInvolved() {
               {activities.map((act) => (
                 <div
                   key={act.title}
-                  className="flex flex-col sm:flex-row gap-6 p-6 rounded border border-heritage-border/30 bg-heritage-cream/10 hover:bg-[#FFFDF9] hover:border-heritage-border/60 transition-all duration-300 shadow-sm"
+                  className="flex flex-col sm:flex-row gap-6 p-6 rounded border border-heritage-border/30 bg-heritage-cream hover:bg-heritage-cream-dark/40 hover:border-heritage-border/60 transition-all duration-300 shadow-sm"
                 >
                   <div className={`font-serif text-4xl sm:text-5xl font-extrabold tracking-tight ${act.numberColor} leading-none shrink-0`}>
                     {act.number}

@@ -1,3 +1,5 @@
+import logo from "../../assets/logo.png";
+
 export default function Footer() {
   return (
     <footer className="bg-heritage-espresso text-heritage-cream-light pt-16 pb-8 border-t border-heritage-red/20">
@@ -7,9 +9,7 @@ export default function Footer() {
           {/* Section 1: Brand / Bio */}
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-9 h-9 rounded-full bg-heritage-red flex items-center justify-center text-[#F9EBD4] font-serif font-bold text-lg">
-                I
-              </div>
+              <img src={logo} alt="INTACH Pune Logo" className="w-12 h-12 object-contain" />
               <span className="font-serif font-bold text-xl tracking-tight text-heritage-cream">
                 INTACH PUNE
               </span>

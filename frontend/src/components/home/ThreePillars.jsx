@@ -5,7 +5,7 @@ export default function ThreePillars() {
       title: "Built & Architectural Heritage",
       accentColor: "text-heritage-red",
       borderColor: "border-heritage-red/20",
-      bgColor: "bg-heritage-cream-light hover:bg-[#FFFDF9]",
+      bgColor: "bg-heritage-cream-light hover:bg-[#F5ECD2]",
       bannerBg: "bg-heritage-red/5",
       icon: (
         <svg className="h-8 w-8 text-heritage-red" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
@@ -25,7 +25,7 @@ export default function ThreePillars() {
       title: "Natural Heritage",
       accentColor: "text-heritage-green",
       borderColor: "border-heritage-green/20",
-      bgColor: "bg-heritage-cream-light hover:bg-[#FFFDF9]",
+      bgColor: "bg-heritage-cream-light hover:bg-[#F5ECD2]",
       bannerBg: "bg-heritage-green/5",
       icon: (
         <svg className="h-8 w-8 text-heritage-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
@@ -45,7 +45,7 @@ export default function ThreePillars() {
       title: "Crafts & Intangible Heritage",
       accentColor: "text-heritage-bronze",
       borderColor: "border-heritage-bronze/20",
-      bgColor: "bg-heritage-cream-light hover:bg-[#FFFDF9]",
+      bgColor: "bg-heritage-cream-light hover:bg-[#F5ECD2]",
       bannerBg: "bg-heritage-bronze/5",
       icon: (
         <svg className="h-8 w-8 text-heritage-bronze" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">

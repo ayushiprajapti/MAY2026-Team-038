@@ -1,3 +1,7 @@
+import copperCarafe from "../../assets/home/copper-carafe.jpg";
+import heritageMap from "../../assets/home/heritage-map.jpg";
+import puneBook from "../../assets/home/pune-book.jpg";
+
 export default function WarsaaTeaser() {
   const products = [
     {
@@ -5,39 +9,21 @@ export default function WarsaaTeaser() {
       category: "Tambat Metalware",
       price: "₹1,850",
       description: "Directly beaten and shaped by Pune's traditional coppersmiths using centuries-old techniques.",
-      icon: (
-        <div className="w-full h-40 bg-heritage-bronze/10 rounded flex items-center justify-center border border-heritage-bronze/15">
-          <svg className="h-16 w-16 text-heritage-bronze" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-      )
+      image: copperCarafe
     },
     {
       name: "Pune Heritage Map",
       category: "Publications",
       price: "₹120",
       description: "A meticulously illustrated foldout guide mapping historical Peshwa wadas, shrines, and old lanes.",
-      icon: (
-        <div className="w-full h-40 bg-heritage-red/10 rounded flex items-center justify-center border border-heritage-red/15">
-          <svg className="h-16 w-16 text-heritage-red" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
-          </svg>
-        </div>
-      )
+      image: heritageMap
     },
     {
       name: '"Pune, Queen of the Deccan"',
       category: "Books",
       price: "₹650",
       description: "The definitive historical compilation detailing Pune's urban growth, climate, and architectural legacy.",
-      icon: (
-        <div className="w-full h-40 bg-heritage-green/10 rounded flex items-center justify-center border border-heritage-green/15">
-          <svg className="h-16 w-16 text-heritage-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-          </svg>
-        </div>
-      )
+      image: puneBook
     }
   ];
 
@@ -69,7 +55,7 @@ export default function WarsaaTeaser() {
           </div>
 
           <div className="lg:col-span-7 text-left">
-            <div className="border border-heritage-border/60 bg-heritage-cream/10 p-6 sm:p-8 rounded relative overflow-hidden">
+            <div className="border border-heritage-border/60 bg-heritage-cream p-6 sm:p-8 rounded relative overflow-hidden">
               <span className="text-[10px] font-mono uppercase tracking-wider text-heritage-charcoal/50 block mb-2">
                 A Revenue-Generating Cause
               </span>
@@ -101,9 +87,15 @@ export default function WarsaaTeaser() {
           {products.map((prod) => (
             <div
               key={prod.name}
-              className="group p-5 rounded border border-heritage-border/40 bg-[#F9EBD4]/20 hover:bg-[#F9EBD4]/50 transition-all duration-300 text-left flex flex-col"
+              className="group p-5 rounded border border-heritage-border/40 bg-heritage-cream hover:bg-heritage-cream-dark/45 transition-all duration-300 text-left flex flex-col"
             >
-              {prod.icon}
+              <div className="w-full h-44 overflow-hidden rounded border border-heritage-border/30 bg-heritage-cream-light mb-4 shrink-0">
+                <img
+                  src={prod.image}
+                  alt={prod.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              </div>
               <div className="mt-4 flex justify-between items-start">
                 <div>
                   <span className="text-[10px] font-mono uppercase tracking-wider text-heritage-charcoal/60">
