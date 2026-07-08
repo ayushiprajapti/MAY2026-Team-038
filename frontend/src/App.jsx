@@ -29,11 +29,11 @@ export default function App() {
         <Route path="/shop" element={<HeritageShop />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/admin" element={<AdminPage />} />
+        <Route path="/volunteer" element={<VolunteerPage />} />
+        <Route path="/events" element={<EventPage />} />
       </Route>
       <Route path="/trails" element={<GlobeHome />} />
       <Route path="/trails/:trailId" element={<TrailExperience />} />
-      <Route path="/volunteer" element={<VolunteerPage />} />
-      <Route path="/events" element={<EventPage />} />
     </Routes>
   );
 }
