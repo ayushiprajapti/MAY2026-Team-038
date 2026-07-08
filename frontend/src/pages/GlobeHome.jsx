@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
-import HeritageMap from '../components/HeritageMap.jsx'
-import FilterBar from '../components/FilterBar.jsx'
-import TrailPanel from '../components/TrailPanel.jsx'
+import HeritageMap from '../components/trails/HeritageMap.jsx'
+import FilterBar from '../components/trails/FilterBar.jsx'
+import TrailPanel from '../components/trails/TrailPanel.jsx'
 import { trails, regions, themes } from '../data/trails.js'
 import './GlobeHome.css'
 
