@@ -182,3 +182,7 @@
     border-right-color: var(--border);
   }
 }
+
+#root{
+  min-height:100vh;
+}
