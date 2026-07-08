@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getTrailById } from '../data/trails.js'
-import SiteIcon from '../components/SiteIcon.jsx'
-import VoiceGuide from '../components/VoiceGuide.jsx'
+import SiteIcon from '../components/trails/SiteIcon.jsx'
+import VoiceGuide from '../components/trails/VoiceGuide.jsx'
 import './TrailExperience.css'
 
 export default function TrailExperience() {

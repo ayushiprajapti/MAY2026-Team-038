@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { MapContainer, TileLayer, Marker, Popup, Polyline, useMap } from 'react-leaflet'
 import L from 'leaflet'
-import { buildSiteIcon } from '../utils/markerIcon.js'
+import { buildSiteIcon } from '../../utils/markerIcon.js'
 import './HeritageMap.css'
 
 const MAHARASHTRA_CENTER = [18.9, 74.6]
