@@ -1,0 +1,68 @@
+/* ============================================================
+   TRAILS — design tokens
+   An "engraved atlas" direction: brass instruments, aged
+   parchment, copper-plate line work. Ochre carries the history
+   theme the brief asked for; ink and brass carry the rest.
+   ============================================================ */
+
+:root {
+  /* color */
+  --ink: #241a10;         /* engraving ink / deep umber */
+  --ink-soft: #382a1b;
+  --parchment: #f2e6c8;   /* aged paper */
+  --parchment-dim: #e6d5a8;
+  --ochre: #c8862e;       /* primary — the history color */
+  --ochre-deep: #9c631c;
+  --rust: #8a3b26;        /* secondary accent, seal-wax */
+  --brass: #b08d4f;       /* line work, instrument metal */
+  --brass-bright: #e2b969;
+  --verdigris: #5c7263;   /* weathered copper — quiet contrast */
+  --cream: #faf3e1;
+
+  /* type */
+  --font-display: 'Fraunces', 'Iowan Old Style', serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-data: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --radius: 3px;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--parchment);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+a { color: inherit; }
+
+::selection {
+  background: var(--ochre);
+  color: var(--ink);
+}
+
+.eyebrow {
+  font-family: var(--font-data);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ochre);
+}
+
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--brass) transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
