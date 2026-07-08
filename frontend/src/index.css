@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Fraunces", serif;
+  --font-body: "Lora", serif;
+  --font-sans: "Satoshi", sans-serif;
+  --font-display: "Fraunces", serif;
+  --font-ui: "Satoshi", sans-serif;
+  --font-mono: "Space Grotesk", "Space Mono", monospace;
+
+  --color-heritage-red: #8c2d19;
+  --color-heritage-green: #2e5a44;
+  --color-heritage-bronze: #b87333;
+  --color-heritage-cream-light: #FAF1DD;
+  --color-heritage-cream-dark: #f4e3c1;
+  --color-heritage-charcoal: #2b2118;
+  --color-heritage-espresso: #1a110b;
+  --color-heritage-cream: #f9ebd4;
+  --color-heritage-border: #e6d0ac;
+}
+
+:root {
+  --font-display: "Fraunces", serif;
+  --font-body: "Lora", serif;
+  --font-ui: "Satoshi", sans-serif;
+
+  --text: var(--color-heritage-charcoal);
+  --text-h: var(--color-heritage-espresso);
+  --bg: var(--color-heritage-cream);
+  --border: var(--color-heritage-border);
+  --code-bg: var(--color-heritage-cream-dark);
+  --accent: var(--color-heritage-red);
+  --accent-bg: rgba(140, 45, 25, 0.08);
+  --accent-border: rgba(140, 45, 25, 0.4);
+  --social-bg: rgba(244, 227, 193, 0.4);
+  --shadow:
+    rgba(26, 17, 11, 0.08) 0 10px 15px -3px,
+    rgba(26, 17, 11, 0.04) 0 4px 6px -2px;
+
+  --sans: var(--font-sans);
+  --heading: var(--font-serif);
+  --body: var(--font-body);
+  --mono: var(--font-mono);
+
+  font: 18px/145% var(--body);
+  letter-spacing: 0.18px;
+  color-scheme: light;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media (max-width: 1024px) {
+    font-size: 16px;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+#root {
+  width: 100%;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+h1,
+h2 {
+  font-family: var(--heading);
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+h1 {
+  font-size: 56px;
+  letter-spacing: -1.68px;
+  margin: 32px 0;
+  @media (max-width: 1024px) {
+    font-size: 36px;
+    margin: 20px 0;
+  }
+}
+h2 {
+  font-size: 24px;
+  line-height: 118%;
+  letter-spacing: -0.24px;
+  margin: 0 0 8px;
+  @media (max-width: 1024px) {
+    font-size: 20px;
+  }
+}
+p {
+  margin: 0;
+}
+
+code,
+.counter {
+  font-family: var(--mono);
+  display: inline-flex;
+  border-radius: 4px;
+  color: var(--text-h);
+}
+
+code {
+  font-size: 15px;
+  line-height: 135%;
+  padding: 4px 8px;
+  background: var(--code-bg);
+}
+
+button,
+a {
+  cursor: pointer;
+}
