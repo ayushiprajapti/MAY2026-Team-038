@@ -1,0 +1,180 @@
+/* ===============================
+   INTACH Heritage Checkout Theme
+================================== */
+
+.checkout-page {
+  min-height: 100vh;
+  background: #F8F1E5;
+  padding: 40px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.checkout-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.checkout-header h1 {
+  color: #4A3A2C;
+  font-size: 2.4rem;
+  margin-bottom: 8px;
+}
+
+.checkout-header p {
+  color: #78695D;
+  font-size: 1.1rem;
+}
+
+.checkout-container {
+  max-width: 1300px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 40px;
+}
+
+.customer-section,
+.summary-section {
+  background: #FFF9F1;
+  border: 1px solid #DCCCB5;
+  border-radius: 14px;
+  padding: 30px;
+  box-shadow: 0 8px 24px rgba(92,59,24,0.08);
+}
+
+.customer-section h2,
+.summary-section h2 {
+  color: #4A3A2C;
+  margin-bottom: 25px;
+  font-size: 1.6rem;
+}
+
+.customer-section label {
+  display: block;
+  margin-top: 18px;
+  margin-bottom: 8px;
+  color: #4A3A2C;
+  font-weight: 600;
+}
+
+.customer-section input,
+.customer-section textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #DCCCB5;
+  border-radius: 8px;
+  background: white;
+  color: #4A3A2C;
+  font-size: 15px;
+  outline: none;
+}
+
+.customer-section input:focus,
+.customer-section textarea:focus {
+  border-color: #E2B66D;
+}
+
+.customer-section textarea {
+  resize: vertical;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  color: #4A3A2C;
+}
+
+.summary-section hr {
+  margin: 20px 0;
+  border: none;
+  border-top: 1px solid #DCCCB5;
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #4A3A2C;
+  margin-bottom: 30px;
+}
+
+.empty-cart-msg {
+  color: #78695D;
+  text-align: center;
+  padding: 30px 0;
+}
+
+.complete-btn {
+  width: 100%;
+  padding: 14px;
+  background: #E2B66D;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  transition: 0.25s;
+}
+
+.complete-btn:hover {
+  background: #cfa052;
+}
+
+.complete-btn:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+.back-btn {
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  border: 1px solid #DCCCB5;
+  color: #4A3A2C;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: .25s;
+}
+
+.back-btn:hover {
+  background: #F8F1E5;
+}
+
+.checkout-success-card {
+  max-width: 650px;
+  margin: 120px auto;
+  background: #FFF9F1;
+  border: 1px solid #DCCCB5;
+  border-radius: 16px;
+  padding: 50px;
+  text-align: center;
+  box-shadow: 0 10px 25px rgba(92,59,24,.08);
+}
+
+.checkout-success-card h1 {
+  color: #4A3A2C;
+  margin-bottom: 20px;
+}
+
+.checkout-success-card p {
+  color: #78695D;
+  font-size: 17px;
+  margin-bottom: 30px;
+}
+
+@media (max-width: 900px) {
+
+  .checkout-container {
+    grid-template-columns: 1fr;
+  }
+
+  .checkout-page {
+    padding: 20px;
+  }
+
+}
