@@ -11,6 +11,8 @@ import GlobeHome from "./pages/GlobeHome.jsx";
 import TrailExperience from "./pages/TrailExperience.jsx";
 import VolunteerPage from "./pages/VolunteerPage";
 import EventPage from "./pages/EventPage";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import "./App.css";
 
 const pageTransition = {
@@ -42,6 +44,8 @@ function AnimatedRoutes() {
       <motion.div key={location.pathname} {...pageTransition}>
         <Routes location={location}>
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/volunteer" element={<VolunteerPage />} />
           <Route path="/events" element={<EventPage />} />
@@ -56,12 +60,15 @@ function AnimatedRoutes() {
 }
 
 export default function App() {
+  const location = useLocation();
+  const hideHeaderFooter = ["/login", "/register"].includes(location.pathname);
+
   return (
     <>
       <ScrollToTop />
-      <Header />
+      {!hideHeaderFooter && <Header />}
       <AnimatedRoutes />
-      <Footer />
+      {!hideHeaderFooter && <Footer />}
     </>
   );
 }
