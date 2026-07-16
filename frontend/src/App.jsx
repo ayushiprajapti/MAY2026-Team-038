@@ -1,5 +1,6 @@
 import { useEffect } from "react";
-import { Routes, Route, Outlet, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import Header from "./components/shared/Header";
 import Footer from "./components/shared/Footer";
 import Home from "./pages/Home";
@@ -12,15 +13,12 @@ import VolunteerPage from "./pages/VolunteerPage";
 import EventPage from "./pages/EventPage";
 import "./App.css";
 
-function SiteLayout() {
-  return (
-    <>
-      <Header />
-      <Outlet />
-      <Footer />
-    </>
-  );
-}
+const pageTransition = {
+  initial: { opacity: 0, y: 12 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -12 },
+  transition: { duration: 0.28, ease: [0.4, 0, 0.2, 1] },
+};
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -32,12 +30,17 @@ function ScrollToTop() {
   return null;
 }
 
-export default function App() {
+// Routes gets an explicit `location` prop (instead of relying on the
+// live router context, as a bare <Outlet /> would) so the exiting page's
+// matched route stays frozen on the old path while AnimatePresence
+// animates it out — otherwise it flips to the new page mid-exit.
+function AnimatedRoutes() {
+  const location = useLocation();
+
   return (
-    <>
-      <ScrollToTop />
-      <Routes>
-        <Route element={<SiteLayout />}>
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.div key={location.pathname} {...pageTransition}>
+        <Routes location={location}>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/volunteer" element={<VolunteerPage />} />
@@ -46,8 +49,19 @@ export default function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/trails" element={<GlobeHome />} />
           <Route path="/trails/:trailId" element={<TrailExperience />} />
-        </Route>
-      </Routes>
+        </Routes>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
+export default function App() {
+  return (
+    <>
+      <ScrollToTop />
+      <Header />
+      <AnimatedRoutes />
+      <Footer />
     </>
   );
 }
