@@ -11,6 +11,8 @@ export default function Header() {
     { name: "Events", to: "/events" },
     { name: "Marketplace", to: "/shop" },
     { name: "Admin", to: "/admin" },
+    { name: "Admin DB", to: "/admin-db" },
+    { name: "Admin Chat", to: "/admin-chat" },
   ];
 
   return (
