@@ -6,6 +6,8 @@ import Home from "./pages/Home";
 import HeritageShop from "./pages/HeritageShop";
 import Checkout from "./pages/Checkout";
 import AdminPage from "./pages/AdminPage";
+import AdminDatabase from "./components/admin/AdminDatabase.jsx";
+import AdminChat from "./components/admin/AdminChat.jsx";
 import GlobeHome from "./pages/GlobeHome.jsx";
 import TrailExperience from "./pages/TrailExperience.jsx";
 import VolunteerPage from "./pages/VolunteerPage";
@@ -40,13 +42,16 @@ export default function App() {
         <Route element={<SiteLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin-db" element={<AdminDatabase />} />
+          <Route path="/admin-chat" element={<AdminChat />} />
           <Route path="/volunteer" element={<VolunteerPage />} />
           <Route path="/events" element={<EventPage />} />
           <Route path="/shop" element={<HeritageShop />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/trails" element={<GlobeHome />} />
-          <Route path="/trails/:trailId" element={<TrailExperience />} />
         </Route>
+        {/* Immersive trail — no global header/footer */}
+        <Route path="/trails/:trailId" element={<TrailExperience />} />
       </Routes>
     </>
   );
