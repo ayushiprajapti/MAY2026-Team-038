@@ -8,21 +8,46 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Initialize a default coordinator user if none exists
+  // Initialize default coordinator (admin) and member (user) users if none exist
   useEffect(() => {
     const users = JSON.parse(localStorage.getItem("intach_users") || "[]");
-    if (!users.some((u) => u.email === "coordinator@intachpune.org")) {
+
+    // Seed Admin/Coordinator
+    if (!users.some((u) => u.email === "admin@intachpune.org")) {
       users.push({
-        fullName: "Pune Coordinator",
-        email: "coordinator@intachpune.org",
+        fullName: "Pune admin",
+        email: "admin@intachpune.org",
         phone: "+91 98765 43210",
         language: "english",
         password: "password123",
-        role: "event_coordinator",
+        role: "event_admin",
       });
-      localStorage.setItem("intach_users", JSON.stringify(users));
     }
+
+    // Seed General User
+    if (!users.some((u) => u.email === "user@intachpune.org")) {
+      users.push({
+        fullName: "Heritage Member",
+        email: "user@intachpune.org",
+        phone: "+91 98230 11223",
+        language: "english",
+        password: "password123",
+        role: "member",
+      });
+    }
+
+    localStorage.setItem("intach_users", JSON.stringify(users));
   }, []);
+
+  const handleQuickFill = (role) => {
+    if (role === "admin") {
+      setEmail("admin@intachpune.org");
+      setPassword("password123");
+    } else {
+      setEmail("user@intachpune.org");
+      setPassword("password123");
+    }
+  };
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -32,7 +57,9 @@ export default function Login() {
     setTimeout(() => {
       const users = JSON.parse(localStorage.getItem("intach_users") || "[]");
       const user = users.find(
-        (u) => u.email.toLowerCase() === email.toLowerCase() && u.password === password
+        (u) =>
+          u.email.toLowerCase() === email.toLowerCase() &&
+          u.password === password,
       );
 
       if (user) {
@@ -40,9 +67,15 @@ export default function Login() {
         // Dispatch custom event to notify Header about auth change
         window.dispatchEvent(new Event("auth-change"));
         setIsLoading(false);
-        navigate("/");
+
+        // Role-based routing: admin goes to dashboard, user goes to homepage
+        if (user.role === "event_admin") {
+          navigate("/admin-dashboard");
+        } else {
+          navigate("/");
+        }
       } else {
-        setError("Invalid email or password. (Try coordinator@intachpune.org / password123)");
+        setError("Invalid email or password. Use quick-fill options below.");
         setIsLoading(false);
       }
     }, 1200);
@@ -112,7 +145,7 @@ export default function Login() {
                   onClick={(e) => {
                     e.preventDefault();
                     alert(
-                      "Default password is 'password123' for coordinator@intachpune.org"
+                      "Default password is 'password123' for coordinator@intachpune.org",
                     );
                   }}
                   className="font-sans text-xs font-semibold text-heritage-red hover:text-heritage-red/80 transition-colors"
@@ -139,7 +172,7 @@ export default function Login() {
               type="submit"
               disabled={isLoading}
             >
-              {isLoading ? (
+              {isLoading ?
                 <>
                   <svg
                     className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
@@ -162,8 +195,7 @@ export default function Login() {
                   </svg>
                   Authenticating...
                 </>
-              ) : (
-                <>
+              : <>
                   <span>Sign In</span>
                   <svg
                     className="w-4 h-4"
@@ -179,9 +211,58 @@ export default function Login() {
                     />
                   </svg>
                 </>
-              )}
+              }
             </button>
           </form>
+
+          {/* Quick Login Selections (Tester helper) */}
+          <div className="mt-5 border-t border-heritage-border/20 pt-4 text-left font-sans text-[11px] select-none">
+            <span className="block font-bold text-heritage-charcoal/60 uppercase tracking-wider mb-2 ml-1 text-[9px]">
+              Quick Login Selection (Mock Roles)
+            </span>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => handleQuickFill("admin")}
+                className="flex items-center justify-center gap-1.5 py-1.5 px-2 bg-heritage-red/5 hover:bg-heritage-red/10 text-heritage-red border border-heritage-red/20 hover:border-heritage-red/35 rounded text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer"
+              >
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                  />
+                </svg>
+                <span>Admin Portal</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleQuickFill("user")}
+                className="flex items-center justify-center gap-1.5 py-1.5 px-2 bg-heritage-green/5 hover:bg-heritage-green/10 text-heritage-green border border-heritage-green/20 hover:border-heritage-green/35 rounded text-[10px] font-bold uppercase tracking-wider transition-colors cursor-pointer"
+              >
+                <svg
+                  className="w-3.5 h-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+                <span>User Account</span>
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Footer registration link */}
