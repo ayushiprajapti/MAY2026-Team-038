@@ -14,6 +14,7 @@ import EventPage from "./pages/EventPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AdminDashboardNew from "./pages/AdminDashboard";
+import AdminShopPage from "./pages/AdminShop";
 import "./App.css";
 
 const pageTransition = {
@@ -49,6 +50,7 @@ function AnimatedRoutes() {
           <Route path="/register" element={<Register />} />
           <Route path="/admin" element={<AdminPage />} />
           <Route path="/admin-dashboard" element={<AdminDashboardNew />} />
+          <Route path="/admin-shop" element={<AdminShopPage />} />
           <Route path="/volunteer" element={<VolunteerPage />} />
           <Route path="/events" element={<EventPage />} />
           <Route path="/shop" element={<HeritageShop />} />
@@ -63,7 +65,7 @@ function AnimatedRoutes() {
 
 export default function App() {
   const location = useLocation();
-  const hideHeaderFooter = ["/login", "/register", "/admin-dashboard"].includes(location.pathname);
+  const hideHeaderFooter = ["/login", "/register", "/admin-dashboard", "/admin-shop"].includes(location.pathname);
 
   return (
     <>
