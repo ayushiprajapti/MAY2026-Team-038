@@ -14,6 +14,10 @@ import TrailExperience from "./pages/TrailExperience.jsx";
 import VolunteerPage from "./pages/VolunteerPage";
 import VolunteerUploadDetails from "./pages/VolunteerUploadDetails";
 import EventPage from "./pages/EventPage";
+import EventRegistration from "./pages/EventRegistration";
+import AdminEvents from "./pages/AdminEvents";
+import AdminEventCreate from "./pages/AdminEventCreate";
+
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AdminDashboardNew from "./pages/AdminDashboard";
@@ -96,6 +100,7 @@ function AnimatedRoutes() {
 
         {/* Public Layout-Wrapped Routes */}
         <Route path="/events" element={<EventPage />} />
+        <Route path="/events/register" element={<EventRegistration />} />
         <Route path="/shop" element={<HeritageShop />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/trails" element={<GlobeHome />} />
@@ -115,6 +120,8 @@ function AnimatedRoutes() {
           <Route path="/admin-chat" element={<AdminChat />} />
           <Route path="/admin-dashboard" element={<AdminDashboardNew />} />
           <Route path="/admin-shop" element={<AdminShopPage />} />
+          <Route path="/admin/events" element={<AdminEvents />} />
+          <Route path="/admin/events/create" element={<AdminEventCreate />} />
         </Route>
         <Route
           path="/admin/volunteer-details"
