@@ -1,1 +1,28 @@
 /* Custom page-specific stylesheet. Tailwind CSS is loaded in index.css. */
+
+/* Event page accents: warm ochre with subtle category distinction. */
+.event-tag-ochre,
+.calendar-ochre {
+  background: #f5e2b9;
+  color: #80500f;
+}
+
+.event-tag-terracotta,
+.calendar-terracotta {
+  background: #f1d6c2;
+  color: #8a4527;
+}
+
+.event-tag-olive,
+.calendar-olive {
+  background: #dce4cf;
+  color: #52623e;
+}
+
+.calendar-ochre,
+.calendar-terracotta,
+.calendar-olive {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
