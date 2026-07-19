@@ -33,7 +33,7 @@ export default function Header() {
     { name: "Heritage Trails", to: "/trails" },
     { name: "Events", to: "/events" },
     { name: "Marketplace", to: "/shop" },
-    { name: "Admin", to: "/admin" },
+    { name: "Volunteer Portal", to: "/volunteer" },
   ];
 
   return (
@@ -87,24 +87,20 @@ export default function Header() {
                       <span className="block text-sm font-semibold text-heritage-espresso">{user.fullName || "Member"}</span>
                     </div>
                     
-                    <button
-                      onClick={() => {
-                        setProfileOpen(false);
-                        alert("Opening Shopping Cart...");
-                      }}
+                    <Link
+                      to="/shop"
+                      onClick={() => setProfileOpen(false)}
                       className="w-full text-left px-4 py-2.5 text-sm text-heritage-charcoal hover:bg-heritage-cream/30 hover:text-heritage-red transition-colors flex items-center gap-2 font-sans font-medium cursor-pointer"
                     >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                       </svg>
                       <span>View Cart</span>
-                    </button>
+                    </Link>
 
-                    <button
-                      onClick={() => {
-                        setProfileOpen(false);
-                        alert("Opening Profile Settings...");
-                      }}
+                    <Link
+                      to="/volunteer/profile"
+                      onClick={() => setProfileOpen(false)}
                       className="w-full text-left px-4 py-2.5 text-sm text-heritage-charcoal hover:bg-heritage-cream/30 hover:text-heritage-red transition-colors flex items-center gap-2 font-sans font-medium cursor-pointer"
                     >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -112,7 +108,7 @@ export default function Header() {
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
                       <span>Profile Settings</span>
-                    </button>
+                    </Link>
 
                     <div className="border-t border-heritage-border/20 my-1" />
 
@@ -190,23 +186,19 @@ export default function Header() {
                 <span className="block text-[10px] font-mono uppercase tracking-wider text-heritage-charcoal/50 mb-2">Signed in as</span>
                 <span className="block text-sm font-semibold text-heritage-espresso mb-4">{user.fullName || "Member"}</span>
                 <div className="space-y-1">
-                  <button
-                    onClick={() => {
-                      setIsOpen(false);
-                      alert("Opening Shopping Cart...");
-                    }}
+                  <Link
+                    to="/shop"
+                    onClick={() => setIsOpen(false)}
                     className="w-full text-left py-2 text-sm text-heritage-charcoal hover:text-heritage-red font-sans font-medium flex items-center gap-2 cursor-pointer"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                     </svg>
                     <span>View Cart</span>
-                  </button>
-                  <button
-                    onClick={() => {
-                      setIsOpen(false);
-                      alert("Opening Profile Settings...");
-                    }}
+                  </Link>
+                  <Link
+                    to="/volunteer/profile"
+                    onClick={() => setIsOpen(false)}
                     className="w-full text-left py-2 text-sm text-heritage-charcoal hover:text-heritage-red font-sans font-medium flex items-center gap-2 cursor-pointer"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -214,7 +206,7 @@ export default function Header() {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
                     <span>Profile Settings</span>
-                  </button>
+                  </Link>
                   <button
                     onClick={() => {
                       setIsOpen(false);

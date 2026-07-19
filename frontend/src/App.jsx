@@ -1,8 +1,6 @@
 import { useEffect } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate, Outlet } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import Header from "./components/shared/Header";
-import Footer from "./components/shared/Footer";
 import SiteLayout from "./components/shared/SiteLayout";
 import Home from "./pages/Home";
 import HeritageShop from "./pages/HeritageShop";
@@ -36,6 +34,29 @@ function ScrollToTop() {
   return null;
 }
 
+// Client-Side Route Protection Component
+function ProtectedRoute({ allowedRoles }) {
+  const storedUser = localStorage.getItem("intach_user");
+
+  if (!storedUser) {
+    // Not signed in, redirect to login page
+    return <Navigate to="/login" replace />;
+  }
+
+  try {
+    const user = JSON.parse(storedUser);
+    
+    if (allowedRoles && !allowedRoles.includes(user.role)) {
+      // Role not authorized, redirect to home page
+      return <Navigate to="/" replace />;
+    }
+  } catch (e) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <Outlet />;
+}
+
 function AnimatedRoutes() {
   const location = useLocation();
 
@@ -48,14 +69,21 @@ function AnimatedRoutes() {
           <Route element={<SiteLayout />}>
             <Route path="/" element={<Home />} />
             
-            {/* Admin Module */}
-            <Route path="/admin" element={<AdminPage />} />
-            <Route
-              path="/admin/volunteer-details"
-              element={<VolunteerUploadDetails />}
-            />
+            {/* Protected Admin Routes (Gets Header & Footer) */}
+            <Route element={<ProtectedRoute allowedRoles={["event_admin"]} />}>
+              <Route path="/admin" element={<AdminPage />} />
+              <Route
+                path="/admin/volunteer-details"
+                element={<VolunteerUploadDetails />}
+              />
+            </Route>
 
-            <Route path="/volunteer/*" element={<VolunteerPage />} />
+            {/* Protected Volunteer Routes (Gets Header & Footer) */}
+            <Route element={<ProtectedRoute />}>
+              <Route path="/volunteer/*" element={<VolunteerPage />} />
+            </Route>
+
+            {/* Public Routes */}
             <Route path="/events" element={<EventPage />} />
             <Route path="/shop" element={<HeritageShop />} />
             <Route path="/checkout" element={<Checkout />} />
@@ -63,11 +91,15 @@ function AnimatedRoutes() {
             <Route path="/trails/:trailId" element={<TrailExperience />} />
           </Route>
 
-          {/* Standalone Routes (No Header & Footer) */}
+          {/* Standalone Public Routes (No Header & Footer) */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/admin-dashboard" element={<AdminDashboardNew />} />
-          <Route path="/admin-shop" element={<AdminShopPage />} />
+
+          {/* Standalone Protected Admin Routes (No Header & Footer) */}
+          <Route element={<ProtectedRoute allowedRoles={["event_admin"]} />}>
+            <Route path="/admin-dashboard" element={<AdminDashboardNew />} />
+            <Route path="/admin-shop" element={<AdminShopPage />} />
+          </Route>
         </Routes>
       </motion.div>
     </AnimatePresence>
