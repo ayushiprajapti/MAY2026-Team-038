@@ -29,7 +29,7 @@ export default function TrailPanel({ matches, activeTrail, onPick }) {
           ))}
         </ol>
 
-        <Link to={`/trail/${activeTrail.id}`} className="btn-primary">
+        <Link to={`/trails/${activeTrail.id}`} className="btn-primary">
           Begin trail →
         </Link>
       </div>

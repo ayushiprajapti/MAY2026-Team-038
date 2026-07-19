@@ -2,9 +2,9 @@ import logo from "../../assets/logo.png";
 
 export default function Footer() {
   return (
-    <footer className="bg-heritage-espresso text-heritage-cream-light pt-16 pb-8 border-t border-heritage-red/20">
+    <footer className="bg-heritage-espresso text-heritage-cream-light pt-10 pb-6 border-t border-heritage-red/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
           
           {/* Section 1: Brand / Bio */}
           <div className="md:col-span-2">
@@ -21,10 +21,10 @@ export default function Footer() {
 
           {/* Section 2: Quick Links */}
           <div>
-            <h3 className="font-serif font-semibold text-lg text-heritage-cream mb-6">
+            <h3 className="font-serif font-semibold text-lg text-heritage-cream mb-4">
               Heritage Chapters
             </h3>
-            <ul className="space-y-3 text-sm">
+            <ul className="space-y-2 text-sm">
               <li>
                 <a href="#about" className="text-heritage-cream-light/80 hover:text-heritage-bronze transition-colors">
                   About & Mission
@@ -60,10 +60,10 @@ export default function Footer() {
 
           {/* Section 3: Contact Info */}
           <div>
-            <h3 className="font-serif font-semibold text-lg text-heritage-cream mb-6">
+            <h3 className="font-serif font-semibold text-lg text-heritage-cream mb-4">
               Contact & Connect
             </h3>
-            <ul className="space-y-4 text-sm text-heritage-cream-light/80">
+            <ul className="space-y-3 text-sm text-heritage-cream-light/80">
               <li className="flex items-start gap-3">
                 <svg className="h-5 w-5 text-heritage-bronze shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -100,7 +100,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-heritage-border/10 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-heritage-cream-light/60">
+        <div className="border-t border-heritage-border/10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-heritage-cream-light/60">
           <p>
             &copy; {new Date().getFullYear()} INTACH Pune Chapter. All rights reserved.
           </p>
