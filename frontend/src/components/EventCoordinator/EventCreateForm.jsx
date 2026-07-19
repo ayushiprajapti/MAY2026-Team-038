@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 // Shared version of the original EventPage creation form, used by admins.
 export default function EventCreateForm() {
   return (
-    <main className="heritage-page px-4 py-6 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-transparent px-4 py-6 sm:px-6 lg:px-8">
       <div className="mx-auto w-full max-w-6xl">
         <header className="mb-8 border-b border-[#D7C3A8] pb-6 text-left"><p className="text-sm font-semibold uppercase tracking-[0.24em] text-[#A26B1D]">Event management</p><h1 className="mt-2 font-serif text-4xl font-medium leading-tight tracking-tight text-[#7F1D1D] sm:text-5xl">Create Heritage Event</h1><p className="mt-3 max-w-3xl text-base leading-7 text-[#5F4631] sm:text-lg">Organize and promote heritage events for volunteers, visitors, and local communities.</p></header>
         <section className="grid grid-cols-1 gap-6 lg:grid-cols-[220px_1fr] lg:items-start">

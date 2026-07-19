@@ -17,10 +17,9 @@ export default function AdminEvents() {
   const attendees = selectedEvent ? registrations.filter((registration) => registration.eventId === selectedEvent.id) : [];
 
   return (
-    <main className="min-h-screen bg-[#f7eddc] px-4 py-8 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-transparent px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <Link to="/admin" className="font-sans text-sm font-bold text-[#9c6719] hover:text-[#74460d]">Back to dashboard</Link>
-        <div className="mt-5 flex flex-col justify-between gap-5 border-b border-[#dec9a3] pb-6 md:flex-row md:items-end">
+        <div className="flex flex-col justify-between gap-5 border-b border-[#dec9a3] pb-6 md:flex-row md:items-end">
           <div>
             <p className="font-sans text-xs font-bold uppercase tracking-[0.22em] text-[#a2651b]">Coordinator workspace</p>
             <h1 className="mt-2 font-serif text-4xl text-[#422b1b]">Events</h1>
