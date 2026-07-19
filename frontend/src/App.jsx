@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Routes, Route, useLocation, Navigate, Outlet } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import SiteLayout from "./components/shared/SiteLayout";
+import AdminLayout from "./components/shared/AdminLayout";
 import Home from "./pages/Home";
 import HeritageShop from "./pages/HeritageShop";
 import Checkout from "./pages/Checkout";
@@ -59,55 +60,68 @@ function ProtectedRoute({ allowedRoles }) {
   return <Outlet />;
 }
 
+// Helper wrapper to animate transition for standalone page components
+function AnimatedPage({ children }) {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.div
+        key={location.pathname}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+        variants={pageTransition}
+        className="w-full h-full"
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 function AnimatedRoutes() {
   const location = useLocation();
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
-      <motion.div key={location.pathname} {...pageTransition}>
-        <Routes location={location}>
-          
-          {/* Site Layout Wrapped Routes (Gets Header & Footer automatically) */}
-          <Route element={<SiteLayout />}>
-            <Route path="/" element={<Home />} />
-            
-            {/* Protected Admin Routes (Gets Header & Footer) */}
-            <Route element={<ProtectedRoute allowedRoles={["event_admin"]} />}>
-              <Route path="/admin" element={<AdminPage />} />
-              <Route path="/admin-db" element={<AdminDatabase />} />
-              <Route path="/admin-chat" element={<AdminChat />} />
-              <Route
-                path="/admin/volunteer-details"
-                element={<VolunteerUploadDetails />}
-              />
-            </Route>
+    <Routes location={location}>
+      
+      {/* Site Layout Wrapped Routes (Gets Header & Footer automatically) */}
+      <Route element={<SiteLayout />}>
+        <Route path="/" element={<Home />} />
+        
+        {/* Protected Volunteer Routes (Gets Header & Footer) */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/volunteer/*" element={<VolunteerPage />} />
+        </Route>
 
-            {/* Protected Volunteer Routes (Gets Header & Footer) */}
-            <Route element={<ProtectedRoute />}>
-              <Route path="/volunteer/*" element={<VolunteerPage />} />
-            </Route>
+        {/* Public Layout-Wrapped Routes */}
+        <Route path="/events" element={<EventPage />} />
+        <Route path="/shop" element={<HeritageShop />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/trails" element={<GlobeHome />} />
+      </Route>
 
-            {/* Public Layout-Wrapped Routes */}
-            <Route path="/events" element={<EventPage />} />
-            <Route path="/shop" element={<HeritageShop />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/trails" element={<GlobeHome />} />
-          </Route>
+      {/* Standalone Public Routes (No Header & Footer) */}
+      <Route path="/login" element={<AnimatedPage><Login /></AnimatedPage>} />
+      <Route path="/register" element={<AnimatedPage><Register /></AnimatedPage>} />
+      {/* Immersive trail — no global header/footer */}
+      <Route path="/trails/:trailId" element={<AnimatedPage><TrailExperience /></AnimatedPage>} />
 
-          {/* Standalone Public Routes (No Header & Footer) */}
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          {/* Immersive trail — no global header/footer */}
-          <Route path="/trails/:trailId" element={<TrailExperience />} />
-
-          {/* Standalone Protected Admin Routes (No Header & Footer) */}
-          <Route element={<ProtectedRoute allowedRoles={["event_admin"]} />}>
-            <Route path="/admin-dashboard" element={<AdminDashboardNew />} />
-            <Route path="/admin-shop" element={<AdminShopPage />} />
-          </Route>
-        </Routes>
-      </motion.div>
-    </AnimatePresence>
+      {/* Protected Admin Routes (No Global Header & Footer, gets AdminSidebar layout) */}
+      <Route element={<ProtectedRoute allowedRoles={["event_admin"]} />}>
+        <Route element={<AdminLayout />}>
+          <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin-db" element={<AdminDatabase />} />
+          <Route path="/admin-chat" element={<AdminChat />} />
+          <Route path="/admin-dashboard" element={<AdminDashboardNew />} />
+          <Route path="/admin-shop" element={<AdminShopPage />} />
+        </Route>
+        <Route
+          path="/admin/volunteer-details"
+          element={<AnimatedPage><VolunteerUploadDetails /></AnimatedPage>}
+        />
+      </Route>
+    </Routes>
   );
 }
 

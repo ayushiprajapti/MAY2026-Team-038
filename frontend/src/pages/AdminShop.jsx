@@ -104,12 +104,8 @@ export default function AdminShop() {
   const totalStock = products.reduce((sum, p) => sum + (p.is_active ? p.stock_quantity : 0), 0);
 
   return (
-    <div className="min-h-screen bg-heritage-cream/90 flex text-heritage-espresso">
-      {/* Shared Sidebar Component */}
-      <AdminSidebar activePage="shop" />
-
-      {/* Main Content Area */}
-      <main className="flex-1 ml-80 p-8 md:p-12 overflow-y-auto">
+    <>
+      <main className="p-8 md:p-12 overflow-y-auto w-full h-full text-heritage-espresso bg-[#f8ecd7]/90">
         {/* Inline Header */}
         <header className="flex flex-col sm:flex-row sm:justify-between sm:items-center w-full mb-10 text-left">
           <div>
@@ -224,6 +220,6 @@ export default function AdminShop() {
           </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 }

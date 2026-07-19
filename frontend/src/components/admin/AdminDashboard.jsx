@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AdminSidebar from "../shared/AdminSidebar";
 import "./AdminDashboard.css";
 
 import charminarImg from "../../assets/heritage/charminar.jpg";
@@ -60,8 +61,7 @@ function AdminDashboard() {
   );
 
   return (
-    <div className="admin-dashboard">
-
+    <div className="admin-dashboard text-left w-full h-full">
       <div className="dashboard-container">
 
         <div className="dashboard-header">
@@ -306,9 +306,7 @@ function AdminDashboard() {
         )}
 
       </div>
-
     </div>
-
   </div>
   );
 }

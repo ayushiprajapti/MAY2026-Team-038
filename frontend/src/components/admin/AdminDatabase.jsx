@@ -3,6 +3,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { trails, regions } from '../../data/trails';
 import { buildSiteIcon } from '../../utils/markerIcon';
+import AdminSidebar from '../shared/AdminSidebar';
 import './AdminDatabase.css';
 
 const MAHARASHTRA_CENTER = [18.9, 74.6];
@@ -57,112 +58,134 @@ export default function AdminDatabase() {
   }, [activeSiteId]);
 
   return (
-    <div className="admin-db-page">
-      <div className="admin-db-header">
-        <h1>Heritage Database</h1>
-        <p>Manage and view all approved heritage sites across regions.</p>
+    <div className="admin-db-page p-8 space-y-8 text-left w-full h-full">
         
-        <div className="admin-db-filters">
-          <label htmlFor="regionFilter"><strong>Filter by Region:</strong></label>
-          <select 
-            id="regionFilter" 
-            value={selectedRegion} 
-            onChange={(e) => {
-              setSelectedRegion(e.target.value);
-              setActiveSiteId(null);
-            }}
-          >
-            <option value="All">All Regions</option>
-            {regions.map(r => <option key={r} value={r}>{r}</option>)}
-          </select>
-        </div>
-      </div>
+        {/* Header Section with Integrated Filter */}
+        <div className="py-6 border-b border-heritage-border/20 flex flex-col md:flex-row md:justify-between md:items-center gap-4 text-left">
+          <div>
+            <p className="uppercase tracking-[0.2em] text-[#c28230] text-xs font-bold">
+              Admin Panel
+            </p>
+            <h1 className="font-serif text-3xl sm:text-4xl font-extrabold text-[#9c2d19] mt-2">
+              Heritage Database
+            </h1>
+            <p className="mt-3 text-heritage-charcoal/85 text-base leading-relaxed max-w-3xl">
+              Manage and view all approved heritage sites across regions on an interactive map.
+            </p>
+          </div>
 
-      <div className="admin-db-content">
-        
-        {/* Map View */}
-        <MapContainer
-          center={MAHARASHTRA_CENTER}
-          zoom={DEFAULT_ZOOM}
-          scrollWheelZoom={false}
-          className="admin-db-map-container"
-        >
-          <TileLayer
-            url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            maxZoom={18}
-          />
-
-          <MapBoundsController sites={filteredSites} selectedRegion={selectedRegion} />
-
-          {filteredSites.map((site) => (
-            <Marker
-              key={site.id}
-              position={[site.lat, site.lon]}
-              icon={buildSiteIcon(site.icon, { active: activeSiteId === site.id })}
-              eventHandlers={{
-                click: () => setActiveSiteId(site.id)
+          {/* Region filter in header */}
+          <div className="flex items-center gap-3 shrink-0">
+            <label htmlFor="regionFilter" className="text-xs font-bold uppercase tracking-wider text-heritage-charcoal/70">
+              Region:
+            </label>
+            <select
+              id="regionFilter"
+              value={selectedRegion}
+              onChange={(e) => {
+                setSelectedRegion(e.target.value);
+                setActiveSiteId(null);
               }}
+              className="w-48 border border-heritage-border bg-white shadow-sm focus:outline-none focus:border-heritage-bronze focus:ring-1 focus:ring-heritage-bronze rounded-lg p-2.5 text-xs font-semibold text-heritage-espresso transition cursor-pointer"
             >
-              <Popup>
-                <strong>{site.name}</strong>
-                <br />
-                <span style={{ fontFamily: 'var(--font-data)', fontSize: '0.75rem' }}>
-                  {site.region} · {site.type}
-                </span>
-              </Popup>
-            </Marker>
-          ))}
-        </MapContainer>
-
-        {/* Table View */}
-        <div className="admin-db-table-wrapper">
-          <table className="admin-db-table">
-            <thead>
-              <tr>
-                <th>Site Name & Trail</th>
-                <th>Region</th>
-                <th>Type / Built</th>
-                <th>Signification</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredSites.length === 0 ? (
-                <tr>
-                  <td colSpan="4">
-                    <div className="empty-table-state">
-                      No sites found for the selected region.
-                    </div>
-                  </td>
-                </tr>
-              ) : (
-                filteredSites.map((site) => (
-                  <tr 
-                    key={site.id} 
-                    ref={el => rowRefs.current[site.id] = el}
-                    className={activeSiteId === site.id ? 'active-row' : ''}
-                    onClick={() => setActiveSiteId(site.id)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <td>
-                      <strong>{site.name}</strong>
-                      <span style={{ fontSize: '0.8rem', color: '#666' }}>{site.trailName}</span>
-                    </td>
-                    <td>{site.region}</td>
-                    <td>
-                      {site.type}
-                      <br />
-                      <span style={{ fontSize: '0.8rem', color: '#666' }}>{site.built}</span>
-                    </td>
-                    <td className="signification-col">{site.signification}</td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+              <option value="All">All Regions</option>
+              {regions.map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
 
+        {/* Main Content Area */}
+        <div className="admin-db-content">
+          
+          {/* Map View */}
+          <MapContainer
+            center={MAHARASHTRA_CENTER}
+            zoom={DEFAULT_ZOOM}
+            scrollWheelZoom={false}
+            className="admin-db-map-container"
+          >
+            <TileLayer
+              url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              maxZoom={18}
+            />
+
+            <MapBoundsController sites={filteredSites} selectedRegion={selectedRegion} />
+
+            {filteredSites.map((site) => (
+              <Marker
+                key={site.id}
+                position={[site.lat, site.lon]}
+                icon={buildSiteIcon(site.icon, { active: activeSiteId === site.id })}
+                eventHandlers={{
+                  click: () => setActiveSiteId(site.id)
+                }}
+              >
+                <Popup>
+                  <strong>{site.name}</strong>
+                  <br />
+                  <span style={{ fontFamily: 'var(--font-data)', fontSize: '0.75rem' }}>
+                    {site.region} · {site.type}
+                  </span>
+                </Popup>
+              </Marker>
+            ))}
+          </MapContainer>
+
+          {/* Table View - Restyled to match Volunteer Tables */}
+          <div className="heritage-card rounded-2xl p-6 md:p-8 overflow-x-auto shadow-sm">
+            <table className="w-full text-left font-sans text-xs border-collapse">
+              <thead>
+                <tr className="border-b border-heritage-border/40 text-heritage-charcoal/60 uppercase font-semibold tracking-wider text-[10px]">
+                  <th className="py-3 px-4">Site Name & Trail</th>
+                  <th className="py-3 px-4">Region</th>
+                  <th className="py-3 px-4">Type / Built</th>
+                  <th className="py-3 px-4">Signification</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-heritage-border/20 text-heritage-espresso font-medium">
+                {filteredSites.length === 0 ? (
+                  <tr>
+                    <td
+                      colSpan="4"
+                      className="py-12 text-center text-heritage-charcoal/60 font-semibold"
+                    >
+                      No sites found for the selected region.
+                    </td>
+                  </tr>
+                ) : (
+                  filteredSites.map((site) => (
+                    <tr 
+                      key={site.id} 
+                      ref={el => rowRefs.current[site.id] = el}
+                      className={`hover:bg-heritage-cream/10 transition-colors cursor-pointer ${
+                        activeSiteId === site.id ? 'bg-heritage-cream/30 border-l-4 border-heritage-bronze' : ''
+                      }`}
+                      onClick={() => setActiveSiteId(site.id)}
+                    >
+                      <td className="py-3.5 px-4 font-semibold text-heritage-espresso">
+                        <strong>{site.name}</strong>
+                        <span className="text-[10px] text-heritage-charcoal/60 font-sans mt-0.5 block">{site.trailName}</span>
+                      </td>
+                      <td className="py-3.5 px-4 text-heritage-charcoal/80">{site.region}</td>
+                      <td className="py-3.5 px-4 text-heritage-charcoal/80">
+                        <div>{site.type}</div>
+                        <span className="text-[10px] text-heritage-charcoal/60 font-sans mt-0.5 block">{site.built}</span>
+                      </td>
+                      <td className="py-3.5 px-4 text-heritage-charcoal/80 max-w-sm leading-relaxed whitespace-normal">
+                        {site.signification}
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-    </div>
   );
 }

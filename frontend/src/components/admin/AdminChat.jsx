@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { trails } from '../../data/trails';
+import AdminSidebar from '../shared/AdminSidebar';
 import './AdminChat.css';
 
 // Mock bot logic that searches the database for site names
@@ -90,60 +91,64 @@ export default function AdminChat() {
   };
 
   return (
-    <div className="admin-chat-layout">
-      <aside className="admin-chat-sidebar">
-        <button className="new-chat-btn" onClick={handleNewChat}>
-          <span>+</span> New chat
-        </button>
+    <div className="admin-chat-layout w-full h-full">
         
-        <div className="chat-sessions">
-          {MOCK_SESSIONS.map((session) => (
-            <div key={session.id} className="chat-session-item" onClick={() => handleSessionClick(session.title)}>
-              <div className="chat-session-icon">💬</div>
-              <div className="chat-session-title">{session.title}</div>
-            </div>
-          ))}
-        </div>
-      </aside>
-
-      {/* Main Chat Area */}
-      <main className="admin-chat-main">
-        <div className="admin-chat-messages" ref={containerRef}>
-          {messages.map((msg) => (
-            <div key={msg.id} className={`chat-message-row ${msg.sender === 'user' ? 'user-row' : 'bot-row'}`}>
-              <div className={`chat-bubble ${msg.sender}`}>
-                {msg.text}
+        {/* Main Chat Area */}
+        <main className="admin-chat-main">
+          <div className="admin-chat-messages" ref={containerRef}>
+            {messages.map((msg) => (
+              <div key={msg.id} className={`chat-message-row ${msg.sender === 'user' ? 'user-row' : 'bot-row'}`}>
+                <div className={`chat-bubble ${msg.sender}`}>
+                  {msg.text}
+                </div>
               </div>
-            </div>
-          ))}
-          {isTyping && (
-            <div className="chat-message-row bot-row">
-              <div className="chat-bubble bot typing-indicator">
-                <span></span><span></span><span></span>
+            ))}
+            {isTyping && (
+              <div className="chat-message-row bot-row">
+                <div className="chat-bubble bot typing-indicator">
+                  <span></span><span></span><span></span>
+                </div>
               </div>
-            </div>
-          )}
-
-        </div>
-
-        <div className="admin-chat-input-area">
-          <form onSubmit={handleSendMessage} className="chat-input-form">
-            <input
-              type="text"
-              placeholder="Message DB Assistant..."
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              className="chat-input"
-            />
-            <button type="submit" className="chat-send-btn" disabled={!inputValue.trim()}>
-              Send
-            </button>
-          </form>
-          <div className="chat-footer-note">
-            Assistant can make mistakes. Verify important data in the Admin Database.
+            )}
           </div>
-        </div>
-      </main>
+
+          <div className="admin-chat-input-area">
+            <form onSubmit={handleSendMessage} className="chat-input-container">
+              <input
+                type="text"
+                placeholder="Message DB Assistant..."
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                className="chat-input-field"
+              />
+              <button type="submit" className="chat-submit-btn" disabled={!inputValue.trim()}>
+                <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </button>
+            </form>
+            <div className="chat-footer-note">
+              Assistant can make mistakes. Verify important data in the Admin Database.
+            </div>
+          </div>
+        </main>
+
+        {/* Chat Sessions Sidebar */}
+        <aside className="admin-chat-sidebar">
+          <button className="new-chat-btn" onClick={handleNewChat}>
+            <span>+</span> New chat
+          </button>
+          
+          <div className="chat-sessions">
+            {MOCK_SESSIONS.map((session) => (
+              <div key={session.id} className="chat-session-item" onClick={() => handleSessionClick(session.title)}>
+                <div className="chat-session-icon">💬</div>
+                <div className="chat-session-title">{session.title}</div>
+              </div>
+            ))}
+          </div>
+        </aside>
+
     </div>
   );
 }
