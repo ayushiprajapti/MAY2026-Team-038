@@ -3,13 +3,15 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import Header from "./components/shared/Header";
 import Footer from "./components/shared/Footer";
+import SiteLayout from "./components/shared/SiteLayout";
 import Home from "./pages/Home";
 import HeritageShop from "./pages/HeritageShop";
 import Checkout from "./pages/Checkout";
 import AdminPage from "./pages/AdminPage";
-import GlobeHome from "./pages/GlobeHome.jsx";
-import TrailExperience from "./pages/TrailExperience.jsx";
+import GlobeHome from "./pages/GlobeHome";
+import TrailExperience from "./pages/TrailExperience";
 import VolunteerPage from "./pages/VolunteerPage";
+import VolunteerUploadDetails from "./pages/VolunteerUploadDetails";
 import EventPage from "./pages/EventPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -34,10 +36,6 @@ function ScrollToTop() {
   return null;
 }
 
-// Routes gets an explicit `location` prop (instead of relying on the
-// live router context, as a bare <Outlet /> would) so the exiting page's
-// matched route stays frozen on the old path while AnimatePresence
-// animates it out — otherwise it flips to the new page mid-exit.
 function AnimatedRoutes() {
   const location = useLocation();
 
@@ -45,18 +43,31 @@ function AnimatedRoutes() {
     <AnimatePresence mode="wait" initial={false}>
       <motion.div key={location.pathname} {...pageTransition}>
         <Routes location={location}>
-          <Route path="/" element={<Home />} />
+          
+          {/* Site Layout Wrapped Routes (Gets Header & Footer automatically) */}
+          <Route element={<SiteLayout />}>
+            <Route path="/" element={<Home />} />
+            
+            {/* Admin Module */}
+            <Route path="/admin" element={<AdminPage />} />
+            <Route
+              path="/admin/volunteer-details"
+              element={<VolunteerUploadDetails />}
+            />
+
+            <Route path="/volunteer/*" element={<VolunteerPage />} />
+            <Route path="/events" element={<EventPage />} />
+            <Route path="/shop" element={<HeritageShop />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/trails" element={<GlobeHome />} />
+            <Route path="/trails/:trailId" element={<TrailExperience />} />
+          </Route>
+
+          {/* Standalone Routes (No Header & Footer) */}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/admin" element={<AdminPage />} />
           <Route path="/admin-dashboard" element={<AdminDashboardNew />} />
           <Route path="/admin-shop" element={<AdminShopPage />} />
-          <Route path="/volunteer" element={<VolunteerPage />} />
-          <Route path="/events" element={<EventPage />} />
-          <Route path="/shop" element={<HeritageShop />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/trails" element={<GlobeHome />} />
-          <Route path="/trails/:trailId" element={<TrailExperience />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
@@ -64,15 +75,10 @@ function AnimatedRoutes() {
 }
 
 export default function App() {
-  const location = useLocation();
-  const hideHeaderFooter = ["/login", "/register", "/admin-dashboard", "/admin-shop"].includes(location.pathname);
-
   return (
     <>
       <ScrollToTop />
-      {!hideHeaderFooter && <Header />}
       <AnimatedRoutes />
-      {!hideHeaderFooter && <Footer />}
     </>
   );
 }
