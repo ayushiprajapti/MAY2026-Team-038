@@ -10,6 +10,10 @@ import GlobeHome from "./pages/GlobeHome.jsx";
 import TrailExperience from "./pages/TrailExperience.jsx";
 import VolunteerPage from "./pages/VolunteerPage";
 import EventPage from "./pages/EventPage";
+import EventRegistration from "./pages/EventRegistration";
+import AdminEvents from "./pages/AdminEvents";
+import AdminEventCreate from "./pages/AdminEventCreate";
+
 import "./App.css";
 
 function SiteLayout() {
@@ -40,8 +44,11 @@ export default function App() {
         <Route element={<SiteLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/admin" element={<AdminPage />} />
+          <Route path="/admin/events" element={<AdminEvents />} />
+          <Route path="/admin/events/create" element={<AdminEventCreate />} />
           <Route path="/volunteer" element={<VolunteerPage />} />
           <Route path="/events" element={<EventPage />} />
+          <Route path="/events/register" element={<EventRegistration />} />
           <Route path="/shop" element={<HeritageShop />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/trails" element={<GlobeHome />} />

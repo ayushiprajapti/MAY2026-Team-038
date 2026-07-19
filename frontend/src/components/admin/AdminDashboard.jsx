@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import "./AdminDashboard.css";
 import HeritageModal from "./HeritageModal";
 
@@ -64,9 +65,10 @@ function AdminDashboard() {
   return (
     <div className="admin-dashboard">
       <div className="dashboard-container">
-        <h1 className="page-title">
-          Admin Dashboard
-        </h1>
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <h1 className="page-title">Admin Dashboard</h1>
+          <Link to="/admin/events" className="rounded-lg bg-[#b87519] px-4 py-2.5 font-sans text-sm font-bold text-white no-underline transition hover:bg-[#925a0e]">Manage event registrations</Link>
+        </div>
 
         <h2 className="section-title">
           Pending Volunteer Submissions
