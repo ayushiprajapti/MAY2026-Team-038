@@ -33,6 +33,7 @@ export const trails = [
         lat: 18.519,
         lon: 73.856,
         built: '1732 CE',
+        signification: 'A short walk through the old Peshwa quarter, tracing the residences and courts that once ran the Maratha capital. Shaniwar Wada was the seat of the Peshwa rulers, built in 1732. Its fire-scarred walls and stepped gateway still show the scale of the original palace complex.',
         narration: {
           en: 'Shaniwar Wada was the seat of the Peshwa rulers, built in 1732. Its fire-scarred walls and stepped gateway still show the scale of the original palace complex.',
           hi: 'शनिवार वाडा 1732 में पेशवाओं की राजधानी के रूप में बना था। आग से झुलसी दीवारें आज भी महल की भव्यता दिखाती हैं।',
@@ -47,6 +48,7 @@ export const trails = [
         lat: 18.516,
         lon: 73.856,
         built: '1807 CE',
+        signification: 'A short walk through the old Peshwa quarter, tracing the residences and courts that once ran the Maratha capital. Vishrambaug Wada shows off wood-carved balconies and an ornamental facade typical of the later Peshwa period.',
         narration: {
           en: 'Vishrambaug Wada shows off wood-carved balconies and an ornamental facade typical of the later Peshwa period.',
           hi: 'विश्रामबाग वाडा में लकड़ी की नक्काशीदार बालकनियाँ हैं, जो बाद के पेशवा काल की खासियत हैं।',
@@ -61,6 +63,7 @@ export const trails = [
         lat: 18.517,
         lon: 73.856,
         built: 'Reconstructed, orig. 1630s CE',
+        signification: 'A short walk through the old Peshwa quarter, tracing the residences and courts that once ran the Maratha capital. Lal Mahal is a modern reconstruction marking the childhood home associated with Shivaji Maharaj and Jijabai.',
         narration: {
           en: 'Lal Mahal is a modern reconstruction marking the childhood home associated with Shivaji Maharaj and Jijabai.',
           hi: 'लाल महल एक आधुनिक पुनर्निर्माण है, जो शिवाजी महाराज और जीजाबाई से जुड़े बचपन के घर का स्मरण कराता है।',
@@ -88,6 +91,7 @@ export const trails = [
         lat: 18.366,
         lon: 73.755,
         built: 'pre-1600s CE',
+        signification: 'A hill-fort circuit through the Sahyadri range, following the ridgelines Maratha garrisons once held. Sinhagad sits at over 1,300 metres and was the site of a decisive 1670 night battle led by Tanaji Malusare.',
         narration: {
           en: 'Sinhagad sits at over 1,300 metres and was the site of a decisive 1670 night battle led by Tanaji Malusare.',
           hi: 'सिंहगड 1300 मीटर से अधिक ऊँचाई पर है और 1670 में तानाजी मालुसरे के नेतृत्व में हुई रात्रि लड़ाई का स्थल है।',
@@ -102,6 +106,7 @@ export const trails = [
         lat: 18.251,
         lon: 73.703,
         built: '1600s CE',
+        signification: 'A hill-fort circuit through the Sahyadri range, following the ridgelines Maratha garrisons once held. Rajgad served as the Maratha capital for over two decades before the court moved to Raigad.',
         narration: {
           en: 'Rajgad served as the Maratha capital for over two decades before the court moved to Raigad.',
           hi: 'राजगढ़ दो दशकों से अधिक समय तक मराठा राजधानी रहा, इसके बाद राजधानी रायगढ़ स्थानांतरित हुई।',
@@ -116,6 +121,7 @@ export const trails = [
         lat: 18.278,
         lon: 73.661,
         built: '1643 CE (captured)',
+        signification: 'A hill-fort circuit through the Sahyadri range, following the ridgelines Maratha garrisons once held. Torna was the first fort captured by Shivaji Maharaj in 1643, at the start of Maratha expansion.',
         narration: {
           en: 'Torna was the first fort captured by Shivaji Maharaj in 1643, at the start of Maratha expansion.',
           hi: 'तोरणा 1643 में शिवाजी महाराज द्वारा जीता गया पहला किला था, मराठा विस्तार की शुरुआत में।',
@@ -143,6 +149,7 @@ export const trails = [
         lat: 19.933,
         lon: 73.529,
         built: '1755 CE',
+        signification: 'A riverside walk along the Godavari through Nashik\'s temple ghats, one of India\'s four Kumbh Mela sites. Trimbakeshwar houses one of the twelve jyotirlingas and sits near the source of the Godavari river.',
         narration: {
           en: 'Trimbakeshwar houses one of the twelve jyotirlingas and sits near the source of the Godavari river.',
           hi: 'त्र्यंबकेश्वर बारह ज्योतिर्लिंगों में से एक है और गोदावरी नदी के उद्गम के निकट स्थित है।',
@@ -157,6 +164,7 @@ export const trails = [
         lat: 19.998,
         lon: 73.791,
         built: '1794 CE',
+        signification: 'A riverside walk along the Godavari through Nashik\'s temple ghats, one of India\'s four Kumbh Mela sites. Kalaram Temple is built entirely of black stone and was central to the 1930 temple-entry satyagraha.',
         narration: {
           en: 'Kalaram Temple is built entirely of black stone and was central to the 1930 temple-entry satyagraha.',
           hi: 'कालाराम मंदिर पूरी तरह काले पत्थर से बना है और 1930 के मंदिर-प्रवेश सत्याग्रह का केंद्र था।',
@@ -171,6 +179,7 @@ export const trails = [
         lat: 19.984,
         lon: 73.776,
         built: '18th century',
+        signification: 'A riverside walk along the Godavari through Nashik\'s temple ghats, one of India\'s four Kumbh Mela sites. Someshwar Temple sits on a quiet bend of the Godavari, a favoured spot for evening aarti.',
         narration: {
           en: 'Someshwar Temple sits on a quiet bend of the Godavari, a favoured spot for evening aarti.',
           hi: 'सोमेश्वर मंदिर गोदावरी के शांत मोड़ पर स्थित है, जो शाम की आरती के लिए प्रिय स्थान है।',
@@ -198,6 +207,7 @@ export const trails = [
         lat: 16.700,
         lon: 74.223,
         built: '1000s CE, rebuilt 1835',
+        signification: 'A trail linking the stepped tanks, ghats and lake reservoirs that once supplied the old city of Kolhapur. Rankala\'s stone ghats step down to a lake believed to trace back to an 11th-century reservoir.',
         narration: {
           en: 'Rankala\'s stone ghats step down to a lake believed to trace back to an 11th-century reservoir.',
           hi: 'रांकाला के पत्थर के घाट झील की ओर उतरते हैं, जिसकी उत्पत्ति 11वीं सदी के जलाशय से मानी जाती है।',
@@ -212,6 +222,7 @@ export const trails = [
         lat: 16.706,
         lon: 74.230,
         built: '12th century',
+        signification: 'A trail linking the stepped tanks, ghats and lake reservoirs that once supplied the old city of Kolhapur. Kotitirtha is a stepped tank once used for ritual bathing, its tiers cut directly into black basalt.',
         narration: {
           en: 'Kotitirtha is a stepped tank once used for ritual bathing, its tiers cut directly into black basalt.',
           hi: 'कोटितीर्थ एक सीढ़ीदार जलाशय है जो पहले स्नान अनुष्ठान के लिए प्रयोग होता था, इसकी सीढ़ियाँ काले बेसाल्ट में खुदी हैं।',
@@ -226,6 +237,7 @@ export const trails = [
         lat: 16.807,
         lon: 74.108,
         built: '12th century, fort 1178 CE',
+        signification: 'A trail linking the stepped tanks, ghats and lake reservoirs that once supplied the old city of Kolhapur. Panhala\'s fort reservoirs kept a hill garrison supplied with water through long sieges.',
         narration: {
           en: 'Panhala\'s fort reservoirs kept a hill garrison supplied with water through long sieges.',
           hi: 'पन्हाला किले के जलाशय लंबे घेरों के दौरान पहाड़ी चौकी को पानी की आपूर्ति करते थे।',

@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./AdminDashboard.css";
-import HeritageModal from "./HeritageModal";
 
 import charminarImg from "../../assets/heritage/charminar.jpg";
 import golcondaImg from "../../assets/heritage/golconda.jpg";
@@ -14,6 +13,7 @@ const initialSubmissions = [
     location: "Hyderabad, Telangana",
     volunteer: "Volunteer 101",
     image: charminarImg,
+    status: "Pending Review",
   },
   {
     id: 2,
@@ -21,6 +21,7 @@ const initialSubmissions = [
     location: "Hyderabad, Telangana",
     volunteer: "Volunteer 204",
     image: golcondaImg,
+    status: "Pending Review",
   },
   {
     id: 3,
@@ -28,34 +29,30 @@ const initialSubmissions = [
     location: "Warangal, Telangana",
     volunteer: "Volunteer 315",
     image: warangalImg,
+    status: "Pending Review",
   },
 ];
 
 function AdminDashboard() {
+  const navigate = useNavigate();
+
   const [submissions, setSubmissions] = useState(initialSubmissions);
-
-  const [selectedSubmission, setSelectedSubmission] = useState(null);
-
   const [search, setSearch] = useState("");
 
   const handleApprove = (id) => {
-    setSubmissions(
-      submissions.filter((submission) => submission.id !== id)
+    setSubmissions((prev) =>
+      prev.filter((submission) => submission.id !== id)
     );
   };
 
   const handleReject = (id) => {
-    setSubmissions(
-      submissions.filter((submission) => submission.id !== id)
+    setSubmissions((prev) =>
+      prev.filter((submission) => submission.id !== id)
     );
   };
 
-  const handleView = (submission) => {
-    setSelectedSubmission(submission);
-  };
-
-  const closeModal = () => {
-    setSelectedSubmission(null);
+  const handleView = () => {
+    navigate("/admin/volunteer-details");
   };
 
   const filteredSubmissions = submissions.filter((submission) =>
@@ -63,114 +60,143 @@ function AdminDashboard() {
   );
 
   return (
-    <div className="admin-dashboard">
+    <div className="admin-dashboard text-left w-full h-full">
       <div className="dashboard-container">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <h1 className="page-title">Admin Dashboard</h1>
-          <Link to="/admin/events" className="rounded-lg bg-[#b87519] px-4 py-2.5 font-sans text-sm font-bold text-white no-underline transition hover:bg-[#925a0e]">Manage event registrations</Link>
+
+        {/* Dashboard Header with Manage Events Button */}
+        <div className="dashboard-header flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <p className="dashboard-tag">
+              INTACH Heritage Management
+            </p>
+            <h1 className="page-title">
+              Volunteer Submission Verification
+            </h1>
+            <p className="dashboard-subtitle">
+              Review, verify and manage heritage submissions contributed
+              by registered volunteers before publishing them on the
+              heritage portal.
+            </p>
+          </div>
+          <div className="shrink-0 self-start md:self-center">
+            <Link 
+              to="/admin/events" 
+              className="rounded-lg bg-[#b87519] px-5 py-2.5 font-sans text-sm font-bold text-white no-underline transition hover:bg-[#925a0e] shadow-sm inline-block"
+            >
+              Manage event registrations
+            </Link>
+          </div>
         </div>
 
-        <h2 className="section-title">
-          Pending Volunteer Submissions
-        </h2>
-
-        <input
-          className="search-box"
-          type="text"
-          placeholder="Search heritage site..."
-          value={search}
-          onChange={(event) => setSearch(event.target.value)}
-        />
-
-        <div className="submission-table">
-
-          <div className="table-header">
-            <div>Site Image</div>
-            <div>Metadata & Location</div>
-            <div>Action Buttons</div>
+        {/* Statistics Grid */}
+        <div className="stats-grid">
+          <div className="stat-card">
+            <span className="stat-icon">📥</span>
+            <div>
+              <h3>Pending</h3>
+              <h2>{submissions.length}</h2>
+            </div>
           </div>
 
-          {filteredSubmissions.length === 0 ? (
-
-            <div className="empty-state">
-              <h2>🎉 All Done!</h2>
-
-              <p>
-                No pending volunteer submissions.
-              </p>
+          <div className="stat-card">
+            <span className="stat-icon">✅</span>
+            <div>
+              <h3>Approved Today</h3>
+              <h2>12</h2>
             </div>
+          </div>
 
-          ) : (
-
-            filteredSubmissions.map((submission) => (
-
-              <div
-                className="table-row"
-                key={submission.id}
-              >
-
-                <div className="image-box">
-                  <img
-                    src={submission.image}
-                    alt={submission.site}
-                  />
-                </div>
-
-                <div className="metadata-box">
-
-                  <h2>{submission.site}</h2>
-
-                  <p>
-                    📍 <strong>Location:</strong> {submission.location}
-                  </p>
-
-                  <p>
-                    👤 <strong>Volunteer:</strong> {submission.volunteer}
-                  </p>
-
-                  <p>
-                    ⏳ <strong>Status:</strong> Pending Review
-                  </p>
-
-                </div>
-
-                <div className="action-box">
-
-                  <button
-                    className="approve-btn"
-                    onClick={() => handleApprove(submission.id)}
-                  >
-                    Approve
-                  </button>
-
-                  <button
-                    className="reject-btn"
-                    onClick={() => handleReject(submission.id)}
-                  >
-                    Reject
-                  </button>
-
-                  <button
-                    className="view-btn"
-                    onClick={() => handleView(submission)}
-                  >
-                    View Details
-                  </button>
-
-                </div>
-
-              </div>
-
-            ))
-
-          )}
-
+          <div className="stat-card">
+            <span className="stat-icon">❌</span>
+            <div>
+              <h3>Rejected Today</h3>
+              <h2>2</h2>
+            </div>
+          </div>
         </div>
 
-        <HeritageModal
-          submission={selectedSubmission}
-          onClose={closeModal}
-        />
+        {/* Search Section */}
+        <div className="search-section">
+          <div>
+            <h2>
+              Pending Heritage Submissions
+            </h2>
+            <p>
+              {submissions.length} submission(s) awaiting review
+            </p>
+          </div>
+
+          <input
+            className="search-box"
+            type="text"
+            placeholder="Search heritage site..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+
+        {/* Submission List */}
+        <div className="submission-list">
+          {filteredSubmissions.length === 0 ? (
+            <div className="empty-state">
+              <div className="empty-icon">🎉</div>
+              <h2>All Caught Up!</h2>
+              <p>There are currently no volunteer submissions waiting for review.</p>
+            </div>
+          ) : (
+            filteredSubmissions.map((submission) => (
+              <div className="submission-card" key={submission.id}>
+                <div className="card-image">
+                  <img src={submission.image} alt={submission.site} />
+                </div>
+
+                <div className="card-content">
+                  <div className="card-top">
+                    <div>
+                      <h2 className="heritage-title">{submission.site}</h2>
+                      <p className="heritage-location">📍 {submission.location}</p>
+                    </div>
+                    <span className="status-badge">🟡 {submission.status}</span>
+                  </div>
+
+                  <div className="info-grid">
+                    <div className="info-box">
+                      <span className="info-label">Volunteer</span>
+                      <p>{submission.volunteer}</p>
+                    </div>
+
+                    <div className="info-box">
+                      <span className="info-label">Category</span>
+                      <p>Historical Monument</p>
+                    </div>
+
+                    <div className="info-box">
+                      <span className="info-label">Submitted</span>
+                      <p>Today</p>
+                    </div>
+
+                    <div className="info-box">
+                      <span className="info-label">Verification</span>
+                      <p>Awaiting Review</p>
+                    </div>
+                  </div>
+
+                  <div className="card-actions">
+                    <button className="approve-btn" onClick={() => handleApprove(submission.id)}>
+                      ✓ Approve
+                    </button>
+                    <button className="reject-btn" onClick={() => handleReject(submission.id)}>
+                      ✕ Reject
+                    </button>
+                    <button className="view-btn" onClick={handleView}>
+                      View Details →
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
 
       </div>
     </div>

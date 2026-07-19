@@ -8,9 +8,9 @@
   --font-ui: "Satoshi", sans-serif;
   --font-mono: "Space Grotesk", "Space Mono", monospace;
 
-  --color-heritage-red: #8c2d19;
-  --color-heritage-green: #2e5a44;
-  --color-heritage-bronze: #b87333;
+  --color-heritage-red: #9c2d19;
+  --color-heritage-green: #256645;
+  --color-heritage-bronze: #c28230;
   --color-heritage-cream-light: #FAF1DD;
   --color-heritage-cream-dark: #f4e3c1;
   --color-heritage-charcoal: #2b2118;
@@ -88,9 +88,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
-  background:
-    radial-gradient(circle at top left, rgba(255, 247, 229, 0.85), transparent 32rem),
-    linear-gradient(180deg, #f8ecd7 0%, #f3e5cf 100%);
+  background: #f8ecd7;
 }
 
 button,
@@ -111,9 +109,7 @@ img {
 
 .heritage-page {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at 10% 0%, rgba(255, 251, 242, 0.95), transparent 28rem),
-    linear-gradient(180deg, #f8ecd7 0%, #f3e4cb 100%);
+  background: #f8ecd7;
 }
 
 .heritage-card {
@@ -126,3 +122,15 @@ button,
 a {
   cursor: pointer;
 }
+
+/* Remove number picker input spin buttons globally */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+

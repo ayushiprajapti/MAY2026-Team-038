@@ -1,0 +1,123 @@
+.admin-db-page {
+  background-color: var(--color-heritage-cream, #f9ebd4);
+  color: var(--color-heritage-charcoal, #2b2118);
+  min-height: 100vh;
+  padding: 2rem;
+  font-family: var(--font-body);
+}
+
+.admin-db-header {
+  margin-bottom: 2rem;
+}
+
+.admin-db-header h1 {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.admin-db-filters {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.admin-db-filters select {
+  padding: 0.5rem 1rem;
+  background: var(--color-heritage-cream);
+  border: 1px solid var(--color-heritage-ochre, #d69f4c);
+  color: var(--color-heritage-charcoal);
+  border-radius: 4px;
+  font-family: var(--font-data, sans-serif);
+}
+
+.admin-db-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Map Section */
+.admin-db-map-container {
+  height: 400px;
+  width: 100%;
+  border-radius: var(--radius, 8px);
+  border: 2px solid var(--color-heritage-ochre);
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(43, 33, 24, 0.1);
+  background: var(--color-heritage-charcoal); /* Keep map dark behind tiles */
+}
+
+.admin-db-map-container .leaflet-tile-pane {
+  filter: sepia(30%) saturate(60%) hue-rotate(-5deg) brightness(1) contrast(1.05);
+}
+
+/* Table Section */
+.admin-db-table-wrapper {
+  background: #fffdfa; /* Slightly lighter than cream for contrast */
+  border-radius: var(--radius, 8px);
+  border: 1px solid rgba(214, 159, 76, 0.3);
+  overflow-x: auto;
+  box-shadow: 0 2px 8px rgba(43, 33, 24, 0.05);
+}
+
+.admin-db-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.admin-db-table th,
+.admin-db-table td {
+  padding: 1rem;
+  border-bottom: 1px solid rgba(214, 159, 76, 0.2);
+}
+
+.admin-db-table th {
+  background: rgba(214, 159, 76, 0.1);
+  font-family: var(--font-data, sans-serif);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.admin-db-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.admin-db-table tbody tr:hover {
+  background-color: rgba(214, 159, 76, 0.05);
+}
+
+.admin-db-table tbody tr.active-row {
+  background-color: rgba(214, 159, 76, 0.15);
+  border-left: 4px solid var(--color-heritage-ochre);
+}
+
+.admin-db-table td {
+  vertical-align: top;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.admin-db-table td.signification-col {
+  max-width: 400px;
+}
+
+.admin-db-table td strong {
+  display: block;
+  font-size: 1.05rem;
+  color: var(--color-heritage-espresso, #1a110b);
+}
+
+.empty-table-state {
+  padding: 3rem;
+  text-align: center;
+  color: rgba(43, 33, 24, 0.6);
+  font-style: italic;
+}
