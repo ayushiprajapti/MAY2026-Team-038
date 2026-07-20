@@ -1,17 +1,8 @@
 import { useEffect } from "react";
-<<<<<<< HEAD
-import { Routes, Route, Outlet, useLocation } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
-
-import Header from "./components/shared/Header";
-import Footer from "./components/shared/Footer";
-
-=======
 import { Routes, Route, useLocation, Navigate, Outlet } from "react-router-dom";
 import { motion } from "framer-motion";
 import SiteLayout from "./components/shared/SiteLayout";
 import AdminLayout from "./components/shared/AdminLayout";
->>>>>>> 4d91720bc27f62d9c96301a2e683f56b2cacf7cb
 import Home from "./pages/Home";
 import HeritageShop from "./pages/HeritageShop";
 import Checkout from "./pages/Checkout";
@@ -36,26 +27,6 @@ import AdminShopPage from "./pages/AdminShop";
 
 import "./App.css";
 
-<<<<<<< HEAD
-const pageTransition = {
-  initial: { opacity: 0, y: 12 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: -12 },
-  transition: { duration: 0.28, ease: [0.4, 0, 0.2, 1] },
-};
-
-function SiteLayout() {
-  return (
-    <>
-      <Header />
-      <Outlet />
-      <Footer />
-    </>
-  );
-}
-
-=======
->>>>>>> 4d91720bc27f62d9c96301a2e683f56b2cacf7cb
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -107,19 +78,6 @@ function AnimatedRoutes() {
   const location = useLocation();
 
   return (
-<<<<<<< HEAD
-    <AnimatePresence mode="wait" initial={false}>
-      <motion.div key={location.pathname} {...pageTransition}>
-        <Routes location={location}>
-          <Route element={<SiteLayout />}>
-            <Route path="/" element={<Home />} />
-
-            <Route path="/admin" element={<AdminPage />} />
-            <Route
-              path="/admin/volunteer-details"
-              element={<VolunteerUploadDetails />}
-            />
-=======
     <Routes location={location}>
       
       {/* Site Layout Wrapped Routes (Gets Header & Footer automatically) */}
@@ -132,7 +90,6 @@ function AnimatedRoutes() {
           <Route path="/orders" element={<AnimatedPage><OrderHistory /></AnimatedPage>} />
           <Route path="/volunteer/*" element={<AnimatedPage><VolunteerPage /></AnimatedPage>} />
         </Route>
->>>>>>> 4d91720bc27f62d9c96301a2e683f56b2cacf7cb
 
         {/* Public Layout-Wrapped Routes */}
         <Route path="/events" element={<AnimatedPage><EventPage /></AnimatedPage>} />
@@ -142,15 +99,6 @@ function AnimatedRoutes() {
         <Route path="/trails" element={<AnimatedPage><GlobeHome /></AnimatedPage>} />
       </Route>
 
-<<<<<<< HEAD
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/admin-dashboard" element={<AdminDashboardNew />} />
-          <Route path="/admin-shop" element={<AdminShopPage />} />
-        </Routes>
-      </motion.div>
-    </AnimatePresence>
-=======
       {/* Standalone Public Routes (No Header & Footer) */}
       <Route path="/login" element={<AnimatedPage><Login /></AnimatedPage>} />
       <Route path="/register" element={<AnimatedPage><Register /></AnimatedPage>} />
@@ -174,7 +122,6 @@ function AnimatedRoutes() {
         />
       </Route>
     </Routes>
->>>>>>> 4d91720bc27f62d9c96301a2e683f56b2cacf7cb
   );
 }
 
