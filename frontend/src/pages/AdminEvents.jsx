@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { events } from "../data/events";
 
 const demoRegistrations = [
@@ -9,12 +9,35 @@ const demoRegistrations = [
 ];
 
 export default function AdminEvents() {
+  const navigate = useNavigate();
   const [selectedId, setSelectedId] = useState(null);
   const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [eventList, setEventList] = useState(() => {
+    const savedEvents = JSON.parse(localStorage.getItem("intach-admin-events") || "null");
+    return savedEvents ? [...savedEvents, ...events.filter((event) => !savedEvents.some((savedEvent) => savedEvent.id === event.id))] : events;
+  });
   const registrations = useMemo(() => [...demoRegistrations, ...JSON.parse(localStorage.getItem("intach-event-registrations") || "[]")], []);
-  const filteredEvents = events.filter((event) => event.title.toLowerCase().includes(search.toLowerCase()) || event.category.toLowerCase().includes(search.toLowerCase()));
-  const selectedEvent = events.find((event) => event.id === selectedId);
+  const getEventStatus = (event) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const eventDate = new Date(2026, event.monthIndex, event.date);
+    if (eventDate.getTime() === today.getTime()) return "ongoing";
+    return eventDate < today ? "completed" : "upcoming";
+  };
+  const filteredEvents = eventList.filter((event) => {
+    const matchesSearch = event.title.toLowerCase().includes(search.toLowerCase()) || event.category.toLowerCase().includes(search.toLowerCase());
+    return matchesSearch && (statusFilter === "all" || getEventStatus(event) === statusFilter);
+  });
+  const selectedEvent = eventList.find((event) => event.id === selectedId);
   const attendees = selectedEvent ? registrations.filter((registration) => registration.eventId === selectedEvent.id) : [];
+  const deleteEvent = (event) => {
+    if (!window.confirm(`Delete “${event.title}”? This cannot be undone.`)) return;
+    const nextEvents = eventList.filter((item) => item.id !== event.id);
+    localStorage.setItem("intach-admin-events", JSON.stringify(nextEvents));
+    setEventList(nextEvents);
+    setSelectedId(null);
+  };
 
   return (
     <main className="min-h-screen bg-[#f7eddc] px-4 py-8 sm:px-6 lg:px-8">
@@ -34,23 +57,26 @@ export default function AdminEvents() {
             <div className="border-b border-[#eadcc2] p-5 sm:p-6">
               <h2 className="font-serif text-2xl text-[#422b1b]">All events</h2>
               <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search events" className="mt-4 w-full rounded-lg border border-[#d9c29d] bg-[#fffdf8] px-3 py-2.5 font-sans text-sm outline-none focus:ring-2 focus:ring-[#d39834]" />
+              <div className="mt-4 flex flex-wrap gap-2" aria-label="Filter events by status">
+                {["all", "upcoming", "ongoing", "completed"].map((status) => <button key={status} onClick={() => setStatusFilter(status)} aria-pressed={statusFilter === status} className={`rounded-full px-3 py-2 font-sans text-xs font-bold capitalize transition ${statusFilter === status ? "bg-[#ad741d] text-white" : "border border-[#d9c29d] bg-[#fffdf8] text-[#755d48] hover:bg-[#f8ead0]"}`}>{status === "all" ? "All events" : `${status[0].toUpperCase()}${status.slice(1)}`}</button>)}
+              </div>
             </div>
             <div className="divide-y divide-[#eadcc2]">
               {filteredEvents.map((event) => {
                 const count = registrations.filter((registration) => registration.eventId === event.id).length;
                 const isSelected = event.id === selectedId;
                 return (
-                  <button key={event.id} onClick={() => setSelectedId(event.id)} aria-pressed={isSelected} className={`flex w-full items-center justify-between gap-4 p-5 text-left transition hover:bg-[#fff7e9] sm:p-6 ${isSelected ? "bg-[#fcf0d8]" : ""}`}>
-                    <span>
+                  <article key={event.id} className={`flex flex-col gap-4 p-5 transition hover:bg-[#fff7e9] sm:flex-row sm:items-center sm:justify-between sm:p-6 ${isSelected ? "bg-[#fcf0d8]" : ""}`}>
+                    <button onClick={() => setSelectedId(event.id)} aria-pressed={isSelected} className="min-w-0 text-left">
                       <span className="font-sans text-xs font-bold uppercase tracking-[0.12em] text-[#a2651b]">{event.month} {event.date} · {event.category}</span>
                       <strong className="mt-1 block font-serif text-lg text-[#422b1b]">{event.title}</strong>
                       <span className="mt-1 block font-sans text-sm text-[#755d48]">{event.time} · {event.place}</span>
-                    </span>
-                    <span className="shrink-0 rounded-full bg-[#f3e1ba] px-3 py-1.5 font-sans text-xs font-bold text-[#80500f]">{count} registered</span>
-                  </button>
+                    </button>
+                    <div className="flex flex-wrap items-center gap-2 sm:justify-end"><span className={`shrink-0 rounded-full px-3 py-1.5 font-sans text-xs font-bold capitalize ${getEventStatus(event) === "completed" ? "bg-[#ece7df] text-[#6d6258]" : getEventStatus(event) === "ongoing" ? "bg-[#e2ebd5] text-[#526348]" : "bg-[#f3e1ba] text-[#80500f]"}`}>{getEventStatus(event)}</span><span className="shrink-0 rounded-full bg-[#f3e1ba] px-3 py-1.5 font-sans text-xs font-bold text-[#80500f]">{count} registered</span><button onClick={() => navigate("/admin/events/create", { state: { event } })} className="rounded-lg border border-[#b87519] px-3 py-2 font-sans text-xs font-bold text-[#925a0e] transition hover:bg-[#f8ead0]">Edit</button><button onClick={() => deleteEvent(event)} className="rounded-lg border border-[#9b4428] px-3 py-2 font-sans text-xs font-bold text-[#9b4428] transition hover:bg-[#f8e4d9]">Delete</button></div>
+                  </article>
                 );
               })}
-              {!filteredEvents.length && <p className="p-6 font-body text-[#755d48]">No events match your search.</p>}
+              {!filteredEvents.length && <p className="p-6 font-body text-[#755d48]">No {statusFilter === "all" ? "events" : statusFilter} events match your search.</p>}
             </div>
           </section>
         ) : (
