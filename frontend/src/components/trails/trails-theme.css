@@ -1,0 +1,82 @@
+/* ============================================================
+   TRAILS — design tokens
+   An "engraved atlas" direction: brass instruments, aged
+   parchment, copper-plate line work. Ochre carries the history
+   theme the brief asked for; ink and brass carry the rest.
+   ============================================================ */
+
+:root {
+  /* color */
+  --ink: #2b2118;         /* var(--color-heritage-charcoal) */
+  --ink-soft: #3f3123;
+  --parchment: #f9ebd4;   /* var(--color-heritage-cream) */
+  --parchment-dim: #e6d0ac; /* var(--color-heritage-border) */
+  --ochre: #b87333;       /* var(--color-heritage-bronze) */
+  --ochre-deep: #8c2d19;  /* var(--color-heritage-red) */
+  --rust: #8c2d19;        /* var(--color-heritage-red) */
+  --brass: #b87333;       /* var(--color-heritage-bronze) */
+  --brass-bright: #d4985b;
+  --verdigris: #2e5a44;   /* var(--color-heritage-green) */
+  --cream: #FAF1DD;       /* var(--color-heritage-cream-light) */
+
+  /* type */
+  --font-display: "Fraunces", serif;
+  --font-body: "Lora", serif;
+  --font-data: "Satoshi", sans-serif;
+
+  --radius: 3px;
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--parchment);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  button {
+    font-family: inherit;
+    cursor: pointer;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  ::selection {
+    background: var(--ochre);
+    color: var(--ink);
+  }
+
+  .eyebrow {
+    font-family: var(--font-data);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ochre);
+  }
+
+  .scroll-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--brass) transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

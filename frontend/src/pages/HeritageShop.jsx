@@ -95,15 +95,6 @@ export default function HeritageShop() {
 
   return (
     <div className="full-screen-shop-wrapper">
-      {/* 1. Immersive Full-Width Header Navigation */}
-      <nav className="global-app-nav">
-        <div className="nav-brand-block">
-          <span className="brand-logo-text">INTACH</span>
-          <span className="brand-logo-sep">/</span>
-          <span className="brand-logo-sub">HERITAGE PORTAL</span>
-        </div>
-      </nav>
-
       {/* 2. Hero Presentation section */}
       <header className="shop-app-hero">
         <span className="hero-eyebrow">INTACH Official Marketplace</span>
