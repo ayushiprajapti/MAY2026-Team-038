@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./AdminDashboard.css";
 
 import charminarImg from "../../assets/heritage/charminar.jpg";
 import golcondaImg from "../../assets/heritage/golconda.jpg";
@@ -33,7 +32,7 @@ const initialSubmissions = [
   },
 ];
 
-function AdminDashboard() {
+export default function AdminDashboard() {
   const navigate = useNavigate();
 
   const [submissions, setSubmissions] = useState(initialSubmissions);
@@ -51,266 +50,145 @@ function AdminDashboard() {
     );
   };
 
-  const handleView = () => {
-    navigate("/admin/volunteer-details");
-  };
-
   const filteredSubmissions = submissions.filter((submission) =>
     submission.site.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
-    <div className="admin-dashboard">
+    <main className="flex-grow bg-[#F9EBD4] min-h-screen">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div className="text-center">
+          <h1 className="text-3xl md:text-4xl font-bold text-heritage-red">
+            Volunteer Submission Verification
+          </h1>
 
-      <div className="dashboard-container">
+          <p className="mt-4 max-w-3xl mx-auto text-gray-600 leading-8">
+            Review and verify heritage submissions submitted by volunteers
+            before they become visible on the heritage portal.
+          </p>
 
-        <div className="dashboard-header">
-
-          <div>
-
-            <p className="dashboard-tag">
-              INTACH Heritage Management
-            </p>
-
-            <h1 className="page-title">
-              Volunteer Submission Verification
-            </h1>
-
-            <p className="dashboard-subtitle">
-              Review, verify and manage heritage submissions contributed
-              by registered volunteers before publishing them on the
-              heritage portal.
-            </p>
-
-          </div>
-
+          <div className="w-24 h-1 bg-heritage-red mx-auto rounded-full mt-6"></div>
         </div>
 
-        <div className="stats-grid">
-
-          <div className="stat-card">
-
-            <span className="stat-icon">
-              📥
-            </span>
-
-            <div>
-
-              <h3>Pending</h3>
-
-              <h2>{submissions.length}</h2>
-
-            </div>
-
-          </div>
-
-          <div className="stat-card">
-
-            <span className="stat-icon">
-              ✅
-            </span>
-
-            <div>
-
-              <h3>Approved Today</h3>
-
-              <h2>12</h2>
-
-            </div>
-
-          </div>
-
-          <div className="stat-card">
-
-            <span className="stat-icon">
-              ❌
-            </span>
-
-            <div>
-
-              <h3>Rejected Today</h3>
-
-              <h2>2</h2>
-
-            </div>
-
-          </div>
-
-        </div>
-
-        <div className="search-section">
-
-          <div>
-
-            <h2>
-              Pending Heritage Submissions
-            </h2>
-
-            <p>
-              {submissions.length} submission(s) awaiting review
-            </p>
-
-          </div>
-
+        <div className="flex justify-center mt-8">
           <input
-            className="search-box"
             type="text"
             placeholder="Search heritage site..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            className="w-full max-w-lg rounded border border-heritage-border bg-[#FCFAF2] px-5 py-3 outline-none transition-all duration-300 focus:border-heritage-red"
           />
-
         </div>
 
-        <div className="submission-list">        {filteredSubmissions.length === 0 ? (
+        <div className="mt-8 space-y-6">
+          {filteredSubmissions.length === 0 ? (
+            <div className="rounded-xl border border-heritage-border bg-[#FCFAF2] py-14 text-center">
+              <h3 className="text-2xl font-semibold text-heritage-red">
+                No submissions found
+              </h3>
 
-          <div className="empty-state">
-
-            <div className="empty-icon">
-              🎉
+              <p className="mt-3 text-gray-600">
+                Try searching for another heritage site.
+              </p>
             </div>
+          ) : (
+            filteredSubmissions.map((submission) => (
+              <div
+                key={submission.id}
+                className="rounded-xl border border-heritage-border bg-[#FCFAF2] shadow-sm transition-all duration-300 hover:shadow-md"
+              >
+                <div className="grid gap-6 p-5 md:grid-cols-[180px_1fr]">
+                  <img
+                    src={submission.image}
+                    alt={submission.site}
+                    className="h-40 w-full rounded-lg object-cover"
+                  />
 
-            <h2>
-              All Caught Up!
-            </h2>
+                  <div className="flex flex-col justify-between">
+                    <div>
+                      <div className="flex flex-wrap items-start justify-between gap-4">
+                        <div>
+                          <h2 className="text-3xl font-bold text-heritage-red">
+                            {submission.site}
+                          </h2>
 
-            <p>
-              There are currently no volunteer submissions waiting for review.
-            </p>
+                          <p className="mt-2 text-gray-600">
+                            {submission.location}
+                          </p>
+                        </div>
 
-          </div>
+                        <span className="rounded-full bg-[#F9EBD4] px-3 py-1.5 text-xs font-medium text-heritage-red">
+                          {submission.status}
+                        </span>
+                      </div>
 
-        ) : (
+                      <div className="mt-6 grid gap-5 sm:grid-cols-2">
+                        <div>
+                          <p className="text-sm text-gray-500">Volunteer</p>
 
-          filteredSubmissions.map((submission) => (
+                          <p className="font-semibold text-gray-800">
+                            {submission.volunteer}
+                          </p>
+                        </div>
 
-            <div
-              className="submission-card"
-              key={submission.id}
-            >
+                        <div>
+                          <p className="text-sm text-gray-500">Category</p>
 
-              <div className="card-image">
+                          <p className="font-semibold text-gray-800">
+                            Historical Monument
+                          </p>
+                        </div>
 
-                <img
-                  src={submission.image}
-                  alt={submission.site}
-                />
+                        <div>
+                          <p className="text-sm text-gray-500">Submitted</p>
 
+                          <p className="font-semibold text-gray-800">
+                            Today
+                          </p>
+                        </div>
+
+                        <div>
+                          <p className="text-sm text-gray-500">
+                            Verification
+                          </p>
+
+                          <p className="font-semibold text-gray-800">
+                            Awaiting Review
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="mt-6 flex flex-wrap justify-end gap-3">                        <button
+                          onClick={() =>
+                            navigate(`/admin/submission/${submission.id}`)
+                          }
+                          className="rounded border border-heritage-border bg-[#FCFAF2] px-5 py-2.5 font-medium text-gray-700 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md"
+                        >
+                          View Details
+                        </button>
+
+                        <button
+                          onClick={() => handleReject(submission.id)}
+                          className="rounded border border-red-300 px-5 py-2.5 font-medium text-red-700 transition-all duration-300 hover:bg-red-50"
+                        >
+                          Reject
+                        </button>
+
+                        <button
+                          onClick={() => handleApprove(submission.id)}
+                          className="rounded bg-heritage-red px-5 py-2.5 font-medium text-[#FFFDF9] shadow transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#722111] hover:shadow-md"
+                        >
+                          Approve
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-
-              <div className="card-content">
-
-                <div className="card-top">
-
-                  <div>
-
-                    <h2 className="heritage-title">
-                      {submission.site}
-                    </h2>
-
-                    <p className="heritage-location">
-                      📍 {submission.location}
-                    </p>
-
-                  </div>
-
-                  <span className="status-badge">
-                    🟡 {submission.status}
-                  </span>
-
-                </div>
-
-                <div className="info-grid">
-
-                  <div className="info-box">
-
-                    <span className="info-label">
-                      Volunteer
-                    </span>
-
-                    <p>
-                      {submission.volunteer}
-                    </p>
-
-                  </div>
-
-                  <div className="info-box">
-
-                    <span className="info-label">
-                      Category
-                    </span>
-
-                    <p>
-                      Historical Monument
-                    </p>
-
-                  </div>
-
-                  <div className="info-box">
-
-                    <span className="info-label">
-                      Submitted
-                    </span>
-
-                    <p>
-                      Today
-                    </p>
-
-                  </div>
-
-                  <div className="info-box">
-
-                    <span className="info-label">
-                      Verification
-                    </span>
-
-                    <p>
-                      Awaiting Review
-                    </p>
-
-                  </div>
-
-                </div>
-
-                <div className="card-actions">
-
-                  <button
-                    className="approve-btn"
-                    onClick={() => handleApprove(submission.id)}
-                  >
-                    ✓ Approve
-                  </button>
-
-                  <button
-                    className="reject-btn"
-                    onClick={() => handleReject(submission.id)}
-                  >
-                    ✕ Reject
-                  </button>
-
-                  <button
-                    className="view-btn"
-                    onClick={handleView}
-                  >
-                    View Details →
-                  </button>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          ))
-
-        )}
-
-      </div>
-
-    </div>
-
-  </div>
+            ))
+          )}
+        </div>
+      </section>
+    </main>
   );
 }
-
-export default AdminDashboard;
