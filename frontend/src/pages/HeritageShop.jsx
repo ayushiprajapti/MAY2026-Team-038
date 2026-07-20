@@ -111,20 +111,37 @@ export default function HeritageShop() {
         <p className="hero-description-text">
           Directly fund regional preservation movements. Discover validated research directories, rare cartographic prints, and authentic metalware commissioned from legacy artisan clusters.
         </p>
-        <button
-            className="hero-shopping-bag"
-            onClick={() =>
-                navigate("/checkout", {
-                    state: {
-                    cartItems,
-                    totalAmount,
-                    },
-                })
-            }
-        >
-            <span className="bag-glyph">👜 Cart</span>
-            <span className="bag-count-badge">{cartCount}</span>
-        </button>
+        <div className="hero-actions">
+          <button
+          className="hero-profile-btn"
+                onClick={() => navigate("/profile")}
+            >
+                👤 Profile
+            </button>
+
+            <button
+                className="hero-orders-btn"
+                onClick={() => navigate("/orders")}
+            >
+                📦 Orders
+            </button>
+
+            <button
+                className="hero-shopping-bag"
+                onClick={() =>
+                    navigate("/checkout", {
+                        state: {
+                            cartItems,
+                            totalAmount,
+                        },
+                    })
+                }
+            >
+                <span className="bag-glyph">👜 Cart</span>
+                <span className="bag-count-badge">{cartCount}</span>
+            </button>
+
+        </div>
       </header>
 
       {/* 3. Operational Toolbar Container */}
