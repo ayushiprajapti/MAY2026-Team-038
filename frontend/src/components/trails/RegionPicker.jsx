@@ -27,7 +27,6 @@ export default function RegionPicker({ regions, region, onRegion }) {
 
   return (
     <div className="region-picker" ref={wrapRef}>
-      <span className="eyebrow">Region</span>
       <div className="region-picker__control">
         <input
           ref={inputRef}

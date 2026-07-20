@@ -3,7 +3,10 @@ import { useNavigate } from "react-router-dom";
 
 export default function AdminSidebar({ activePage }) {
   const navigate = useNavigate();
-  const [adminUser, setAdminUser] = useState({ fullName: "Admin User", role: "Chapter Head" });
+  const [adminUser, setAdminUser] = useState({
+    fullName: "Admin User",
+    role: "Chapter Head",
+  });
 
   useEffect(() => {
     const stored = localStorage.getItem("intach_user");
@@ -12,7 +15,10 @@ export default function AdminSidebar({ activePage }) {
         const parsed = JSON.parse(stored);
         setAdminUser({
           fullName: parsed.fullName || "Admin User",
-          role: parsed.role === "event_coordinator" ? "Chapter Head" : "Heritage Expert",
+          role:
+            parsed.role === "event_coordinator" ?
+              "Chapter Head"
+            : "Heritage Expert",
         });
       } catch (e) {
         // Safe fallback
@@ -32,8 +38,18 @@ export default function AdminSidebar({ activePage }) {
       name: "Dashboard",
       to: "/admin-dashboard",
       icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z" />
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2v-4zM14 16a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2v-4z"
+          />
         </svg>
       ),
     },
@@ -42,18 +58,98 @@ export default function AdminSidebar({ activePage }) {
       name: "Heritage Shop",
       to: "/admin-shop",
       icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+          />
+        </svg>
+      ),
+    },
+    {
+      id: "database",
+      name: "Heritage Database",
+      to: "/admin-db",
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"
+          />
+        </svg>
+      ),
+    },
+    {
+      id: "chat",
+      name: "Expert Chat",
+      to: "/admin-chat",
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+          />
+        </svg>
+      ),
+    },
+    {
+      id: "events",
+      name: "Manage Events",
+      to: "/admin/events",
+      icon: (
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+          />
         </svg>
       ),
     },
     {
       id: "old-admin",
-      name: "Old Admin Review",
-      to: "/admin",
+      name: "Admin Review",
+      to: "/admin-review",
       icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        <svg
+          className="w-5 h-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+          />
         </svg>
       ),
     },
@@ -85,9 +181,9 @@ export default function AdminSidebar({ activePage }) {
                   navigate(item.to);
                 }}
                 className={`flex items-center gap-4 rounded-lg px-5 py-3 transition-all duration-300 font-sans text-sm font-semibold ${
-                  isActive
-                    ? "bg-heritage-red text-white shadow-md"
-                    : "text-heritage-charcoal hover:bg-heritage-cream/60 hover:text-heritage-red"
+                  isActive ?
+                    "bg-heritage-red text-white shadow-md"
+                  : "text-heritage-charcoal hover:bg-heritage-cream/60 hover:text-heritage-red"
                 }`}
               >
                 {item.icon}
@@ -95,20 +191,6 @@ export default function AdminSidebar({ activePage }) {
               </a>
             );
           })}
-
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              navigate("/");
-            }}
-            className="flex items-center gap-4 text-heritage-charcoal hover:bg-heritage-cream/60 hover:text-heritage-red rounded-lg px-5 py-3 transition-all duration-300 font-sans text-sm font-semibold"
-          >
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-            </svg>
-            <span>Chapter Home</span>
-          </a>
         </nav>
       </div>
 

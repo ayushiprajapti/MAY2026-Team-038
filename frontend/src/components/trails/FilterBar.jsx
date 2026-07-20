@@ -1,13 +1,11 @@
 import RegionPicker from './RegionPicker.jsx'
 
-export default function FilterBar({ regions, themes, region, theme, onRegion, onTheme }) {
+export default function FilterBar({ regions, themes, region, theme, onRegion, onTheme, children }) {
   return (
     <div className="filter-bar">
       <RegionPicker regions={regions} region={region} onRegion={onRegion} />
 
-      <div className="filter-group">
-        <span className="eyebrow">Theme</span>
-        <div className="chip-row">
+      <div className="chip-row">
           <button
             className={`chip ${theme === null ? 'chip--active' : ''}`}
             onClick={() => onTheme(null)}
@@ -23,8 +21,11 @@ export default function FilterBar({ regions, themes, region, theme, onRegion, on
               {t}
             </button>
           ))}
+          
+          <div style={{ marginLeft: 'auto', display: 'flex' }}>
+            {children}
+          </div>
         </div>
-      </div>
     </div>
   )
 }
