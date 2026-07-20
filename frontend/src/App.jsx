@@ -6,6 +6,8 @@ import AdminLayout from "./components/shared/AdminLayout";
 import Home from "./pages/Home";
 import HeritageShop from "./pages/HeritageShop";
 import Checkout from "./pages/Checkout";
+import Profile from "./pages/Profile";
+import OrderHistory from "./pages/OrderHistory";
 import AdminReviewPage from "./pages/AdminReview";
 import AdminDatabase from "./components/admin/AdminDatabase.jsx";
 import AdminChat from "./components/admin/AdminChat.jsx";
@@ -81,8 +83,10 @@ function AnimatedRoutes() {
       <Route element={<SiteLayout />}>
         <Route path="/" element={<AnimatedPage><Home /></AnimatedPage>} />
         
-        {/* Protected Volunteer Routes (Gets Header & Footer) */}
+        {/* Protected User Routes (Gets Header & Footer) */}
         <Route element={<ProtectedRoute />}>
+          <Route path="/profile" element={<AnimatedPage><Profile /></AnimatedPage>} />
+          <Route path="/orders" element={<AnimatedPage><OrderHistory /></AnimatedPage>} />
           <Route path="/volunteer/*" element={<AnimatedPage><VolunteerPage /></AnimatedPage>} />
         </Route>
 
