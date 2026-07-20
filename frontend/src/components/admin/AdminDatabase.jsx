@@ -137,8 +137,8 @@ export default function AdminDatabase() {
           </MapContainer>
 
           {/* Table View - Restyled to match Volunteer Tables */}
-          <div className="heritage-card rounded-2xl p-6 md:p-8 overflow-x-auto shadow-sm">
-            <table className="w-full text-left font-sans text-xs border-collapse">
+          <div className="bg-transparent border border-heritage-border/30 rounded-2xl p-6 md:p-8 overflow-x-auto shadow-sm">
+            <table className="w-full text-left font-serif text-sm border-collapse">
               <thead>
                 <tr className="border-b border-heritage-border/40 text-heritage-charcoal/60 uppercase font-semibold tracking-wider text-[10px]">
                   <th className="py-3 px-4">Site Name & Trail</th>
