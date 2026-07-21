@@ -24,6 +24,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AdminDashboardNew from "./pages/AdminDashboard";
 import AdminShopPage from "./pages/AdminShop";
+
 import "./App.css";
 
 function ScrollToTop() {
@@ -88,11 +89,11 @@ function AnimatedRoutes() {
           
           <Route path="/orders" element={<AnimatedPage><OrderHistory /></AnimatedPage>} />
           <Route path="/volunteer/*" element={<AnimatedPage><VolunteerPage /></AnimatedPage>} />
+          <Route path="/events/register" element={<AnimatedPage><EventRegistration /></AnimatedPage>} />
         </Route>
 
         {/* Public Layout-Wrapped Routes */}
         <Route path="/events" element={<AnimatedPage><EventPage /></AnimatedPage>} />
-        <Route path="/events/register" element={<AnimatedPage><EventRegistration /></AnimatedPage>} />
         <Route path="/shop" element={<AnimatedPage><HeritageShop /></AnimatedPage>} />
         <Route path="/product/:id" element={<AnimatedPage><ProductDetails /></AnimatedPage>} />
         <Route path="/checkout" element={<AnimatedPage><Checkout /></AnimatedPage>} />
@@ -102,20 +103,25 @@ function AnimatedRoutes() {
       {/* Standalone Public Routes (No Header & Footer) */}
       <Route path="/login" element={<AnimatedPage><Login /></AnimatedPage>} />
       <Route path="/register" element={<AnimatedPage><Register /></AnimatedPage>} />
-      {/* Immersive trail — no global header/footer */}
-      <Route path="/trails/:trailId" element={<AnimatedPage><TrailExperience /></AnimatedPage>} />
+      
+      {/* Protected Standalone Routes (No Header & Footer) */}
+      <Route element={<ProtectedRoute />}>
+        {/* Immersive trail — no global header/footer */}
+        <Route path="/trails/:trailId" element={<AnimatedPage><TrailExperience /></AnimatedPage>} />
+      </Route>
 
       {/* Protected Admin Routes (No Global Header & Footer, gets AdminSidebar layout) */}
       <Route element={<ProtectedRoute allowedRoles={["event_admin"]} />}>
         <Route element={<AdminLayout />}>
           <Route path="/admin-review" element={<AnimatedPage><AdminReviewPage /></AnimatedPage>} />
           <Route path="/admin-db" element={<AnimatedPage><AdminDatabase /></AnimatedPage>} />
-          <Route path="/admin-chat" element={<AnimatedPage><AdminChat /></AnimatedPage>} />
           <Route path="/admin-dashboard" element={<AnimatedPage><AdminDashboardNew /></AnimatedPage>} />
           <Route path="/admin-shop" element={<AnimatedPage><AdminShopPage /></AnimatedPage>} />
           <Route path="/admin/events" element={<AnimatedPage><AdminEvents /></AnimatedPage>} />
           <Route path="/admin/events/create" element={<AnimatedPage><AdminEventCreate /></AnimatedPage>} />
         </Route>
+        {/* Immersive admin chat — full-bleed, no persistent admin nav */}
+        <Route path="/admin-chat" element={<AnimatedPage><AdminChat /></AnimatedPage>} />
         <Route
           path="/admin/volunteer-details"
           element={<AnimatedPage><VolunteerUploadDetails /></AnimatedPage>}

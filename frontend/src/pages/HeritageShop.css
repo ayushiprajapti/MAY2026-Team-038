@@ -2,7 +2,7 @@
    HERITAGE SHOP
 ========================================== */
 
-*{
+.heritage-shop, .heritage-shop *{
     margin:0;
     padding:0;
     box-sizing:border-box;

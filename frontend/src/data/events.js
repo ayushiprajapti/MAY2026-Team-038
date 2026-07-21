@@ -4,6 +4,9 @@ export const events = [
   { id: 3, date: 26, month: "JUL", monthIndex: 6, title: "Pune's Forgotten Waterways", category: "Heritage Talk", time: "5:30 PM – 7:00 PM", place: "Bhandarkar Oriental Institute", seats: "32 seats left", color: "olive" },
   { id: 4, date: 30, month: "JUL", monthIndex: 6, title: "Clean-up at Pataleshwar Caves", category: "Volunteer Day", time: "7:30 AM – 10:00 AM", place: "Pataleshwar Cave Temple", seats: "20 seats left", color: "ochre" },
   { id: 5, date: 9, month: "AUG", monthIndex: 7, title: "Old City Photography Walk", category: "Heritage Walk", time: "7:00 AM – 9:30 AM", place: "Kasba Peth, Pune", seats: "18 seats left", color: "terracotta" },
+  { id: 6, date: 20, month: "JUL", monthIndex: 6, title: "Living Heritage Documentation Session", category: "Workshop", time: "10:00 AM â€“ 1:00 PM", place: "INTACH Resource Centre", seats: "12 seats left", color: "olive" },
+  { id: 7, date: 12, month: "JUL", monthIndex: 6, title: "Pune River Heritage Clean-up", category: "Volunteer Day", time: "7:30 AM â€“ 10:30 AM", place: "Mula-Mutha Riverfront", seats: "Completed", color: "ochre" },
+  { id: 8, date: 2, month: "AUG", monthIndex: 7, title: "Crafts of the Peshwa Era", category: "Heritage Talk", time: "5:00 PM â€“ 6:30 PM", place: "Bharat Itihas Sanshodhak Mandal", seats: "25 seats left", color: "terracotta" },
 ];
 
 // Temporary signed-in user history until this is supplied by the backend.
