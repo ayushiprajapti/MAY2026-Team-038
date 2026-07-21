@@ -5,8 +5,8 @@ import SiteLayout from "./components/shared/SiteLayout";
 import AdminLayout from "./components/shared/AdminLayout";
 import Home from "./pages/Home";
 import HeritageShop from "./pages/HeritageShop";
+import ProductDetails from "./pages/ProductDetails";
 import Checkout from "./pages/Checkout";
-import Profile from "./pages/Profile";
 import OrderHistory from "./pages/OrderHistory";
 import AdminReviewPage from "./pages/AdminReview";
 import AdminDatabase from "./components/admin/AdminDatabase.jsx";
@@ -86,7 +86,7 @@ function AnimatedRoutes() {
         
         {/* Protected User Routes (Gets Header & Footer) */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/profile" element={<AnimatedPage><Profile /></AnimatedPage>} />
+          
           <Route path="/orders" element={<AnimatedPage><OrderHistory /></AnimatedPage>} />
           <Route path="/volunteer/*" element={<AnimatedPage><VolunteerPage /></AnimatedPage>} />
         </Route>
@@ -95,6 +95,7 @@ function AnimatedRoutes() {
         <Route path="/events" element={<AnimatedPage><EventPage /></AnimatedPage>} />
         <Route path="/events/register" element={<AnimatedPage><EventRegistration /></AnimatedPage>} />
         <Route path="/shop" element={<AnimatedPage><HeritageShop /></AnimatedPage>} />
+        <Route path="/product/:id" element={<AnimatedPage><ProductDetails /></AnimatedPage>} />
         <Route path="/checkout" element={<AnimatedPage><Checkout /></AnimatedPage>} />
         <Route path="/trails" element={<AnimatedPage><GlobeHome /></AnimatedPage>} />
       </Route>
