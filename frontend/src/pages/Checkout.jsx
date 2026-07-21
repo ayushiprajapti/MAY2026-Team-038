@@ -1,194 +1,612 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./Checkout.css";
 
 export default function Checkout() {
-  const navigate = useNavigate();
-  const location = useLocation();
 
-  const cartItems = location.state?.cartItems || [];
-  const totalAmount = location.state?.totalAmount || 0;
+    const navigate = useNavigate();
 
-  const [customer, setCustomer] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-    city: "",
-    state: "",
-    pincode: "",
-  });
+    const location = useLocation();
 
-  const [orderPlaced, setOrderPlaced] = useState(false);
+    const [cartItems, setCartItems] = useState([]);
 
-  const handleChange = (e) => {
-    setCustomer({
-      ...customer,
-      [e.target.name]: e.target.value,
-    });
-  };
+    const [orderPlaced, setOrderPlaced] = useState(false);
 
-  const handlePurchase = () => {
-    if (
-      !customer.name ||
-      !customer.email ||
-      !customer.phone ||
-      !customer.address ||
-      !customer.city ||
-      !customer.state ||
-      !customer.pincode
-    ) {
-      alert("Please fill all the details.");
-      return;
-    }
+    const isBuyNow = location.state?.buyNow || false;
 
-    setOrderPlaced(true);
-  };
+    /* ===============================
+            LOAD CHECKOUT ITEMS
+    =============================== */
 
-  if (orderPlaced) {
+    useEffect(() => {
+
+        if (isBuyNow && location.state?.items) {
+
+            setCartItems(location.state.items);
+
+        }
+
+        else {
+
+            const cart = JSON.parse(
+
+                localStorage.getItem("heritage_cart")
+
+            ) || [];
+
+            setCartItems(cart);
+
+        }
+
+    }, [location.state, isBuyNow]);
+
+
+
+    /* ===============================
+            UPDATE ITEMS
+    =============================== */
+
+    const updateCart = (updatedCart) => {
+
+        setCartItems(updatedCart);
+
+        if (!isBuyNow) {
+
+            localStorage.setItem(
+
+                "heritage_cart",
+
+                JSON.stringify(updatedCart)
+
+            );
+
+        }
+
+    };
+
+
+
+    /* ===============================
+            INCREASE QUANTITY
+    =============================== */
+
+    const increaseQuantity = (id) => {
+
+        const updatedCart = cartItems.map(item =>
+
+            item.id === id
+
+                ? {
+
+                    ...item,
+
+                    quantity: item.quantity + 1
+
+                }
+
+                : item
+
+        );
+
+        updateCart(updatedCart);
+
+    };
+
+
+
+    /* ===============================
+            DECREASE QUANTITY
+    =============================== */
+
+    const decreaseQuantity = (id) => {
+
+        const updatedCart = cartItems.map(item => {
+
+            if (item.id === id) {
+
+                return {
+
+                    ...item,
+
+                    quantity:
+
+                        item.quantity > 1
+
+                            ? item.quantity - 1
+
+                            : 1
+
+                };
+
+            }
+
+            return item;
+
+        });
+
+        updateCart(updatedCart);
+
+    };
+
+
+
+    /* ===============================
+            REMOVE ITEM
+    =============================== */
+
+    const removeItem = (id) => {
+
+        const updatedCart = cartItems.filter(
+
+            item => item.id !== id
+
+        );
+
+        updateCart(updatedCart);
+
+    };
+
+
+
+    /* ===============================
+            CLEAR CART
+    =============================== */
+
+    const clearCart = () => {
+
+        setCartItems([]);
+
+        if (!isBuyNow) {
+
+            localStorage.removeItem(
+
+                "heritage_cart"
+
+            );
+
+        }
+
+    };
+
+
+
+    /* ===============================
+            TOTALS
+    =============================== */
+
+    const totalItems = useMemo(() => {
+
+        return cartItems.reduce(
+
+            (sum, item) =>
+
+                sum + item.quantity,
+
+            0
+
+        );
+
+    }, [cartItems]);
+
+
+
+    const totalAmount = useMemo(() => {
+
+        return cartItems.reduce(
+
+            (sum, item) =>
+
+                sum +
+
+                item.price *
+
+                item.quantity,
+
+            0
+
+        );
+
+    }, [cartItems]);
+
+
+
+    /* ===============================
+            PLACE ORDER
+    =============================== */
+
+    const placeOrder = () => {
+
+        if (cartItems.length === 0) return;
+
+        const previousOrders = JSON.parse(
+
+            localStorage.getItem("heritage_orders")
+
+        ) || [];
+
+        const newOrder = {
+
+            orderId: `HS${Date.now()}`,
+
+            date: new Date().toLocaleDateString(
+
+                "en-IN",
+
+                {
+
+                    day: "numeric",
+
+                    month: "short",
+
+                    year: "numeric"
+
+                }
+
+            ),
+
+            status: "In Progress",
+
+            items: [...cartItems],
+
+            total: totalAmount
+
+        };
+
+        previousOrders.unshift(newOrder);
+
+        localStorage.setItem(
+
+            "heritage_orders",
+
+            JSON.stringify(previousOrders)
+
+        );
+
+        if (!isBuyNow) {
+
+            localStorage.removeItem(
+
+                "heritage_cart"
+
+            );
+
+        }
+
+        setCartItems([]);
+
+        setOrderPlaced(true);
+
+        setTimeout(() => {
+
+            navigate("/orders");
+
+        }, 1800);
+
+    };
     return (
-      <div className="checkout-page">
-        <div className="checkout-success-card">
-          <h1>🎉 Purchase Successful!</h1>
 
-          <p>
-            Thank you for supporting India's cultural heritage through INTACH.
-          </p>
-
-          <button
-            className="complete-btn"
-            onClick={() => navigate("/shop")}
-          >
-            Back to Shop
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  return (
     <div className="checkout-page">
 
-      <header className="checkout-header">
-        <h1>INTACH Heritage Marketplace</h1>
-        <p>Secure Checkout</p>
-      </header>
+        {/* ===============================
+                HEADER
+        =============================== */}
 
-      <div className="checkout-container">
+        <div className="checkout-header">
 
-        <div className="customer-section">
+            <h1>
 
-          <h2>Customer Details</h2>
+                {isBuyNow ? "Buy Now" : "Checkout"}
 
-          <label>Full Name</label>
-          <input
-            type="text"
-            name="name"
-            value={customer.name}
-            onChange={handleChange}
-            placeholder="Enter your full name"
-          />
+            </h1>
 
-          <label>Email Address</label>
-          <input
-            type="email"
-            name="email"
-            value={customer.email}
-            onChange={handleChange}
-            placeholder="Enter your email"
-          />
+            {!isBuyNow && cartItems.length > 0 && (
 
-          <label>Phone Number</label>
-          <input
-            type="text"
-            name="phone"
-            value={customer.phone}
-            onChange={handleChange}
-            placeholder="Enter your phone number"
-          />
+                <button
 
-          <label>Street Address</label>
-          <textarea
-            name="address"
-            rows="3"
-            value={customer.address}
-            onChange={handleChange}
-            placeholder="House No, Street..."
-          />
+                    className="clear-cart-btn"
 
-          <label>City</label>
-          <input
-            type="text"
-            name="city"
-            value={customer.city}
-            onChange={handleChange}
-            placeholder="City"
-          />
+                    onClick={clearCart}
 
-          <label>State</label>
-          <input
-            type="text"
-            name="state"
-            value={customer.state}
-            onChange={handleChange}
-            placeholder="State"
-          />
+                >
 
-                    <label>PIN Code</label>
-          <input
-            type="text"
-            name="pincode"
-            value={customer.pincode}
-            onChange={handleChange}
-            placeholder="PIN Code"
-          />
+                    Clear Cart
+
+                </button>
+
+            )}
+
         </div>
 
-        <div className="summary-section">
 
-          <h2>Order Summary</h2>
 
-          {cartItems.length === 0 ? (
-            <p className="empty-cart-msg">
-              Your cart is empty.
-            </p>
-          ) : (
+        {/* ===============================
+                EMPTY
+        =============================== */}
+
+        {cartItems.length === 0 && !orderPlaced && (
+
+            <div className="empty-cart">
+
+                <h2>
+
+                    No items available.
+
+                </h2>
+
+                <button
+
+                    className="continue-btn"
+
+                    onClick={() => navigate("/shop")}
+
+                >
+
+                    Continue Shopping
+
+                </button>
+
+            </div>
+
+        )}
+
+
+
+        {/* ===============================
+                SUCCESS
+        =============================== */}
+
+        {orderPlaced && (
+
+            <div className="order-success">
+
+                <h2>
+
+                    🎉 Order Placed Successfully!
+
+                </h2>
+
+                <p>
+
+                    Thank you for supporting India's heritage artisans.
+
+                </p>
+
+            </div>
+
+        )}
+
+
+
+        {/* ===============================
+                ITEMS
+        =============================== */}
+
+        {!orderPlaced && cartItems.length > 0 && (
+
             <>
-              {cartItems.map((item, index) => (
-                <div className="summary-item" key={index}>
-                  <span>{item.name}</span>
-                  <span>₹{item.price}</span>
+
+                <div className="cart-container">
+
+                    {cartItems.map((item) => (
+
+                        <div
+
+                            className="cart-card"
+
+                            key={item.id}
+
+                        >
+
+                            <img
+
+                                src={item.image}
+
+                                alt={item.name}
+
+                                className="cart-image"
+
+                            />
+
+
+
+                            <div className="cart-details">
+
+                                <span className="cart-category">
+
+                                    {item.category}
+
+                                </span>
+
+                                <h3>
+
+                                    {item.name}
+
+                                </h3>
+
+                                <p className="cart-price">
+
+                                    ₹{item.price}
+
+                                </p>
+
+                            </div>
+
+
+
+                            <div className="cart-actions">
+
+                                <div className="qty-box">
+
+                                    <button
+
+                                        onClick={() =>
+
+                                            decreaseQuantity(item.id)
+
+                                        }
+
+                                    >
+
+                                        −
+
+                                    </button>
+
+
+
+                                    <span>
+
+                                        {item.quantity}
+
+                                    </span>
+
+
+
+                                    <button
+
+                                        onClick={() =>
+
+                                            increaseQuantity(item.id)
+
+                                        }
+
+                                    >
+
+                                        +
+
+                                    </button>
+
+                                </div>
+
+
+
+                                <button
+
+                                    className="remove-btn"
+
+                                    onClick={() =>
+
+                                        removeItem(item.id)
+
+                                    }
+
+                                >
+
+                                    Remove
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    ))}
+
                 </div>
-              ))}
 
-              <hr />
 
-              <div className="summary-total">
-                <span>Total Amount</span>
-                <span>₹{totalAmount}</span>
-              </div>
+
+                {/* ===============================
+                        SUMMARY
+                =============================== */}
+
+                <div className="summary-card">
+
+                    <div className="summary-row">
+
+                        <span>
+
+                            Items ({totalItems})
+
+                        </span>
+
+                        <span>
+
+                            ₹{totalAmount}
+
+                        </span>
+
+                    </div>
+
+
+
+                    <div className="summary-row">
+
+                        <span>
+
+                            Delivery
+
+                        </span>
+
+                        <span>
+
+                            FREE
+
+                        </span>
+
+                    </div>
+
+
+
+                    <hr />
+
+
+
+                    <div className="summary-total">
+
+                        <strong>
+
+                            Total
+
+                        </strong>
+
+                        <strong>
+
+                            ₹{totalAmount}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                                {/* ===============================
+                        BUTTONS
+                =============================== */}
+
+                <div className="checkout-buttons">
+
+                    <button
+
+                        className="continue-btn"
+
+                        onClick={() => navigate("/shop")}
+
+                    >
+
+                        Continue Shopping
+
+                    </button>
+
+                    <button
+
+                        className="place-order-btn"
+
+                        onClick={placeOrder}
+
+                    >
+
+                        {isBuyNow ? "Buy Now" : "Place Order"}
+
+                    </button>
+
+                </div>
+
             </>
-          )}
 
-          <button
-            className="complete-btn"
-            onClick={handlePurchase}
-            disabled={cartItems.length === 0}
-          >
-            Complete Purchase
-          </button>
-
-          <button
-            className="back-btn"
-            onClick={() => navigate("/shop")}
-          >
-            ← Back to Shop
-          </button>
-
-        </div>
-
-      </div>
+        )}
 
     </div>
-  );
+
+);
+
 }

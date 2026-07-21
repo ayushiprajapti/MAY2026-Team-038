@@ -1,120 +1,316 @@
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./OrderHistory.css";
 
 export default function OrderHistory() {
-  const navigate = useNavigate();
 
-  const orders = [
-    {
-      id: "ORD1001",
-      product: "Pune Heritage Directory & Guide",
-      quantity: 1,
-      price: "₹750",
-      date: "18 Jul 2026",
-      status: "Delivered",
-    },
-    {
-      id: "ORD1002",
-      product: "INTACH Heritage Calendar",
-      quantity: 2,
-      price: "₹600",
-      date: "15 Jul 2026",
-      status: "Processing",
-    },
-    {
-      id: "ORD1003",
-      product: "Heritage Coffee Table Book",
-      quantity: 1,
-      price: "₹1,250",
-      date: "10 Jul 2026",
-      status: "Delivered",
-    },
-  ];
+    const navigate = useNavigate();
 
-  return (
-    <div className="orders-page">
+    const [orders, setOrders] = useState([]);
 
-      <header className="orders-header">
-        <h1>INTACH Heritage Marketplace</h1>
-        <p>Order History</p>
-      </header>
+    /* ===============================
+            LOAD ORDERS
+    ============================== */
 
-      <div className="orders-container">
+    useEffect(() => {
 
-        <h2>My Orders</h2>
+        const savedOrders = JSON.parse(
 
-        {orders.length === 0 ? (
-          <div className="empty-orders">
-            <h3>No Orders Found</h3>
-            <p>You haven't placed any orders yet.</p>
+            localStorage.getItem("heritage_orders")
 
-            <button
-              className="shop-btn"
-              onClick={() => navigate("/shop")}
-            >
-              Go to Shop
-            </button>
-          </div>
-        ) : (
-          <table className="orders-table">
+        ) || [];
 
-            <thead>
-              <tr>
-                <th>Order ID</th>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Order Date</th>
-                <th>Status</th>
-              </tr>
-            </thead>
+        setOrders(savedOrders);
 
-            <tbody>
-              {orders.map((order) => (
-                <tr key={order.id}>
+    }, []);
 
-                  <td>{order.id}</td>
+    /* ===============================
+            BUY AGAIN
+    ============================== */
 
-                  <td>{order.product}</td>
+    const buyAgain = (item) => {
+      
+      navigate("/checkout", {
 
-                  <td>{order.quantity}</td>
+            state: {
 
-                  <td>{order.price}</td>
+                buyNow: true,
 
-                  <td>{order.date}</td>
+                items: [
 
-                  <td>
-                    <span
-                      className={
-                        order.status === "Delivered"
-                          ? "status delivered"
-                          : "status processing"
-                      }
+                    {
+
+                        ...item,
+
+                        quantity: item.quantity || 1
+
+                    }
+
+                ]
+
+            }
+
+        });
+
+    };
+
+    /* ===============================
+            VIEW PRODUCT
+    ============================== */
+
+    const viewProduct = (id) => {
+
+        navigate(`/product/${id}`);
+
+    };
+
+    /* ===============================
+            TOTAL ORDERS
+    ============================== */
+
+    const totalOrders = useMemo(() => {
+
+        return orders.length;
+
+    }, [orders]);
+
+    return (
+
+        <div className="orders-page">
+
+            {/* ===============================
+                    HEADER
+            ============================== */}
+
+            <div className="orders-header">
+
+                <h1>
+
+                    Order History ({totalOrders})
+
+                </h1>
+
+                <button
+
+                    className="shop-btn"
+
+                    onClick={() => navigate("/shop")}
+
+                >
+
+                    Continue Shopping
+
+                </button>
+
+            </div>
+
+            {/* ===============================
+                    EMPTY ORDERS
+            ============================== */}
+
+            {orders.length === 0 && (
+
+                <div className="empty-orders">
+
+                    <h2>No Orders Yet</h2>
+
+                    <p>
+
+                        Explore our heritage collection and place your first order.
+
+                    </p>
+
+                    <button
+
+                        className="continue-btn"
+
+                        onClick={() => navigate("/shop")}
+
                     >
-                      {order.status}
-                    </span>
-                  </td>
 
-                </tr>
-              ))}
-            </tbody>
+                        Shop Now
 
-          </table>
-        )}
+                    </button>
 
-        <div className="orders-buttons">
+                </div>
 
-          <button
-            className="back-btn"
-            onClick={() => navigate("/shop")}
-          >
-            ← Back to Shop
-          </button>
+            )}
+
+            {/* ===============================
+                    ORDER LIST
+            ============================== */}
+
+            {orders.length > 0 && (
+
+                <div className="orders-container">
+                                      {orders.map((order) => (
+
+                        <div
+
+                            className="order-card"
+
+                            key={order.orderId}
+
+                        >
+
+                            {/* ===============================
+                                    ORDER HEADER
+                            ============================== */}
+
+                            <div className="order-top">
+
+                                <div>
+
+                                    <h3>
+
+                                        Order #{order.orderId}
+
+                                    </h3>
+
+                                    <p className="order-date">
+
+                                        {order.date}
+
+                                    </p>
+
+                                </div>
+
+                                <span
+
+                                    className={`status ${order.status
+                                        .toLowerCase()
+                                        .replace(/\s+/g, "-")}`}
+
+                                >
+
+                                    {order.status}
+
+                                </span>
+
+                            </div>
+
+                            {/* ===============================
+                                    PRODUCTS
+                            ============================== */}
+
+                            {order.items.map((item) => (
+
+                                <div
+
+                                    className="order-item"
+
+                                    key={item.id}
+
+                                >
+
+                                    <img
+
+                                        src={item.image}
+
+                                        alt={item.name}
+
+                                        className="order-image"
+
+                                    />
+
+                                    <div className="order-details">
+
+                                        <span className="order-category">
+
+                                            {item.category}
+
+                                        </span>
+
+                                        <h4>
+
+                                            {item.name}
+
+                                        </h4>
+
+                                        <p>
+
+                                            Quantity : {item.quantity}
+
+                                        </p>
+
+                                        <p className="order-price">
+
+                                            ₹{item.price * item.quantity}
+
+                                        </p>
+
+                                    </div>
+
+                                    <div className="order-buttons">
+
+                                        <button
+
+                                            className="view-btn"
+
+                                            onClick={() =>
+
+                                                viewProduct(item.id)
+
+                                            }
+
+                                        >
+
+                                            View Details
+
+                                        </button>
+
+                                        <button
+
+                                            className="buy-btn"
+
+                                            onClick={() =>
+
+                                                buyAgain(item)
+
+                                            }
+
+                                        >
+
+                                            Buy Again
+
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            ))}
+
+                            {/* ===============================
+                                    ORDER TOTAL
+                            ============================== */}
+
+                            <div className="order-footer">
+
+                                <strong>
+
+                                    Total Amount
+
+                                </strong>
+
+                                <strong>
+
+                                    ₹{order.total}
+
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    ))}
+
+                </div>
+
+            )}
 
         </div>
 
-      </div>
+    );
 
-    </div>
-  );
 }
