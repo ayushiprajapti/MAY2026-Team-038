@@ -1,40 +1,140 @@
-INTACH Heritage Management System – Frontend
-About the Project
+# INTACH Heritage Management System
 
-The INTACH Heritage Management System is a web application developed to support the management, preservation, and promotion of heritage sites. The frontend provides an intuitive and user-friendly interface for different users, including visitors, volunteers, administrators, and event coordinators, enabling them to perform their respective tasks efficiently.
+A web application for the **INTACH Pune Conservation Chapter** to manage heritage sites, events, volunteers, shop orders, and expert chat — all through a role-based admin dashboard and a public-facing portal.
 
-Frontend Pages
+---
 
-Home Page
+## Tech Stack
 
-Serves as the landing page of the application, providing users with an introduction to the Heritage Management System and easy navigation to the different modules.
+| Layer | Technology |
+|---|---|
+| Framework | React 19 + Vite 8 |
+| Routing | React Router DOM v7 |
+| Styling | Tailwind CSS v4 |
+| Animations | Framer Motion |
+| Charts | Chart.js |
+| Maps | Leaflet + React-Leaflet |
+| State | React local state + `localStorage` |
 
-Volunteer Portal
+---
 
-Allows volunteers to submit details of heritage sites along with relevant information and images for administrative review.
+## Prerequisites
 
-Admin Dashboard
+Make sure you have the following installed before proceeding:
 
-Provides administrators with a centralized interface to review pending heritage site submissions. Administrators can search submissions, view detailed information, and approve or reject volunteer submissions.
+- **Node.js** v18 or later — [https://nodejs.org](https://nodejs.org)
+- **npm** v9 or later (comes bundled with Node.js)
 
-Event Coordinator Portal
+Verify your versions:
 
-Allows event coordinators to create, manage, and organize heritage-related events and quizzes for users.
+```bash
+node -v
+npm -v
+```
 
-Components
+---
 
-Heritage Details Modal
+## Installation
 
-Displays detailed information about a selected heritage site, including its image, location, volunteer details, and description.
+### 1. Clone the repository
 
-Search Bar
+```bash
+git clone https://github.com/ayushiprajapti/MAY2026-Team-038.git
+cd MAY2026-Team-038
+```
 
-Enables administrators to quickly search and filter heritage submissions by site name.
+### 2. Install dependencies
 
-Submission Cards
+All source code lives inside the `frontend/` directory.
 
-Display heritage site information in a structured format, including images, metadata, and action buttons for reviewing submissions.
+```bash
+cd frontend
+npm install
+```
 
-Objective
+This will download all required packages listed in `package.json` into a local `node_modules/` folder.
 
-The objective of the frontend is to provide a responsive, user-friendly, and visually appealing interface that enables efficient interaction with the Heritage Management System while supporting the needs of different categories of users.
+---
+
+## Running the App
+
+### Development server (with hot-reload)
+
+```bash
+npm run dev
+```
+
+The app will start on **http://localhost:5173** by default.  
+Open that URL in your browser. Changes to source files will reflect instantly without a full reload.
+
+
+## Project Structure
+
+```
+MAY2026-Team-038/
+└── frontend/
+    ├── public/               # Static assets served as-is
+    ├── src/
+    │   ├── assets/           # Images and illustrations
+    │   ├── components/       # Reusable UI components (grouped by feature)
+    │   │   ├── admin/
+    │   │   ├── admin-dashboard/
+    │   │   ├── admin-shop/
+    │   │   ├── EventCoordinator/
+    │   │   └── shared/       # AdminSidebar, AdminLayout, Navbar, etc.
+    │   ├── data/             # Static seed data (events, products, etc.)
+    │   ├── hooks/            # Custom React hooks
+    │   ├── pages/            # Top-level route pages
+    │   │   ├── AdminDashboard.jsx
+    │   │   ├── AdminEvents.jsx
+    │   │   ├── AdminEventCreate.jsx
+    │   │   ├── AdminShop.jsx
+    │   │   ├── Login.jsx
+    │   │   └── ...
+    │   ├── utils/            # Helper utilities
+    │   ├── App.jsx           # Root component with route definitions
+    │   ├── main.jsx          # React DOM entry point
+    │   └── index.css         # Global design tokens & Tailwind base
+    ├── index.html
+    ├── vite.config.js
+    └── package.json
+```
+
+---
+
+## Default Login Credentials
+
+The app uses `localStorage`-based auth with two seeded accounts:
+
+| Role | Email | Password |
+|---|---|---|
+| **Admin** | `admin@intachpune.org` | `admin123` |
+| **Member / Volunteer** | `user@intachpune.org` | `user123` |
+
+> These credentials are seeded automatically on first load inside `Login.jsx`.
+
+---
+
+## Key Routes
+
+| Path | Description |
+|---|---|
+| `/` | Public homepage |
+| `/login` | Login page |
+| `/admin-dashboard` | Admin dashboard (admin only) |
+| `/admin/events` | Manage heritage events |
+| `/admin/events/create` | Create or edit an event |
+| `/admin-shop` | Heritage shop administration |
+| `/admin-db` | Heritage database |
+| `/admin-chat` | Expert chat |
+| `/admin` | Volunteer submission review |
+| `/events` | Public events listing |
+| `/heritage` | Heritage sites explorer |
+| `/volunteer` | Volunteer upload portal |
+
+---
+
+
+## Notes
+
+- Data is persisted in the browser's **`localStorage`** — clearing browser storage resets all admin-created events, products, and registrations to their seeded defaults.
