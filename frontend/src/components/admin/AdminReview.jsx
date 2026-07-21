@@ -146,7 +146,7 @@ function AdminReview() {
                       <h2 className="heritage-title">{submission.site}</h2>
                       <p className="heritage-location">📍 {submission.location}</p>
                     </div>
-                    <span className="status-badge">🟡 {submission.status}</span>
+                    <span className="status-badge">{submission.status}</span>
                   </div>
 
                   <div className="info-grid">
