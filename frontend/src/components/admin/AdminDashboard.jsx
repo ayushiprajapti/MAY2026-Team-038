@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "./AdminDashboard.css";
 
 import charminarImg from "../../assets/heritage/charminar.jpg";
@@ -63,29 +63,19 @@ function AdminDashboard() {
     <div className="admin-dashboard text-left w-full h-full">
       <div className="dashboard-container">
 
-        {/* Dashboard Header with Manage Events Button */}
-        <div className="dashboard-header flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <p className="dashboard-tag">
-              INTACH Heritage Management
-            </p>
-            <h1 className="page-title">
-              Volunteer Submission Verification
-            </h1>
-            <p className="dashboard-subtitle">
-              Review, verify and manage heritage submissions contributed
-              by registered volunteers before publishing them on the
-              heritage portal.
-            </p>
-          </div>
-          <div className="shrink-0 self-start md:self-center">
-            <Link 
-              to="/admin/events" 
-              className="rounded-lg bg-[#b87519] px-5 py-2.5 font-sans text-sm font-bold text-white no-underline transition hover:bg-[#925a0e] shadow-sm inline-block"
-            >
-              Manage event registrations
-            </Link>
-          </div>
+        {/* Dashboard Header */}
+        <div className="dashboard-header">
+          <p className="dashboard-tag">
+            INTACH Heritage Management
+          </p>
+          <h1 className="page-title">
+            Volunteer Submission Verification
+          </h1>
+          <p className="dashboard-subtitle">
+            Review, verify and manage heritage submissions contributed
+            by registered volunteers before publishing them on the
+            heritage portal.
+          </p>
         </div>
 
         {/* Statistics Grid */}

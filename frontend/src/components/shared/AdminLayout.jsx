@@ -15,9 +15,10 @@ export default function AdminLayout() {
 
   let activePage = "dashboard";
   if (pathname.includes("/admin-shop")) activePage = "shop";
+  else if (pathname.includes("/admin/events")) activePage = "events";
   else if (pathname.includes("/admin-db")) activePage = "database";
   else if (pathname.includes("/admin-chat")) activePage = "chat";
-  else if (pathname === "/admin") activePage = "old-admin";
+  else if (pathname === "/admin-review") activePage = "old-admin";
 
   return (
     <div className="flex bg-[#f8ecd7] min-h-screen text-heritage-espresso w-full">

@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useMemo, useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import { events } from "../data/events";
 
 const demoRegistrations = [
@@ -8,92 +9,399 @@ const demoRegistrations = [
   { eventId: 1, firstName: "Rohan", lastName: "Patil", email: "rohan.patil@example.com", phone: "+91 98901 66741", attendees: "3", note: "Bringing two family members." },
 ];
 
+const ITEMS_PER_PAGE = 6;
+
 export default function AdminEvents() {
   const navigate = useNavigate();
-  const [selectedId, setSelectedId] = useState(null);
+
+  const [eventList, setEventList] = useState(() => {
+    const saved = JSON.parse(localStorage.getItem("intach-admin-events") || "null");
+    return saved
+      ? [...saved, ...events.filter((e) => !saved.some((s) => s.id === e.id))]
+      : events;
+  });
+
+  const registrations = useMemo(
+    () => [...demoRegistrations, ...JSON.parse(localStorage.getItem("intach-event-registrations") || "[]")],
+    []
+  );
+
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [eventList, setEventList] = useState(() => {
-    const savedEvents = JSON.parse(localStorage.getItem("intach-admin-events") || "null");
-    return savedEvents ? [...savedEvents, ...events.filter((event) => !savedEvents.some((savedEvent) => savedEvent.id === event.id))] : events;
-  });
-  const registrations = useMemo(() => [...demoRegistrations, ...JSON.parse(localStorage.getItem("intach-event-registrations") || "[]")], []);
-  const getEventStatus = (event) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedId, setSelectedId] = useState(null);
+
+  useEffect(() => { setCurrentPage(1); }, [search, statusFilter]);
+
+  const getStatus = (event) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const eventDate = new Date(2026, event.monthIndex, event.date);
-    if (eventDate.getTime() === today.getTime()) return "ongoing";
-    return eventDate < today ? "completed" : "upcoming";
+    const d = new Date(2026, event.monthIndex, event.date);
+    if (d.getTime() === today.getTime()) return "ongoing";
+    return d < today ? "completed" : "upcoming";
   };
-  const filteredEvents = eventList.filter((event) => {
-    const matchesSearch = event.title.toLowerCase().includes(search.toLowerCase()) || event.category.toLowerCase().includes(search.toLowerCase());
-    return matchesSearch && (statusFilter === "all" || getEventStatus(event) === statusFilter);
+
+  const filteredEvents = eventList.filter((e) => {
+    const matchesSearch =
+      e.title.toLowerCase().includes(search.toLowerCase()) ||
+      e.category.toLowerCase().includes(search.toLowerCase()) ||
+      e.place.toLowerCase().includes(search.toLowerCase());
+    return matchesSearch && (statusFilter === "all" || getStatus(e) === statusFilter);
   });
-  const selectedEvent = eventList.find((event) => event.id === selectedId);
-  const attendees = selectedEvent ? registrations.filter((registration) => registration.eventId === selectedEvent.id) : [];
+
+  const totalPages = Math.ceil(filteredEvents.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const pageEvents = filteredEvents.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+  const selectedEvent = eventList.find((e) => e.id === selectedId) || null;
+  const attendees = selectedEvent
+    ? registrations.filter((r) => r.eventId === selectedEvent.id)
+    : [];
+
   const deleteEvent = (event) => {
-    if (!window.confirm(`Delete “${event.title}”? This cannot be undone.`)) return;
-    const nextEvents = eventList.filter((item) => item.id !== event.id);
-    localStorage.setItem("intach-admin-events", JSON.stringify(nextEvents));
-    setEventList(nextEvents);
-    setSelectedId(null);
+    if (!window.confirm(`Delete "${event.title}"? This cannot be undone.`)) return;
+    const next = eventList.filter((e) => e.id !== event.id);
+    localStorage.setItem("intach-admin-events", JSON.stringify(next));
+    setEventList(next);
+    if (selectedId === event.id) setSelectedId(null);
+  };
+
+  const upcomingCount = eventList.filter((e) => getStatus(e) === "upcoming").length;
+  const totalRegistrations = registrations.length;
+  const completedCount = eventList.filter((e) => getStatus(e) === "completed").length;
+
+  const statusBadge = (status) => {
+    const map = {
+      upcoming: "bg-amber-50 text-amber-700 border-amber-200",
+      ongoing: "bg-emerald-50 text-emerald-700 border-emerald-200",
+      completed: "bg-heritage-cream-dark/60 text-heritage-charcoal/70 border-heritage-border/50",
+    };
+    return map[status] || map.upcoming;
+  };
+
+  const categoryColor = (category) => {
+    const map = {
+      "Heritage Walk": "bg-blue-50 text-blue-700",
+      "Workshop": "bg-purple-50 text-purple-700",
+      "Heritage Talk": "bg-teal-50 text-teal-700",
+      "Volunteer Day": "bg-orange-50 text-orange-700",
+    };
+    return map[category] || "bg-heritage-cream text-heritage-charcoal";
   };
 
   return (
-    <main className="min-h-screen bg-[#f7eddc] px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        <Link to="/admin" className="font-sans text-sm font-bold text-[#9c6719] hover:text-[#74460d]">Back to dashboard</Link>
-        <div className="mt-5 flex flex-col justify-between gap-5 border-b border-[#dec9a3] pb-6 md:flex-row md:items-end">
-          <div>
-            <p className="font-sans text-xs font-bold uppercase tracking-[0.22em] text-[#a2651b]">Coordinator workspace</p>
-            <h1 className="mt-2 font-serif text-4xl text-[#422b1b]">Events</h1>
-            <p className="mt-2 font-body text-[#755d48]">Select an event to view its registered users.</p>
-          </div>
-          <Link to="/admin/events/create" className="rounded-lg bg-[#b87519] px-4 py-2.5 text-center font-sans text-sm font-bold text-white transition hover:bg-[#925a0e]">Add event</Link>
-        </div>
+    <main className="p-8 md:p-12 overflow-y-auto w-full h-full text-heritage-espresso bg-[#f8ecd7]/90">
 
-        {!selectedEvent ? (
-          <section className="mt-7 overflow-hidden rounded-2xl border border-[#dfcda8] bg-[#fffaf0] shadow-[0_10px_28px_rgba(96,69,30,0.08)]">
-            <div className="border-b border-[#eadcc2] p-5 sm:p-6">
-              <h2 className="font-serif text-2xl text-[#422b1b]">All events</h2>
-              <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search events" className="mt-4 w-full rounded-lg border border-[#d9c29d] bg-[#fffdf8] px-3 py-2.5 font-sans text-sm outline-none focus:ring-2 focus:ring-[#d39834]" />
-              <div className="mt-4 flex flex-wrap gap-2" aria-label="Filter events by status">
-                {["all", "upcoming", "ongoing", "completed"].map((status) => <button key={status} onClick={() => setStatusFilter(status)} aria-pressed={statusFilter === status} className={`rounded-full px-3 py-2 font-sans text-xs font-bold capitalize transition ${statusFilter === status ? "bg-[#ad741d] text-white" : "border border-[#d9c29d] bg-[#fffdf8] text-[#755d48] hover:bg-[#f8ead0]"}`}>{status === "all" ? "All events" : `${status[0].toUpperCase()}${status.slice(1)}`}</button>)}
-              </div>
-            </div>
-            <div className="divide-y divide-[#eadcc2]">
-              {filteredEvents.map((event) => {
-                const count = registrations.filter((registration) => registration.eventId === event.id).length;
-                const isSelected = event.id === selectedId;
-                return (
-                  <article key={event.id} className={`flex flex-col gap-4 p-5 transition hover:bg-[#fff7e9] sm:flex-row sm:items-center sm:justify-between sm:p-6 ${isSelected ? "bg-[#fcf0d8]" : ""}`}>
-                    <button onClick={() => setSelectedId(event.id)} aria-pressed={isSelected} className="min-w-0 text-left">
-                      <span className="font-sans text-xs font-bold uppercase tracking-[0.12em] text-[#a2651b]">{event.month} {event.date} · {event.category}</span>
-                      <strong className="mt-1 block font-serif text-lg text-[#422b1b]">{event.title}</strong>
-                      <span className="mt-1 block font-sans text-sm text-[#755d48]">{event.time} · {event.place}</span>
-                    </button>
-                    <div className="flex flex-wrap items-center gap-2 sm:justify-end"><span className={`shrink-0 rounded-full px-3 py-1.5 font-sans text-xs font-bold capitalize ${getEventStatus(event) === "completed" ? "bg-[#ece7df] text-[#6d6258]" : getEventStatus(event) === "ongoing" ? "bg-[#e2ebd5] text-[#526348]" : "bg-[#f3e1ba] text-[#80500f]"}`}>{getEventStatus(event)}</span><span className="shrink-0 rounded-full bg-[#f3e1ba] px-3 py-1.5 font-sans text-xs font-bold text-[#80500f]">{count} registered</span><button onClick={() => navigate("/admin/events/create", { state: { event } })} className="rounded-lg border border-[#b87519] px-3 py-2 font-sans text-xs font-bold text-[#925a0e] transition hover:bg-[#f8ead0]">Edit</button><button onClick={() => deleteEvent(event)} className="rounded-lg border border-[#9b4428] px-3 py-2 font-sans text-xs font-bold text-[#9b4428] transition hover:bg-[#f8e4d9]">Delete</button></div>
-                  </article>
-                );
-              })}
-              {!filteredEvents.length && <p className="p-6 font-body text-[#755d48]">No {statusFilter === "all" ? "events" : statusFilter} events match your search.</p>}
-            </div>
-          </section>
-        ) : (
-          <section className="mt-7 rounded-2xl border border-[#dfcda8] bg-[#fffaf0] shadow-[0_10px_28px_rgba(96,69,30,0.08)]">
-            <div className="border-b border-[#eadcc2] p-6 sm:p-8">
-              <button onClick={() => setSelectedId(null)} className="font-sans text-sm font-bold text-[#9c6719] hover:text-[#74460d]">← All events</button>
-              <p className="mt-6 font-sans text-xs font-bold uppercase tracking-[0.16em] text-[#a2651b]">{selectedEvent.month} {selectedEvent.date} · {selectedEvent.time}</p>
-              <h2 className="mt-2 font-serif text-3xl leading-tight text-[#422b1b] sm:text-4xl">{selectedEvent.title}</h2>
-              <p className="mt-3 font-sans text-base text-[#755d48]">{selectedEvent.place}</p>
-            </div>
-            <div className="p-6 sm:p-8">
-              <div className="flex flex-wrap items-end justify-between gap-3"><div><p className="font-sans text-xs font-bold uppercase tracking-[0.16em] text-[#a2651b]">Participant list</p><h3 className="mt-1 font-serif text-2xl text-[#422b1b]">Registered users <span className="font-sans text-base font-normal text-[#7d634b]">({attendees.length})</span></h3></div></div>
-              {attendees.length ? <div className="mt-6 space-y-4">{attendees.map((person) => <article key={person.email} className="rounded-xl border border-[#eadcc2] bg-[#fffdf8] p-5"><p className="font-sans text-lg font-bold text-[#4f3523]">{person.firstName} {person.lastName}</p><p className="mt-3 font-sans text-sm text-[#755d48]">{person.email}</p><p className="mt-1 font-sans text-sm text-[#755d48]">{person.phone}</p><p className="mt-4 border-t border-[#eadcc2] pt-3 font-sans text-sm text-[#755d48]"><strong className="text-[#4f3523]">{person.attendees}</strong> attendee{person.attendees === "1" ? "" : "s"}</p>{person.note && <p className="mt-3 rounded-lg bg-[#faf1e1] p-3 font-sans text-sm leading-5 text-[#755d48]">{person.note}</p>}</article>)}</div> : <p className="mt-6 rounded-xl bg-[#faf1e1] p-5 font-body text-sm leading-6 text-[#795f47]">No one has registered for this event yet. Registrations submitted through the public event page will appear here.</p>}
-            </div>
-          </section>
-        )}
-      </div>
+      {/* Page Header */}
+      <header className="flex flex-col sm:flex-row sm:justify-between sm:items-center w-full mb-10 text-left">
+        <div>
+          <h2 className="font-serif text-3xl font-bold text-heritage-espresso">
+            Event Management
+          </h2>
+          <p className="text-sm text-heritage-charcoal/70 mt-1 font-sans">
+            Manage heritage events, view registrations, and track attendance.
+          </p>
+        </div>
+        <button
+          onClick={() => navigate("/admin/events/create")}
+          className="mt-4 sm:mt-0 flex items-center gap-1.5 bg-heritage-red hover:bg-heritage-red/90 text-white font-semibold text-sm py-2.5 px-5 rounded shadow shadow-heritage-red/15 cursor-pointer transition-colors active:scale-95 duration-150"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+          <span>Add Event</span>
+        </button>
+      </header>
+
+      {/* Stat Cards */}
+      <section className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8 text-left">
+        <div className="bg-heritage-cream-light p-5 rounded-xl border border-heritage-border/80 shadow-[0_4px_15px_rgba(43,33,24,0.04)]">
+          <p className="text-heritage-charcoal/60 font-sans text-xs font-semibold uppercase tracking-wider">Upcoming Events</p>
+          <h3 className="font-serif text-2xl font-bold text-heritage-espresso mt-1">{upcomingCount}</h3>
+          <p className="text-[10px] text-heritage-charcoal/50 font-sans mt-1.5">Scheduled and open for registration</p>
+        </div>
+        <div className="bg-heritage-cream-light p-5 rounded-xl border border-heritage-border/80 shadow-[0_4px_15px_rgba(43,33,24,0.04)]">
+          <p className="text-heritage-charcoal/60 font-sans text-xs font-semibold uppercase tracking-wider">Total Registrations</p>
+          <h3 className="font-serif text-2xl font-bold text-heritage-red mt-1">{totalRegistrations}</h3>
+          <p className="text-[10px] text-heritage-charcoal/50 font-sans mt-1.5">Across all events in this cycle</p>
+        </div>
+        <div className="bg-heritage-cream-light p-5 rounded-xl border border-heritage-border/80 shadow-[0_4px_15px_rgba(43,33,24,0.04)]">
+          <p className="text-heritage-charcoal/60 font-sans text-xs font-semibold uppercase tracking-wider">Completed Events</p>
+          <h3 className="font-serif text-2xl font-bold text-heritage-espresso mt-1">{completedCount}</h3>
+          <p className="text-[10px] text-heritage-charcoal/50 font-sans mt-1.5">Successfully concluded heritage events</p>
+        </div>
+      </section>
+
+      {/* Main Card — swaps views in-place */}
+      <section className="mb-8">
+        <div className="bg-heritage-cream-light rounded-xl border border-heritage-border/80 shadow-[0_4px_15px_rgba(43,33,24,0.04)] text-left overflow-hidden">
+          <AnimatePresence mode="wait" initial={false}>
+
+            {/* ── VIEW 1: Events Table ── */}
+            {!selectedEvent ? (
+              <motion.div
+                key="table"
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -16 }}
+                transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+                className="p-6 md:p-8"
+              >
+                {/* Header */}
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+                  <div>
+                    <h4 className="font-serif text-2xl font-semibold text-heritage-espresso">Manage Events</h4>
+                    <p className="text-xs text-heritage-charcoal/60 mt-1 font-sans">
+                      View, edit, and delete events. Click a row to see its registered attendees.
+                    </p>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-3 shrink-0 font-sans text-xs">
+                    <input
+                      type="text"
+                      placeholder="Search by title, category, place…"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      className="bg-heritage-cream border border-heritage-border/60 text-heritage-espresso text-xs rounded font-sans px-3.5 py-1.5 focus:outline-none focus:ring-1 focus:ring-heritage-bronze w-52"
+                    />
+                    <div className="flex items-center gap-1.5">
+                      {["all", "upcoming", "ongoing", "completed"].map((s) => (
+                        <button
+                          key={s}
+                          onClick={() => setStatusFilter(s)}
+                          className={`px-2.5 py-1 rounded-full text-[10px] font-bold capitalize transition-all duration-150 border ${
+                            statusFilter === s
+                              ? "bg-heritage-red text-white border-heritage-red"
+                              : "border-heritage-border/60 text-heritage-charcoal/70 hover:bg-heritage-cream hover:text-heritage-red"
+                          }`}
+                        >
+                          {s === "all" ? "All" : s.charAt(0).toUpperCase() + s.slice(1)}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Table */}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left font-sans text-xs border-collapse">
+                    <thead>
+                      <tr className="border-b border-heritage-border/40 text-heritage-charcoal/60 uppercase font-semibold tracking-wider text-[10px]">
+                        <th className="py-2.5 px-3">Date</th>
+                        <th className="py-2.5 px-3">Title</th>
+                        <th className="py-2.5 px-3 w-32">Category</th>
+                        <th className="py-2.5 px-3">Time &amp; Place</th>
+                        <th className="py-2.5 px-3 w-20 text-center">Reg.</th>
+                        <th className="py-2.5 px-3 w-24">Status</th>
+                        <th className="py-2.5 px-3 w-28 text-center">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-heritage-border/20 text-heritage-espresso font-medium">
+                      {pageEvents.length === 0 ? (
+                        <tr>
+                          <td colSpan="7" className="py-10 text-center text-heritage-charcoal/50 font-sans text-sm">
+                            No events match your search or filter.
+                          </td>
+                        </tr>
+                      ) : (
+                        pageEvents.map((event) => {
+                          const status = getStatus(event);
+                          const regCount = registrations.filter((r) => r.eventId === event.id).length;
+                          return (
+                            <tr
+                              key={event.id}
+                              onClick={() => setSelectedId(event.id)}
+                              className="hover:bg-heritage-cream/30 transition-colors cursor-pointer"
+                            >
+                              <td className="py-3 px-3 whitespace-nowrap">
+                                <span className="font-mono font-bold text-[10px] text-heritage-red uppercase">
+                                  {event.date} {event.month}
+                                </span>
+                              </td>
+                              <td className="py-3 px-3 text-sm font-semibold">{event.title}</td>
+                              <td className="py-3 px-3 w-32">
+                                <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold ${categoryColor(event.category)}`}>
+                                  {event.category}
+                                </span>
+                              </td>
+                              <td className="py-3 px-3 text-heritage-charcoal/70 max-w-[180px]">
+                                <span className="block text-[11px] truncate" title={event.time}>{event.time}</span>
+                                <span className="block text-[10px] text-heritage-charcoal/50 truncate" title={event.place}>{event.place}</span>
+                              </td>
+                              <td className="py-3 px-3 w-20 text-center">
+                                <span className="font-semibold text-sm">{regCount}</span>
+                              </td>
+                              <td className="py-3 px-3 w-24">
+                                <span className={`inline-block px-2 py-0.5 rounded-full border text-[9px] font-bold uppercase tracking-wider font-mono ${statusBadge(status)}`}>
+                                  {status}
+                                </span>
+                              </td>
+                              <td className="py-3 px-3 w-28" onClick={(e) => e.stopPropagation()}>
+                                <div className="flex items-center justify-center gap-2">
+                                  <button
+                                    onClick={() => navigate("/admin/events/create", { state: { event } })}
+                                    className="p-1.5 border border-heritage-border/60 text-heritage-charcoal hover:text-heritage-red hover:bg-heritage-cream rounded-md transition-all cursor-pointer shadow-sm active:scale-90"
+                                    title="Edit Event"
+                                  >
+                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                    </svg>
+                                  </button>
+                                  <button
+                                    onClick={() => deleteEvent(event)}
+                                    className="p-1.5 border border-heritage-border/60 text-heritage-charcoal hover:bg-red-50 hover:text-red-700 hover:border-red-200 rounded-md transition-all cursor-pointer shadow-sm active:scale-90"
+                                    title="Delete Event"
+                                  >
+                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Pagination */}
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mt-6 border-t border-heritage-border/30 pt-4 font-sans text-xs select-none">
+                  <div className="text-heritage-charcoal/60 font-medium">
+                    Showing {filteredEvents.length === 0 ? 0 : startIndex + 1} to{" "}
+                    {Math.min(startIndex + ITEMS_PER_PAGE, filteredEvents.length)} of{" "}
+                    {filteredEvents.length} events
+                  </div>
+                  {totalPages > 1 && (
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                        disabled={currentPage === 1}
+                        className="p-1.5 border border-heritage-border/60 text-heritage-charcoal hover:bg-heritage-cream rounded-md disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-95 cursor-pointer"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
+                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                        <button
+                          key={page}
+                          onClick={() => setCurrentPage(page)}
+                          className={`w-7 h-7 flex items-center justify-center border rounded-md font-semibold transition-all active:scale-95 cursor-pointer ${
+                            currentPage === page
+                              ? "bg-heritage-red text-white border-heritage-red shadow-sm"
+                              : "border-heritage-border/60 text-heritage-charcoal hover:bg-heritage-cream hover:text-heritage-red"
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      ))}
+                      <button
+                        onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                        disabled={currentPage === totalPages}
+                        className="p-1.5 border border-heritage-border/60 text-heritage-charcoal hover:bg-heritage-cream rounded-md disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-95 cursor-pointer"
+                      >
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+
+            ) : (
+
+              /* ── VIEW 2: Attendees Detail ── */
+              <motion.div
+                key={`attendees-${selectedEvent.id}`}
+                initial={{ opacity: 0, x: 16 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 16 }}
+                transition={{ duration: 0.22, ease: [0.4, 0, 0.2, 1] }}
+                className="p-6 md:p-8"
+              >
+                {/* Back + event info */}
+                <div className="mb-6">
+                  <button
+                    onClick={() => setSelectedId(null)}
+                    className="flex items-center gap-1.5 font-sans text-xs font-semibold text-heritage-charcoal/60 hover:text-heritage-red transition-colors cursor-pointer mb-4"
+                  >
+                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    Back to Events
+                  </button>
+                  <p className="font-sans text-[10px] font-bold uppercase tracking-widest text-heritage-red mb-1">
+                    {selectedEvent.month} {selectedEvent.date} · {selectedEvent.time}
+                  </p>
+                  <h4 className="font-serif text-2xl font-semibold text-heritage-espresso">
+                    {selectedEvent.title}
+                  </h4>
+                  <p className="font-sans text-xs text-heritage-charcoal/60 mt-1">
+                    {selectedEvent.place}
+                  </p>
+                </div>
+
+                {/* Attendees sub-header */}
+                <div className="mb-4 pb-4 border-b border-heritage-border/30">
+                  <p className="font-sans text-[10px] font-bold uppercase tracking-widest text-heritage-charcoal/60">
+                    Participant List
+                  </p>
+                  <h5 className="font-serif text-lg text-heritage-espresso mt-0.5">
+                    Registered Attendees{" "}
+                    <span className="font-sans text-sm font-normal text-heritage-charcoal/60">
+                      ({attendees.length})
+                    </span>
+                  </h5>
+                </div>
+
+                {/* Attendees table */}
+                {attendees.length > 0 ? (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left font-sans text-xs border-collapse">
+                      <thead>
+                        <tr className="border-b border-heritage-border/40 text-heritage-charcoal/60 uppercase font-semibold tracking-wider text-[10px]">
+                          <th className="py-2.5 px-3">Name</th>
+                          <th className="py-2.5 px-3">Email</th>
+                          <th className="py-2.5 px-3">Phone</th>
+                          <th className="py-2.5 px-3 w-20 text-center">Attendees</th>
+                          <th className="py-2.5 px-3">Note</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-heritage-border/20 text-heritage-espresso">
+                        {attendees.map((person) => (
+                          <tr key={person.email} className="hover:bg-heritage-cream/30 transition-colors">
+                            <td className="py-3 px-3 font-semibold text-sm whitespace-nowrap">
+                              {person.firstName} {person.lastName}
+                            </td>
+                            <td className="py-3 px-3 text-heritage-charcoal/70">{person.email}</td>
+                            <td className="py-3 px-3 text-heritage-charcoal/70 whitespace-nowrap">{person.phone}</td>
+                            <td className="py-3 px-3 text-center font-bold text-sm">{person.attendees}</td>
+                            <td className="py-3 px-3 text-heritage-charcoal/60">
+                              {person.note ? (
+                                person.note
+                              ) : (
+                                <span className="text-heritage-charcoal/30 italic">—</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : (
+                  <div className="rounded-lg bg-heritage-cream/60 border border-heritage-border/40 p-5 text-sm font-sans text-heritage-charcoal/60 leading-6">
+                    No one has registered for this event yet. Registrations submitted through the public event page will appear here.
+                  </div>
+                )}
+              </motion.div>
+            )}
+
+          </AnimatePresence>
+        </div>
+      </section>
+
     </main>
   );
 }
