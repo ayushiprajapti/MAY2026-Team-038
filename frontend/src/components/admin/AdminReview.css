@@ -53,18 +53,19 @@
 
 .stat-card {
   background: white;
-  border-radius: 18px;
+  border-radius: 20px;
   padding: 28px;
   display: flex;
   align-items: center;
   gap: 18px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.07);
-  transition: .3s;
   border-left: 5px solid #c68a27;
+  box-shadow: 0 10px 26px rgba(72, 45, 25, 0.08);
+  transition: all 0.3s ease;
 }
 
 .stat-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-5px);
+  box-shadow: 0 16px 34px rgba(72, 45, 25, 0.12);
 }
 
 .stat-icon {
@@ -96,12 +97,12 @@
 .search-section {
   background: white;
   padding: 25px 30px;
-  border-radius: 18px;
+  border-radius: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
-  box-shadow: 0 10px 25px rgba(0,0,0,.06);
+  box-shadow: 0 10px 25px rgba(72, 45, 25, 0.06);
 }
 
 .search-section h2 {
@@ -117,16 +118,16 @@
 .search-box {
   width: 360px;
   padding: 15px 20px;
-  border: 2px solid #ead9c3;
+  border: 2px solid #dcc5a7;
   border-radius: 50px;
   outline: none;
   font-size: 15px;
-  transition: .3s;
+  transition: all 0.25s ease;
 }
 
 .search-box:focus {
-  border-color: #c68a27;
-  box-shadow: 0 0 15px rgba(198,138,39,.25);
+  border-color: #6b2d21;
+  box-shadow: 0 0 0 4px rgba(107, 45, 33, 0.12);
 }
 
 /* ---------------- LIST ---------------- */
@@ -135,7 +136,9 @@
   display: flex;
   flex-direction: column;
   gap: 28px;
-}/* ---------------- SUBMISSION CARD ---------------- */
+}
+
+/* ---------------- SUBMISSION CARD ---------------- */
 
 .submission-card {
   background: #ffffff;
@@ -143,14 +146,14 @@
   overflow: hidden;
   display: grid;
   grid-template-columns: 280px 1fr;
-  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.08);
-  transition: 0.35s ease;
   border-left: 6px solid #c68a27;
+  box-shadow: 0 12px 28px rgba(72, 45, 25, 0.09);
+  transition: all 0.35s ease;
 }
 
 .submission-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(72, 45, 25, 0.13);
 }
 
 .card-image {
@@ -163,7 +166,7 @@
   height: 100%;
   min-height: 270px;
   object-fit: cover;
-  transition: transform 0.4s;
+  transition: transform 0.45s ease;
 }
 
 .submission-card:hover img {
@@ -199,12 +202,14 @@
 }
 
 .status-badge {
-  background: #fff5d6;
-  color: #b8860b;
+  background: #f6ead3;
+  color: #7a4e1d;
+  border: 1px solid #e2c89d;
   padding: 10px 18px;
-  border-radius: 30px;
-  font-size: 14px;
+  border-radius: 999px;
+  font-size: 13px;
   font-weight: 700;
+  letter-spacing: 0.3px;
   white-space: nowrap;
 }
 
@@ -218,9 +223,10 @@
 }
 
 .info-box {
-  background: #faf7f3;
+  background: #fcfaf7;
   border-radius: 14px;
   padding: 18px;
+  border: 1px solid #efe6db;
 }
 
 .info-label {
@@ -230,7 +236,7 @@
   font-weight: 600;
   margin-bottom: 8px;
   text-transform: uppercase;
-  letter-spacing: .5px;
+  letter-spacing: 0.5px;
 }
 
 .info-box p {
@@ -238,66 +244,78 @@
   color: #333;
   font-size: 17px;
   font-weight: 600;
-}
-
-/* ---------------- BUTTONS ---------------- */
+}/* ---------------- BUTTONS ---------------- */
 
 .card-actions {
   display: flex;
-  gap: 15px;
-  margin-top: 30px;
+  align-items: center;
+  gap: 14px;
+  margin-top: 32px;
   flex-wrap: wrap;
 }
 
+/* Shared Button Style */
+
 .card-actions button {
-  border: none;
+  padding: 13px 26px;
   border-radius: 12px;
-  padding: 14px 26px;
-  cursor: pointer;
   font-size: 15px;
   font-weight: 600;
-  transition: .3s;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
 }
 
+/* -------- Approve (Primary) -------- */
+
 .approve-btn {
-  background: #2e8b57;
-  color: white;
+  background: #6b2d21;
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 6px 18px rgba(107, 45, 33, 0.18);
 }
 
 .approve-btn:hover {
-  background: #267347;
+  background: #572319;
   transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(107, 45, 33, 0.28);
 }
 
+/* -------- Reject (Secondary) -------- */
+
 .reject-btn {
-  background: #c23a3a;
-  color: white;
+  background: transparent;
+  color: #6b2d21;
+  border: 2px solid #6b2d21;
 }
 
 .reject-btn:hover {
-  background: #a72f2f;
+  background: #f7efe6;
   transform: translateY(-2px);
 }
+
+/* -------- View Details -------- */
 
 .view-btn {
   margin-left: auto;
-  background: #6b2d21;
-  color: white;
+  background: #f6efe6;
+  color: #6b2d21;
+  border: 1px solid #d7bda0;
 }
 
 .view-btn:hover {
-  background: #572319;
+  background: #eee0cd;
   transform: translateY(-2px);
 }
 
-/* ---------------- EMPTY ---------------- */
+/* ---------------- EMPTY STATE ---------------- */
 
 .empty-state {
   background: white;
   padding: 80px 40px;
   text-align: center;
   border-radius: 22px;
-  box-shadow: 0 12px 30px rgba(0,0,0,.08);
+  box-shadow: 0 12px 30px rgba(72, 45, 25, 0.08);
 }
 
 .empty-icon {
@@ -305,14 +323,16 @@
 }
 
 .empty-state h2 {
-  color: #2e8b57;
+  color: #6b2d21;
   margin-top: 18px;
+  font-size: 32px;
 }
 
 .empty-state p {
   color: #777;
   margin-top: 10px;
   font-size: 17px;
+  line-height: 1.6;
 }
 
 /* ---------------- MOBILE ---------------- */
@@ -359,6 +379,11 @@
 
   .card-top {
     flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .status-badge {
+    margin-top: 10px;
   }
 
   .info-grid {
@@ -367,10 +392,46 @@
 
   .card-actions {
     flex-direction: column;
+    align-items: stretch;
+  }
+
+  .card-actions button {
+    width: 100%;
   }
 
   .view-btn {
     margin-left: 0;
   }
 
+}
+.approve-btn {
+  background: #6b2d21 !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 8px 20px rgba(107,45,33,.18) !important;
+}
+
+.approve-btn:hover {
+  background: #572319 !important;
+}
+
+.reject-btn {
+  background: transparent !important;
+  color: #6b2d21 !important;
+  border: 2px solid #6b2d21 !important;
+}
+
+.reject-btn:hover {
+  background: #f5ebe0 !important;
+}
+
+.view-btn {
+  margin-left: auto !important;
+  background: #f5ebe0 !important;
+  color: #6b2d21 !important;
+  border: 1px solid #d9bea3 !important;
+}
+
+.view-btn:hover {
+  background: #ecdfcd !important;
 }

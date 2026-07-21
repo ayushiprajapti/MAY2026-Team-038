@@ -24,6 +24,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import AdminDashboardNew from "./pages/AdminDashboard";
 import AdminShopPage from "./pages/AdminShop";
+
 import "./App.css";
 
 function ScrollToTop() {
