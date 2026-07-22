@@ -14,7 +14,6 @@ import AdminChat from "./components/admin/AdminChat.jsx";
 import GlobeHome from "./pages/GlobeHome.jsx";
 import TrailExperience from "./pages/TrailExperience.jsx";
 import VolunteerPage from "./pages/VolunteerPage";
-import VolunteerUploadDetails from "./pages/VolunteerUploadDetails";
 import EventPage from "./pages/EventPage";
 import EventRegistration from "./pages/EventRegistration";
 import AdminEvents from "./pages/AdminEvents";
@@ -122,10 +121,6 @@ function AnimatedRoutes() {
         </Route>
         {/* Immersive admin chat — full-bleed, no persistent admin nav */}
         <Route path="/admin-chat" element={<AnimatedPage><AdminChat /></AnimatedPage>} />
-        <Route
-          path="/admin/volunteer-details"
-          element={<AnimatedPage><VolunteerUploadDetails /></AnimatedPage>}
-        />
       </Route>
     </Routes>
   );
