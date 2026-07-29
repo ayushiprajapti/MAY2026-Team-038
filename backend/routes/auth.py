@@ -1,0 +1,27 @@
+from fastapi import APIRouter, Depends
+from psycopg2.extensions import connection
+
+from database import get_db
+from schemas.auth import LoginRequest, SignupRequest, TokenResponse, UserResponse
+from services import auth_service
+from utils.auth import get_current_user
+from utils.security import create_access_token
+
+router = APIRouter(prefix="/auth", tags=["auth"])
+
+
+@router.post("/signup", response_model=UserResponse, status_code=201)
+def signup(payload: SignupRequest, conn: connection = Depends(get_db)) -> dict:
+    return auth_service.create_user(conn, payload)
+
+
+@router.post("/login", response_model=TokenResponse)
+def login(payload: LoginRequest, conn: connection = Depends(get_db)) -> TokenResponse:
+    user = auth_service.authenticate_user(conn, payload.email, payload.password)
+    token = create_access_token(subject=str(user["id"]))
+    return TokenResponse(access_token=token)
+
+
+@router.get("/me", response_model=UserResponse)
+def read_current_user(current_user: dict = Depends(get_current_user)) -> dict:
+    return current_user
