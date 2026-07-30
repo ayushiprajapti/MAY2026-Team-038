@@ -50,19 +50,47 @@ def test_haversine_meters_matches_known_distance() -> None:
     assert 110_000 < distance < 112_000
 
 
+PUNE_CITY_LATITUDE = 18.519
+PUNE_CITY_LONGITUDE = 73.855
+
+
 def test_guess_region_name_extracts_peth() -> None:
-    assert guess_region_name("Near Kasaba Peth, Opp. To Nana Wada - 11") == "Kasaba Peth"
+    assert (
+        guess_region_name(
+            "Near Kasaba Peth, Opp. To Nana Wada - 11", PUNE_CITY_LATITUDE, PUNE_CITY_LONGITUDE
+        )
+        == "Kasaba Peth"
+    )
 
 
-def test_guess_region_name_returns_none_without_address() -> None:
-    assert guess_region_name(None) is None
-    assert guess_region_name("No peth mentioned here") is None
+def test_guess_region_name_returns_none_within_city_with_no_match() -> None:
+    assert guess_region_name(None, PUNE_CITY_LATITUDE, PUNE_CITY_LONGITUDE) is None
+    assert (
+        guess_region_name("No peth mentioned here", PUNE_CITY_LATITUDE, PUNE_CITY_LONGITUDE)
+        is None
+    )
+
+
+def test_guess_region_name_falls_back_to_greater_pune_region_outside_city() -> None:
+    # Sinhagad Fort - ~20km SW of central Pune, no addr tags on OSM.
+    assert guess_region_name(None, 18.3664, 73.7547) == "Greater Pune Region"
 
 
 def test_guess_themes_matches_keywords() -> None:
     assert "Religious Heritage" in guess_themes("Kasba Ganpati Mandir")
     assert "Peshwa-era Wada" in guess_themes("Nana Wada")
     assert guess_themes("Some Unrelated Name") == []
+
+
+def test_guess_themes_uses_historic_type_when_name_has_no_keyword() -> None:
+    # "Suvarnadurg" doesn't contain any fort-ish keyword on its own.
+    assert guess_themes("Suvarnadurg", historic_type="fort") == ["Hill Forts & Rock-cut Heritage"]
+
+
+def test_guess_themes_does_not_duplicate_theme_from_both_signals() -> None:
+    assert guess_themes("Sinhagad Fort", historic_type="fort") == [
+        "Hill Forts & Rock-cut Heritage"
+    ]
 
 
 def test_to_normalized_maps_raw_site_fields() -> None:

@@ -55,6 +55,18 @@ THEME_KEYWORDS: dict[str, list[str]] = {
         "college", "hospital", "bungalow", "institute", "post", "railway", "court",
     ],
     "Water Heritage": ["ghat", "dam", "dharan", "aquaduct", "well"],
+    "Hill Forts & Rock-cut Heritage": ["fort", "castle", "cave", "caves", "killa", "fortress"],
+}
+
+# The 150km-radius OSM data is mostly forts/caves/ruins that don't reliably
+# say so in their name (e.g. "Suvarnadurg" has no fort-ish keyword at all).
+# The OSM tag itself is a far more reliable signal than guessing from the
+# name, so map it straight to the same theme.
+HISTORIC_TYPE_THEMES: dict[str, str] = {
+    "fort": "Hill Forts & Rock-cut Heritage",
+    "castle": "Hill Forts & Rock-cut Heritage",
+    "ruins": "Hill Forts & Rock-cut Heritage",
+    "archaeological_site": "Hill Forts & Rock-cut Heritage",
 }
 
 
@@ -103,24 +115,44 @@ KNOWN_AREAS = [
     "Kalyani Nagar", "Erandwane", "Aundh", "Wanowrie", "Hadapsar",
 ]
 
+# Address-based matching (Peth names, KNOWN_AREAS) only covers Pune city
+# proper - most of it doesn't even apply to the 150km-radius OSM data, which
+# rarely has addr:* tags at all. Rather than leave every fort/cave outside
+# the city with no region, anything beyond city limits with no better match
+# falls into one coarse catch-all region instead of staying unclassified.
+PUNE_CENTER_LATITUDE = 18.5204
+PUNE_CENTER_LONGITUDE = 73.8567
+CITY_LIMIT_RADIUS_METERS = 20_000.0
+GREATER_PUNE_REGION = "Greater Pune Region"
 
-def guess_region_name(address: str | None) -> str | None:
-    if not address:
-        return None
-    peth_match = re.search(r"([A-Za-z]+ Peth)", address)
-    if peth_match:
-        return peth_match.group(1)
-    lowered = address.lower()
-    return next((area for area in KNOWN_AREAS if area.lower() in lowered), None)
+
+def guess_region_name(address: str | None, latitude: float, longitude: float) -> str | None:
+    if address:
+        peth_match = re.search(r"([A-Za-z]+ Peth)", address)
+        if peth_match:
+            return peth_match.group(1)
+        lowered = address.lower()
+        known = next((area for area in KNOWN_AREAS if area.lower() in lowered), None)
+        if known:
+            return known
+
+    distance = haversine_meters(
+        latitude, longitude, PUNE_CENTER_LATITUDE, PUNE_CENTER_LONGITUDE
+    )
+    return GREATER_PUNE_REGION if distance >= CITY_LIMIT_RADIUS_METERS else None
 
 
-def guess_themes(name: str) -> list[str]:
+def guess_themes(name: str, historic_type: str | None = None) -> list[str]:
     lowered = name.lower()
-    return [
+    themes = [
         theme
         for theme, keywords in THEME_KEYWORDS.items()
         if any(keyword in lowered for keyword in keywords)
     ]
+    mapped_theme = HISTORIC_TYPE_THEMES.get(historic_type)
+    if mapped_theme and mapped_theme not in themes:
+        themes.append(mapped_theme)
+    return themes
 
 
 def to_normalized(raw: RawSite, status: str = "approved") -> NormalizedSite:
@@ -132,8 +164,8 @@ def to_normalized(raw: RawSite, status: str = "approved") -> NormalizedSite:
         address=raw.address,
         description=raw.description,
         image_url=raw.image_url,
-        region_name=guess_region_name(raw.address),
-        theme_names=guess_themes(raw.name),
+        region_name=guess_region_name(raw.address, raw.latitude, raw.longitude),
+        theme_names=guess_themes(raw.name, raw.historic_type),
         status=status,
     )
 

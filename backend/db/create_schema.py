@@ -236,7 +236,7 @@ CREATE TABLE heritage_site_embeddings (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     site_id UUID,
     content_chunk TEXT,
-    embedding VECTOR(1536),
+    embedding VECTOR(1024),
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 """
@@ -310,6 +310,7 @@ ALTER TABLE heritage_site_embeddings
 INDEXES = """
 CREATE UNIQUE INDEX ux_voice_guide_scripts_site_language ON voice_guide_scripts (site_id, language_code);
 CREATE UNIQUE INDEX ux_event_registrations_event_user ON event_registrations (event_id, user_id);
+CREATE UNIQUE INDEX ux_heritage_site_embeddings_site ON heritage_site_embeddings (site_id);
 """
 
 # Mirrors schema.dbml's own TableGroups; foreign keys/indexes are applied
