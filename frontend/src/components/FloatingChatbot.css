@@ -22,6 +22,14 @@
   transition: transform 0.2s ease, background-color 0.2s ease;
 }
 
+.floating-chat-trigger.with-text {
+  width: auto;
+  padding: 0 1.25rem;
+  border-radius: 28px;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
 .floating-chat-trigger:hover {
   transform: translateY(-2px);
   background-color: var(--color-heritage-ochre, #d69f4c);

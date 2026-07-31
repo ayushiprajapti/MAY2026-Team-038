@@ -9,6 +9,7 @@ from routes import (
     admin_verification,
     admin_events,
     admin_heritage_review,
+    auth, chat, health
 )
 
 app = FastAPI(title="INTACH Pune API")
@@ -27,3 +28,4 @@ app.include_router(admin_dashboard.router)
 app.include_router(admin_verification.router)
 app.include_router(admin_events.router)
 app.include_router(admin_heritage_review.router)
+app.include_router(chat.router)

@@ -95,8 +95,8 @@ export default function FloatingChatbot() {
       )}
 
       {!isOpen && (
-        <button className="floating-chat-trigger" onClick={() => setIsOpen(true)}>
-          <span className="trigger-icon">💬</span>
+        <button className="floating-chat-trigger with-text" onClick={() => setIsOpen(true)}>
+          <span className="trigger-icon">💬</span> Ask Assistant
         </button>
       )}
     </div>

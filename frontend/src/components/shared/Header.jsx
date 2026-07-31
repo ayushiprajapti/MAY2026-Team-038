@@ -88,7 +88,7 @@ export default function Header() {
                     </div>
                     
                     <Link
-                      to="/shop"
+                      to="/checkout"
                       onClick={() => setProfileOpen(false)}
                       className="w-full text-left px-4 py-2.5 text-sm text-heritage-charcoal hover:bg-heritage-cream/30 hover:text-heritage-red transition-colors flex items-center gap-2 font-sans font-medium cursor-pointer"
                     >
@@ -187,7 +187,7 @@ export default function Header() {
                 <span className="block text-sm font-semibold text-heritage-espresso mb-4">{user.fullName || "Member"}</span>
                 <div className="space-y-1">
                   <Link
-                    to="/shop"
+                    to="/checkout"
                     onClick={() => setIsOpen(false)}
                     className="w-full text-left py-2 text-sm text-heritage-charcoal hover:text-heritage-red font-sans font-medium flex items-center gap-2 cursor-pointer"
                   >

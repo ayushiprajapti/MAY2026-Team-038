@@ -43,6 +43,9 @@ export default function GlobeHome() {
 
   return (
     <div className="home">
+      <div className="home__hero-quote">
+        "A people without the knowledge of their past history, origin and culture is like a tree without roots." — Marcus Garvey
+      </div>
       {/* Clean single-row filter toolbar — no hero title */}
       <div className="home__toolbar">
         <FilterBar

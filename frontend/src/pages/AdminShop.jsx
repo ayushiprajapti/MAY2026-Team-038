@@ -207,7 +207,7 @@ export default function AdminShop() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.94, y: 20 }}
               transition={{ duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
-              className="max-w-md w-full relative z-10 shadow-2xl"
+              className="max-w-2xl w-full relative z-10 shadow-2xl max-h-[90vh] overflow-y-auto rounded-xl"
             >
               <ProductForm
                 onAddProduct={(p) => {
