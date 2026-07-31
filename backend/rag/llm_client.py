@@ -6,11 +6,9 @@ from config import settings
 
 EMBEDDINGS_URL = "https://integrate.api.nvidia.com/v1/embeddings"
 CHAT_URL = "https://integrate.api.nvidia.com/v1/chat/completions"
-RERANK_URL = "https://ai.api.nvidia.com/v1/retrieval/nvidia/nv-rerankqa-mistral-4b-v3/reranking"
 
 EMBEDDING_MODEL = "nvidia/nv-embedqa-e5-v5"
-GENERATION_MODEL = "meta/llama-3.3-70b-instruct"
-RERANK_MODEL = "nvidia/nv-rerankqa-mistral-4b-v3"
+GENERATION_MODEL = "meta/llama-3.1-70b-instruct"
 
 TIMEOUT_SECONDS = 30
 
@@ -53,21 +51,3 @@ def generate_answer(messages: list[dict[str, str]]) -> str:
     )
     response.raise_for_status()
     return response.json()["choices"][0]["message"]["content"]
-
-
-def rerank(query: str, passages: list[str]) -> list[int]:
-    """Returns indices into `passages`, ordered best-to-worst match for `query`."""
-    response = requests.post(
-        RERANK_URL,
-        headers=_headers(),
-        json={
-            "model": RERANK_MODEL,
-            "query": {"text": query},
-            "passages": [{"text": passage} for passage in passages],
-        },
-        timeout=TIMEOUT_SECONDS,
-    )
-    response.raise_for_status()
-    rankings = response.json()["rankings"]
-    ranked = sorted(rankings, key=lambda item: item["logit"], reverse=True)
-    return [item["index"] for item in ranked]

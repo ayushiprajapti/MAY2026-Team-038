@@ -9,7 +9,7 @@ from psycopg2.extras import RealDictCursor
 from rag import llm_client
 from rag.retrieval import retrieve_relevant_sites
 
-HISTORY_LIMIT = 6
+HISTORY_LIMIT = 15
 
 SYSTEM_PROMPT = (
     "You are the Heritage Assistant for INTACH Pune. Answer questions about "
@@ -51,7 +51,7 @@ RETURNING id, session_id, role, content, referenced_site_ids, created_at
 
 INSERT_ASSISTANT_MESSAGE = """
 INSERT INTO chat_messages (id, session_id, role, content, referenced_site_ids, created_at)
-VALUES (%(id)s, %(session_id)s, 'assistant', %(content)s, %(referenced_site_ids)s, now())
+VALUES (%(id)s, %(session_id)s, 'assistant', %(content)s, %(referenced_site_ids)s::uuid[], now())
 RETURNING id, session_id, role, content, referenced_site_ids, created_at
 """
 
@@ -69,7 +69,7 @@ def get_owned_session(conn: connection, session_id: str, user_id: str) -> dict:
 
     if session is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Session not found")
-    if session["user_id"] != user_id:
+    if str(session["user_id"]) != user_id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not your session")
     return session
 

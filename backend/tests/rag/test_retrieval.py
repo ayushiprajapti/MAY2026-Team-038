@@ -52,7 +52,7 @@ class _FakeConnection:
         return _FakeCursor(self)
 
 
-@patch("rag.retrieval.llm_client.rerank")
+@patch("rag.retrieval.local_reranker.rerank")
 @patch("rag.retrieval.llm_client.embed_texts")
 def test_retrieve_relevant_sites_reranks_and_limits_to_k(mock_embed, mock_rerank):
     mock_embed.return_value = [[0.1, 0.2]]
@@ -69,7 +69,25 @@ def test_retrieve_relevant_sites_reranks_and_limits_to_k(mock_embed, mock_rerank
     assert [r["site_id"] for r in result] == ["c", "a"]
 
 
-@patch("rag.retrieval.llm_client.rerank")
+@patch("rag.retrieval.local_reranker.rerank")
+@patch("rag.retrieval.llm_client.embed_texts")
+def test_retrieve_relevant_sites_falls_back_to_distance_order_when_rerank_fails(
+    mock_embed, mock_rerank
+):
+    mock_embed.return_value = [[0.1, 0.2]]
+    mock_rerank.side_effect = RuntimeError("rerank model unavailable for this account")
+    knn_rows = [
+        {"site_id": "a", "name": "A", "content_chunk": "chunk a", "distance": 0.1},
+        {"site_id": "b", "name": "B", "content_chunk": "chunk b", "distance": 0.2},
+    ]
+    conn = _FakeConnection(knn_rows=knn_rows)
+
+    result = retrieval.retrieve_relevant_sites(conn, "tell me about heritage", k=2)
+
+    assert [r["site_id"] for r in result] == ["a", "b"]
+
+
+@patch("rag.retrieval.local_reranker.rerank")
 @patch("rag.retrieval.llm_client.embed_texts")
 def test_retrieve_relevant_sites_returns_empty_when_no_candidates(mock_embed, mock_rerank):
     mock_embed.return_value = [[0.1, 0.2]]
@@ -81,7 +99,7 @@ def test_retrieve_relevant_sites_returns_empty_when_no_candidates(mock_embed, mo
     mock_rerank.assert_not_called()
 
 
-@patch("rag.retrieval.llm_client.rerank")
+@patch("rag.retrieval.local_reranker.rerank")
 @patch("rag.retrieval.llm_client.embed_texts")
 def test_retrieve_relevant_sites_drops_candidates_beyond_distance_cutoff(mock_embed, mock_rerank):
     mock_embed.return_value = [[0.1, 0.2]]
@@ -94,7 +112,7 @@ def test_retrieve_relevant_sites_drops_candidates_beyond_distance_cutoff(mock_em
     mock_rerank.assert_not_called()
 
 
-@patch("rag.retrieval.llm_client.rerank")
+@patch("rag.retrieval.local_reranker.rerank")
 @patch("rag.retrieval.llm_client.embed_texts")
 def test_retrieve_relevant_sites_filters_by_matched_region(mock_embed, mock_rerank):
     mock_embed.return_value = [[0.1, 0.2]]

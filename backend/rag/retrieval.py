@@ -3,7 +3,7 @@ from __future__ import annotations
 from psycopg2.extensions import connection
 from psycopg2.extras import RealDictCursor
 
-from rag import llm_client
+from rag import llm_client, local_reranker
 from rag.vector_format import to_pgvector_literal
 
 CANDIDATE_LIMIT = 20
@@ -67,5 +67,12 @@ def retrieve_relevant_sites(conn: connection, query: str, k: int = 5) -> list[di
     if not candidates:
         return []
 
-    ranked_indices = llm_client.rerank(query, [c["content_chunk"] for c in candidates])
-    return [candidates[i] for i in ranked_indices[:k]]
+    try:
+        ranked_indices = local_reranker.rerank(query, [c["content_chunk"] for c in candidates])
+        return [candidates[i] for i in ranked_indices[:k]]
+    except Exception:
+        # Reranking is a precision upgrade on top of plain vector distance,
+        # not a hard requirement - if the local reranker fails for any
+        # reason, fall back to the KNN distance order rather than failing
+        # the whole chat turn.
+        return candidates[:k]

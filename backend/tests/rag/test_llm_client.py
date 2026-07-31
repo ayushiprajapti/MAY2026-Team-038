@@ -41,20 +41,3 @@ def test_generate_answer_returns_message_content(mock_post):
     )
 
     assert result == "Shaniwar Wada is a fort."
-
-
-@patch("rag.llm_client.requests.post")
-def test_rerank_returns_indices_sorted_by_score_desc(mock_post):
-    mock_post.return_value = _mock_response(
-        {
-            "rankings": [
-                {"index": 0, "logit": 0.1},
-                {"index": 1, "logit": 0.9},
-                {"index": 2, "logit": 0.5},
-            ]
-        }
-    )
-
-    result = llm_client.rerank("query", ["a", "b", "c"])
-
-    assert result == [1, 2, 0]
