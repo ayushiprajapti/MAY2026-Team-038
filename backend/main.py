@@ -9,6 +9,7 @@ from routes import (
     auth,
     chat,
     health,
+    shop, admin_shop
 )
 
 app = FastAPI(title="INTACH Pune API")
@@ -23,6 +24,9 @@ app.add_middleware(
 
 app.include_router(health.router)
 app.include_router(auth.router)
+app.include_router(shop.router)
+app.include_router(admin_shop.router)
+
 app.include_router(admin_dashboard.router)
 app.include_router(admin_events.router)
 app.include_router(admin_heritage_review.router)
