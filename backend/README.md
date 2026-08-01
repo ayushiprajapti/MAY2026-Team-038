@@ -38,6 +38,20 @@ uvicorn main:app --reload
 
 API will be available at `http://localhost:8000`, docs at `http://localhost:8000/docs`.
 
+## Database schema
+
+`db/create_schema.py` is a Python script (not raw `.sql` files) that creates
+every table/enum/extension from `../schema.dbml` against `DATABASE_URL`.
+Run it once, against a fresh database, after `.env` is filled in:
+
+```bash
+python -m db.create_schema
+```
+
+It's a one-time bootstrap, not a migration tool — see the module docstring
+in `db/create_schema.py` for details, and `CONTRIBUTING.md` for why this
+file is locked from casual edits.
+
 ## Tests
 
 ```bash
