@@ -1,3 +1,4 @@
+import psycopg2
 from fastapi import HTTPException, status
 from psycopg2.extensions import connection
 from psycopg2.extras import RealDictCursor
@@ -174,14 +175,21 @@ def update_event(conn: connection, event_id: str, data: dict) -> dict:
 
 def delete_event(conn: connection, event_id: str) -> dict:
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
-        cur.execute(
-            """
-            DELETE FROM events
-            WHERE id = %s::uuid
-            RETURNING id
-            """,
-            (event_id,),
-        )
+        try:
+            cur.execute(
+                """
+                DELETE FROM events
+                WHERE id = %s::uuid
+                RETURNING id
+                """,
+                (event_id,),
+            )
+        except psycopg2.errors.ForeignKeyViolation:
+            conn.rollback()
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Cannot delete this event because it still has registrations.",
+            )
 
         deleted = cur.fetchone()
 

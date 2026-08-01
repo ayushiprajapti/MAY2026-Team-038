@@ -1,4 +1,6 @@
-from datetime import date
+from datetime import date, datetime
+from uuid import UUID
+
 from pydantic import BaseModel
 
 
@@ -10,20 +12,20 @@ class ShopStatsResponse(BaseModel):
 
 
 class EventResponse(BaseModel):
-    id: str
-    title: str
-    venue: str
+    id: UUID
+    title: str | None
+    venue: str | None
     event_date: date
-    status: str
+    status: str | None
 
 
 class VolunteerUploadResponse(BaseModel):
-    id: str
-    name: str
-    submitted_by: str
-    status: str
+    id: UUID
+    name: str | None
+    submitted_by: str | None
+    status: str | None
     image_url: str | None
-    created_at: str
+    created_at: datetime
 
 
 class DashboardEventsResponse(BaseModel):

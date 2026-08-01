@@ -3,13 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from config import settings
 from routes import (
-    auth,
-    health,
     admin_dashboard,
-    admin_verification,
     admin_events,
     admin_heritage_review,
-    auth, chat, health
+    auth,
+    chat,
+    health,
 )
 
 app = FastAPI(title="INTACH Pune API")
@@ -25,7 +24,6 @@ app.add_middleware(
 app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(admin_dashboard.router)
-app.include_router(admin_verification.router)
 app.include_router(admin_events.router)
 app.include_router(admin_heritage_review.router)
 app.include_router(chat.router)

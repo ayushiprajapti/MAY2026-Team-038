@@ -76,7 +76,7 @@ def get_recent_volunteer_uploads(conn: connection) -> dict:
                 hs.created_at,
                 u.full_name AS submitted_by
             FROM heritage_sites hs
-            JOIN users u
+            LEFT JOIN users u
                 ON hs.submitted_by = u.id
             ORDER BY hs.created_at DESC
             LIMIT 5

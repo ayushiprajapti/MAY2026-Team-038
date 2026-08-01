@@ -14,7 +14,9 @@ class HeritageSubmissionResponse(BaseModel):
     historical_significance: Optional[str] = None
     description: Optional[str] = None
     image_url: Optional[str] = None
-    status: str
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    status: Optional[str] = None
     submitted_by: Optional[UUID] = None
     reviewed_by: Optional[UUID] = None
     reviewed_at: Optional[datetime] = None
@@ -25,5 +27,4 @@ class HeritageSubmissionResponse(BaseModel):
 
 
 class ReviewRequest(BaseModel):
-    reviewed_by: UUID
     review_notes: Optional[str] = None

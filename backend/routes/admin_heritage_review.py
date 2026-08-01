@@ -15,6 +15,7 @@ from services.heritage_review_service import (
     reject_submission,
     delete_submission,
 )
+from utils.auth import get_current_user
 
 router = APIRouter(
     prefix="/admin/heritage-submissions",
@@ -27,9 +28,14 @@ router = APIRouter(
     response_model=list[HeritageSubmissionResponse],
 )
 def get_all_pending(
+    status: str | None = "pending_review",
     conn: connection = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
 ):
-    return get_pending_submissions(conn)
+    """Defaults to pending_review only. Pass ?status=approved/rejected to
+    filter by another status, or ?status=all to see every submission."""
+    status_filter = None if status in (None, "all") else status
+    return get_pending_submissions(conn, status_filter)
 
 
 @router.get(
@@ -39,6 +45,7 @@ def get_all_pending(
 def get_one_submission(
     submission_id: UUID,
     conn: connection = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
 ):
     submission = get_submission_by_id(conn, submission_id)
 
@@ -59,11 +66,12 @@ def approve(
     submission_id: UUID,
     body: ReviewRequest,
     conn: connection = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
 ):
     submission = approve_submission(
         conn,
         submission_id,
-        body.reviewed_by,
+        current_user["id"],
         body.review_notes,
     )
 
@@ -84,11 +92,12 @@ def reject(
     submission_id: UUID,
     body: ReviewRequest,
     conn: connection = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
 ):
     submission = reject_submission(
         conn,
         submission_id,
-        body.reviewed_by,
+        current_user["id"],
         body.review_notes,
     )
 
@@ -105,6 +114,7 @@ def reject(
 def delete(
     submission_id: UUID,
     conn: connection = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
 ):
     deleted = delete_submission(conn, submission_id)
 

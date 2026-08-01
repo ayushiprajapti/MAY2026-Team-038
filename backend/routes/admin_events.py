@@ -17,6 +17,7 @@ from services.events_service import (
     update_event,
     delete_event,
 )
+from utils.auth import get_current_user
 
 router = APIRouter(
     prefix="/admin/events",
@@ -28,7 +29,10 @@ router = APIRouter(
     "",
     response_model=EventListResponse,
 )
-def get_all_events(conn=Depends(get_db)):
+def get_all_events(
+    conn=Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
     return list_events(conn)
 
 
@@ -39,6 +43,7 @@ def get_all_events(conn=Depends(get_db)):
 def get_event_by_id(
     event_id: UUID,
     conn=Depends(get_db),
+    current_user: dict = Depends(get_current_user),
 ):
     return get_event(conn, str(event_id))
 
@@ -51,6 +56,7 @@ def get_event_by_id(
 def create_new_event(
     request: CreateEventRequest,
     conn=Depends(get_db),
+    current_user: dict = Depends(get_current_user),
 ):
     data = request.model_dump()
 
@@ -78,6 +84,7 @@ def update_existing_event(
     event_id: UUID,
     request: UpdateEventRequest,
     conn=Depends(get_db),
+    current_user: dict = Depends(get_current_user),
 ):
     data = request.model_dump(exclude_unset=True)
 
@@ -105,6 +112,7 @@ def update_existing_event(
 def delete_existing_event(
     event_id: UUID,
     conn=Depends(get_db),
+    current_user: dict = Depends(get_current_user),
 ):
     result = delete_event(
         conn,

@@ -42,18 +42,18 @@ class UpdateEventRequest(BaseModel):
 
 class EventListItem(BaseModel):
     id: UUID
-    title: str
+    title: str | None
     description: str | None
-    event_type: str
+    event_type: str | None
     heritage_site: str | None
-    venue: str
+    venue: str | None
     event_date: date
     start_time: time
     end_time: time
     participant_limit: int
     registration_deadline: datetime
     coordinator_name: str | None
-    status: str
+    status: str | None
     registrations: int
 
 
@@ -65,12 +65,12 @@ class EventListResponse(BaseModel):
 
 class EventDetailResponse(BaseModel):
     id: UUID
-    title: str
+    title: str | None
     description: str | None
-    event_type: str
+    event_type: str | None
     site_id: UUID | None
     heritage_site: str | None
-    venue: str
+    venue: str | None
     event_date: date
     start_time: time
     end_time: time
@@ -78,7 +78,7 @@ class EventDetailResponse(BaseModel):
     registration_deadline: datetime
     coordinator_id: UUID | None
     coordinator_name: str | None
-    status: str
+    status: str | None
     created_at: datetime
 
 
