@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi import APIRouter, Depends, Query
 from psycopg2.extensions import connection
 
@@ -42,10 +44,10 @@ def search_products(
     response_model=ProductResponse,
 )
 def get_product(
-    product_id: str,
+    product_id: UUID,
     conn: connection = Depends(get_db),
 ):
-    return shop_service.get_product(conn, product_id)
+    return shop_service.get_product(conn, str(product_id))
 
 
 @router.post(

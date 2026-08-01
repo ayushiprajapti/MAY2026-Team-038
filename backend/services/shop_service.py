@@ -64,7 +64,15 @@ def get_product(conn: connection, product_id: str) -> dict:
     return product
 
 
+def _escape_like(query: str) -> str:
+    # Without this, a literal % or _ in the search text is treated as a SQL
+    # wildcard instead of the character the user actually typed.
+    return query.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+
+
 def search_products(conn: connection, query: str) -> list[dict]:
+    pattern = f"%{_escape_like(query)}%"
+
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(
             """
@@ -82,12 +90,12 @@ def search_products(conn: connection, query: str) -> list[dict]:
             WHERE
                 is_active = TRUE
                 AND (
-                    LOWER(name) LIKE LOWER(%s)
-                    OR LOWER(category) LIKE LOWER(%s)
+                    LOWER(name) LIKE LOWER(%s) ESCAPE '\\'
+                    OR LOWER(category) LIKE LOWER(%s) ESCAPE '\\'
                 )
             ORDER BY name
             """,
-            (f"%{query}%", f"%{query}%"),
+            (pattern, pattern),
         )
 
         return cur.fetchall()
@@ -310,35 +318,43 @@ def create_order(
         total_cents = 0
         order_items = []
 
-        # Validate products and stock
+        # Check-and-decrement stock atomically in one statement so two
+        # concurrent orders can't both pass a "there's enough stock" check
+        # against the same remaining unit before either commits.
         for item in data.items:
 
             cur.execute(
                 """
-                SELECT
-                    id,
-                    name,
-                    price_cents,
-                    stock_quantity
-                FROM products
+                UPDATE products
+                SET
+                    stock_quantity = stock_quantity - %s,
+                    updated_at = now()
                 WHERE id = %s
                 AND is_active = TRUE
+                AND stock_quantity >= %s
+                RETURNING id, name, price_cents
                 """,
-                (str(item.product_id),),
+                (item.quantity, str(item.product_id), item.quantity),
             )
 
             product = cur.fetchone()
 
             if not product:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail="Product not found",
+                cur.execute(
+                    "SELECT name FROM products WHERE id = %s AND is_active = TRUE",
+                    (str(item.product_id),),
                 )
+                existing = cur.fetchone()
 
-            if product["stock_quantity"] < item.quantity:
+                if not existing:
+                    raise HTTPException(
+                        status_code=status.HTTP_404_NOT_FOUND,
+                        detail="Product not found",
+                    )
+
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail=f"Insufficient stock for {product['name']}",
+                    detail=f"Insufficient stock for {existing['name']}",
                 )
 
             subtotal = product["price_cents"] * item.quantity
@@ -432,21 +448,8 @@ def create_order(
                 ),
             )
 
-            # Reduce stock
-            cur.execute(
-                """
-                UPDATE products
-                SET
-                    stock_quantity = stock_quantity - %s,
-                    updated_at = now()
-                WHERE id = %s
-                """,
-                (
-                    item["quantity"],
-                    item["product"]["id"],
-                ),
-            )
-
+            # Stock was already decremented atomically above, alongside the
+            # availability check - just log it here.
             # Inventory log
             _log_inventory(
                 cur,

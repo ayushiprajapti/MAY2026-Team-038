@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi import APIRouter, Depends
 from psycopg2.extensions import connection
 
@@ -8,7 +10,7 @@ from schemas.shop import (
     UpdateProductRequest,
 )
 from services import shop_service
-from utils.auth import get_current_user
+from utils.auth import require_roles
 
 router = APIRouter(
     prefix="/shop/admin",
@@ -24,7 +26,7 @@ router = APIRouter(
 def create_product(
     payload: CreateProductRequest,
     conn: connection = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_roles("shop_admin")),
 ):
     return shop_service.create_product(
         conn,
@@ -38,14 +40,14 @@ def create_product(
     response_model=ProductResponse,
 )
 def update_product(
-    product_id: str,
+    product_id: UUID,
     payload: UpdateProductRequest,
     conn: connection = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_roles("shop_admin")),
 ):
     return shop_service.update_product(
         conn,
-        product_id,
+        str(product_id),
         payload,
     )
 
@@ -53,6 +55,6 @@ def update_product(
 @router.get("/orders")
 def get_all_orders(
     conn: connection = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_roles("shop_admin")),
 ):
     return shop_service.get_all_orders(conn)

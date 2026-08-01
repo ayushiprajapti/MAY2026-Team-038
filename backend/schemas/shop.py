@@ -48,7 +48,7 @@ class OrderItemRequest(BaseModel):
 
 class CreateOrderRequest(BaseModel):
     shipping_address: str
-    items: list[OrderItemRequest]
+    items: list[OrderItemRequest] = Field(..., min_length=1)
 
 
 class OrderResponse(BaseModel):
