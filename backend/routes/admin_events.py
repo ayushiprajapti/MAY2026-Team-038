@@ -1,124 +1,72 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response, status
+from psycopg2.extensions import connection
 
 from database import get_db
 from schemas.events import (
+    AdminEventResponse,
+    AdminEventsListResponse,
     CreateEventRequest,
+    EventRegistrantsResponse,
     UpdateEventRequest,
-    EventListResponse,
-    EventDetailResponse,
-    EventActionResponse,
 )
-from services.events_service import (
-    list_events,
-    get_event,
-    create_event,
-    update_event,
-    delete_event,
-)
+from services import event_service
 from utils.auth import get_current_user
 
-router = APIRouter(
-    prefix="/admin/events",
-    tags=["Admin Events"],
-)
+router = APIRouter(prefix="/events/admin", tags=["admin-events"])
 
 
-@router.get(
-    "",
-    response_model=EventListResponse,
-)
-def get_all_events(
-    conn=Depends(get_db),
+@router.get("/", response_model=AdminEventsListResponse)
+def list_events(
+    conn: connection = Depends(get_db),
     current_user: dict = Depends(get_current_user),
-):
-    return list_events(conn)
+) -> dict:
+    """List all events with dashboard stat card totals for the admin."""
+    return event_service.list_all_events(conn)
 
 
-@router.get(
-    "/{event_id}",
-    response_model=EventDetailResponse,
-)
-def get_event_by_id(
-    event_id: UUID,
-    conn=Depends(get_db),
+@router.post("/", response_model=AdminEventResponse, status_code=201)
+def create_event(
+    payload: CreateEventRequest,
+    conn: connection = Depends(get_db),
     current_user: dict = Depends(get_current_user),
-):
-    return get_event(conn, str(event_id))
-
-
-@router.post(
-    "",
-    response_model=EventActionResponse,
-    status_code=201,
-)
-def create_new_event(
-    request: CreateEventRequest,
-    conn=Depends(get_db),
-    current_user: dict = Depends(get_current_user),
-):
-    data = request.model_dump()
-
-    # Convert UUIDs to strings for psycopg2
-    data["site_id"] = str(data["site_id"])
-    data["coordinator_id"] = str(data["coordinator_id"])
-
-    result = create_event(
-        conn,
-        data,
+) -> dict:
+    """Create and publish a new event. coordinator_id is taken from the auth token."""
+    return event_service.create_event(
+        conn, payload, coordinator_id=str(current_user["id"])
     )
 
-    conn.commit()
 
-    return {
-        "message": result["message"]
-    }
-
-
-@router.patch(
-    "/{event_id}",
-    response_model=EventActionResponse,
-)
-def update_existing_event(
+@router.get("/{event_id}/registrations", response_model=EventRegistrantsResponse)
+def list_event_registrants(
     event_id: UUID,
-    request: UpdateEventRequest,
-    conn=Depends(get_db),
+    conn: connection = Depends(get_db),
     current_user: dict = Depends(get_current_user),
-):
-    data = request.model_dump(exclude_unset=True)
-
-    if "site_id" in data and data["site_id"] is not None:
-        data["site_id"] = str(data["site_id"])
-
-    if "coordinator_id" in data and data["coordinator_id"] is not None:
-        data["coordinator_id"] = str(data["coordinator_id"])
-
-    result = update_event(
-        conn,
-        str(event_id),
-        data,
-    )
-
-    conn.commit()
-
-    return result
+) -> dict:
+    """Return the event header and full registered-attendee list for an event."""
+    return event_service.list_event_registrants(conn, str(event_id))
 
 
-@router.delete(
-    "/{event_id}",
-    response_model=EventActionResponse,
-)
-def delete_existing_event(
+@router.patch("/{event_id}", response_model=AdminEventResponse)
+def update_event(
     event_id: UUID,
-    conn=Depends(get_db),
+    payload: UpdateEventRequest,
+    conn: connection = Depends(get_db),
     current_user: dict = Depends(get_current_user),
-):
-    result = delete_event(
-        conn,
-        str(event_id),
-    )
+) -> dict:
+    """Partially update an existing event. Send only the fields you want to change."""
+    return event_service.update_event(conn, str(event_id), payload)
 
-    conn.commit()
 
-    return result
+@router.delete("/{event_id}", status_code=204)
+def delete_event(
+    event_id: UUID,
+    conn: connection = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+) -> Response:
+    """Permanently delete an event and all its registrations.
+    Returns 204 No Content on success, 404 if the event does not exist.
+    """
+    event_service.delete_event(conn, str(event_id))
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
