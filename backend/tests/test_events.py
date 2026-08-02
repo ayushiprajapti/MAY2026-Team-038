@@ -46,6 +46,7 @@ def _make_event(event_id: str | None = None, **overrides: object) -> dict:
         "title": "Heritage Walk — Shaniwar Wada",
         "description": "A guided morning walk.",
         "event_type": "heritage_walk",
+        "site_id": None,
         "venue": "Shaniwar Wada, Pune",
         "event_date": "2026-12-01",   # far future → counts as upcoming
         "start_time": "07:00:00",
@@ -227,6 +228,31 @@ def test_create_event_rejects_missing_required_fields(client: TestClient) -> Non
     )
 
     assert response.status_code == 422
+
+
+def test_create_event_accepts_and_persists_site_id(
+    client: TestClient, fake_db_store: dict
+) -> None:
+    site_id = str(uuid4())
+
+    response = client.post(
+        "/events/admin/",
+        json={**VALID_CREATE_PAYLOAD, "site_id": site_id},
+        headers=_auth_headers(client),
+    )
+
+    assert response.status_code == 201
+    assert response.json()["site_id"] == site_id
+    assert fake_db_store["events"][0]["site_id"] == site_id
+
+
+def test_create_event_without_site_id_defaults_to_null(client: TestClient) -> None:
+    response = client.post(
+        "/events/admin/", json=VALID_CREATE_PAYLOAD, headers=_auth_headers(client)
+    )
+
+    assert response.status_code == 201
+    assert response.json()["site_id"] is None
 
 
 # ═══════════════════════════════════════════════════════════════════════════════

@@ -22,6 +22,7 @@ class CreateEventRequest(BaseModel):
     """Payload for the admin 'Publish Event' form."""
 
     title: str = Field(min_length=1, max_length=255)
+    site_id: UUID | None = None
     event_date: date
     start_time: time
     end_time: time | None = None
@@ -40,6 +41,7 @@ class UpdateEventRequest(BaseModel):
     """
 
     title: str | None = Field(default=None, min_length=1, max_length=255)
+    site_id: UUID | None = None
     event_date: date | None = None
     start_time: time | None = None
     end_time: time | None = None
@@ -56,6 +58,7 @@ class AdminEventResponse(BaseModel):
     title: str
     description: str | None
     event_type: str
+    site_id: UUID | None = None
     venue: str | None
     event_date: date
     start_time: time

@@ -17,7 +17,7 @@ def list_all_events(conn: connection) -> dict:
     - completed_events : events with status = 'completed'
     """
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
-        # ── 1. Event rows (unchanged) ─────────────────────────────────────
+        # ── 1. Event rows ──────────────────────────────────────────────────
         cur.execute(
             """
             SELECT
@@ -25,6 +25,7 @@ def list_all_events(conn: connection) -> dict:
                 e.title,
                 e.description,
                 e.event_type,
+                e.site_id,
                 e.venue,
                 e.event_date,
                 e.start_time,
@@ -76,6 +77,7 @@ def list_all_events(conn: connection) -> dict:
 def create_event(conn: connection, data: CreateEventRequest, coordinator_id: str) -> dict:
     """Insert a new published event and return the created row."""
     new_id = str(uuid4())
+    site_id = str(data.site_id) if data.site_id else None
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(
             """
@@ -84,6 +86,7 @@ def create_event(conn: connection, data: CreateEventRequest, coordinator_id: str
                 title,
                 description,
                 event_type,
+                site_id,
                 venue,
                 event_date,
                 start_time,
@@ -94,12 +97,13 @@ def create_event(conn: connection, data: CreateEventRequest, coordinator_id: str
                 status,
                 created_at
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'published', now())
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'published', now())
             RETURNING
                 id,
                 title,
                 description,
                 event_type,
+                site_id,
                 venue,
                 event_date,
                 start_time,
@@ -114,6 +118,7 @@ def create_event(conn: connection, data: CreateEventRequest, coordinator_id: str
                 data.title,
                 data.description,
                 data.event_type,
+                site_id,
                 data.venue,
                 data.event_date,
                 data.start_time,
@@ -145,6 +150,9 @@ def update_event(conn: connection, event_id: str, data: UpdateEventRequest) -> d
             detail="Request body must contain at least one field to update.",
         )
 
+    if "site_id" in updates and updates["site_id"] is not None:
+        updates["site_id"] = str(updates["site_id"])
+
     set_clause = ", ".join(f"{col} = %s" for col in updates)
     values = list(updates.values()) + [event_id]
 
@@ -159,6 +167,7 @@ def update_event(conn: connection, event_id: str, data: UpdateEventRequest) -> d
                 title,
                 description,
                 event_type,
+                site_id,
                 venue,
                 event_date,
                 start_time,

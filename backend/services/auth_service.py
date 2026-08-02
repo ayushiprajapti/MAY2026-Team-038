@@ -62,3 +62,9 @@ def get_user_by_id(conn: connection, user_id: str) -> dict | None:
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute("SELECT id, email, full_name FROM users WHERE id = %s", (user_id,))
         return cur.fetchone()
+
+
+def get_user_roles(conn: connection, user_id: str) -> list[str]:
+    with conn.cursor() as cur:
+        cur.execute("SELECT role FROM user_roles WHERE user_id = %s", (user_id,))
+        return [row[0] for row in cur.fetchall()]

@@ -64,6 +64,15 @@ class FakeCursor:
                 else None
             )
 
+        elif q.startswith("select role from user_roles where user_id"):
+            user_id = params[0]
+            self._results = [
+                {"role": r["role"]}
+                for r in self.store.get("user_roles", [])
+                if r["user_id"] == user_id
+            ]
+            self._result = None
+
         # ── event service queries (added; existing patterns above are unchanged) ──
 
         elif q.startswith("select e.id, e.title,"):
@@ -96,7 +105,7 @@ class FakeCursor:
         elif q.startswith("insert into events ( id, title,"):
             # create_event — INSERT
             (
-                event_id, title, description, event_type, venue,
+                event_id, title, description, event_type, site_id, venue,
                 event_date, start_time, end_time, participant_limit,
                 registration_deadline, coordinator_id,
             ) = params
@@ -105,6 +114,7 @@ class FakeCursor:
                 "title": title,
                 "description": description,
                 "event_type": event_type,
+                "site_id": site_id,
                 "venue": venue,
                 "event_date": event_date,
                 "start_time": start_time,
