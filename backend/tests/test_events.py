@@ -543,3 +543,17 @@ def test_delete_event_does_not_remove_other_events(
     remaining_ids = [e["id"] for e in fake_db_store["events"]]
     assert target_id not in remaining_ids
     assert other_id in remaining_ids
+
+
+def test_update_event_rejects_malformed_id(client: TestClient) -> None:
+    # event_id is typed as UUID on the route, so FastAPI must reject a
+    # malformed value with a clean 422 before the request ever reaches the
+    # database - a regression test for a bug where an earlier revision typed
+    # this parameter as `str` and let bad input crash the DB layer instead.
+    response = client.patch(
+        "/events/admin/not-a-uuid",
+        json={"title": "Regression Probe"},
+        headers=_auth_headers(client),
+    )
+
+    assert response.status_code == 422
