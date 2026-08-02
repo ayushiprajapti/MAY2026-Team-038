@@ -52,3 +52,23 @@ def test_get_one_submission_rejects_malformed_id_when_authenticated():
         app.dependency_overrides.pop(get_current_user, None)
 
     assert response.status_code == 422
+
+
+# Real heritage_sites row known to have an FK-referencing heritage_site_themes
+# row. Postgres itself refuses the DELETE before any row is removed, so this
+# is safe to re-run.
+FK_REFERENCED_SITE_ID = "1a8445b2-b6ab-44f9-af1f-cc45bfbf0dc3"
+
+
+def test_delete_rejects_when_site_still_referenced():
+    # delete_submission() wraps the DELETE in a try/except for
+    # psycopg2.errors.ForeignKeyViolation and converts it into a clean 409 -
+    # a regression test for a bug where an earlier revision let this crash
+    # the request with an unhandled 500 instead.
+    app.dependency_overrides[get_current_user] = lambda: {"id": SUBMISSION_ID}
+    try:
+        response = client.delete(f"/admin/heritage-submissions/{FK_REFERENCED_SITE_ID}")
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+    assert response.status_code == 409
