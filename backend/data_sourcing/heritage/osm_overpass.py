@@ -5,7 +5,7 @@ import time
 
 import requests
 
-from data_sourcing.models import RAW_DIR, RawSite, dump_raw_sites
+from data_sourcing.heritage.models import RAW_DIR, RawSite, dump_raw_sites
 
 logger = logging.getLogger(__name__)
 

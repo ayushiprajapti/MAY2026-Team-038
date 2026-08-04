@@ -7,7 +7,7 @@ import re
 import requests
 from bs4 import BeautifulSoup
 
-from data_sourcing.models import RAW_DIR
+from data_sourcing.heritage.models import RAW_DIR
 
 logger = logging.getLogger(__name__)
 

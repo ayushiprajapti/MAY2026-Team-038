@@ -1,0 +1,562 @@
+[
+  {
+    "name": "I-Pad Sleeve",
+    "category": "Bags",
+    "price_cents": 45000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/i-pad-sleeve-3.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Handbag Large",
+    "category": "Bags",
+    "price_cents": 70000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/handbag-large-4.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Handbag Small",
+    "category": "Bags",
+    "price_cents": 60000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/handbag-small-3.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Round Sling Bag",
+    "category": "Bags",
+    "price_cents": 45000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/round-sling-bag-5.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Block Print Tote",
+    "category": "Bags",
+    "price_cents": 40000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/block-print-tote-6.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Travel Cases",
+    "category": "Bags",
+    "price_cents": 30000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/travel-cases-9.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Purses",
+    "category": "Bags",
+    "price_cents": 35000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/purses-10.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Paithani Clutches and Bags",
+    "category": "Bags",
+    "price_cents": 110000,
+    "source": "warsaa_catalogue",
+    "description": "Price varies by variant - starting from Rs.1100",
+    "image_url": "/static/products/warsaa/paithani-clutches-and-bags-7.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Pune Heritage Bags",
+    "category": "Bags",
+    "price_cents": 20000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/pune-heritage-bags-18.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Print Tote",
+    "category": "Bags",
+    "price_cents": 50000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/print-tote-18.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Canvas Totes",
+    "category": "Bags",
+    "price_cents": 35000,
+    "source": "warsaa_catalogue",
+    "description": "Price varies by variant - starting from Rs.350",
+    "image_url": "/static/products/warsaa/canvas-totes-15.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Wallets",
+    "category": "Bags",
+    "price_cents": 15000,
+    "source": "warsaa_catalogue",
+    "description": "Price varies by variant - starting from Rs.150",
+    "image_url": "/static/products/warsaa/wallets-16.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Decorative Border Bag",
+    "category": "Bags",
+    "price_cents": 160000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/decorative-border-bag-17.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Dupattass Silk",
+    "category": "Clothing",
+    "price_cents": 150000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/dupattass-silk-21.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Dupattas Cotton",
+    "category": "Clothing",
+    "price_cents": 100000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/dupattas-cotton-22.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Stoles",
+    "category": "Clothing",
+    "price_cents": 80000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/stoles-21.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Jacket Reversible",
+    "category": "Clothing",
+    "price_cents": 180000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/jacket-reversible-23.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Jacket - Tie up",
+    "category": "Clothing",
+    "price_cents": 160000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/jacket-tie-up-24.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Jacket - Coati",
+    "category": "Clothing",
+    "price_cents": 150000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/jacket-coati-23.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Pune T- Shirts",
+    "category": "Clothing",
+    "price_cents": 50000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/pune-t-shirts-27.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Dhoti",
+    "category": "Clothing",
+    "price_cents": 90000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/dhoti-25.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Jackets",
+    "category": "Clothing",
+    "price_cents": 180000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/jackets-26.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Bedspreads Single",
+    "category": "Home Linen",
+    "price_cents": 300000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/bedspreads-single-31.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Bedspreads Double",
+    "category": "Home Linen",
+    "price_cents": 500000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/bedspreads-double-32.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Quilts Single",
+    "category": "Home Linen",
+    "price_cents": 300000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/quilts-single-33.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Quilts Double",
+    "category": "Home Linen",
+    "price_cents": 500000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/quilts-double-34.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Cushion Covers",
+    "category": "Home Linen",
+    "price_cents": 20000,
+    "source": "warsaa_catalogue",
+    "description": "Price varies by variant - starting from Rs.200",
+    "image_url": "/static/products/warsaa/cushion-covers-37.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Pillow Covers",
+    "category": "Home Linen",
+    "price_cents": 30000,
+    "source": "warsaa_catalogue",
+    "description": "Price varies by variant - starting from Rs.300",
+    "image_url": "/static/products/warsaa/pillow-covers-37.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Trays",
+    "category": "Home Accessories",
+    "price_cents": 40000,
+    "source": "warsaa_catalogue",
+    "description": "Price varies by variant - Rs.400 to Rs.1000",
+    "image_url": "/static/products/warsaa/trays-40.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Boxes",
+    "category": "Home Accessories",
+    "price_cents": 60000,
+    "source": "warsaa_catalogue",
+    "description": "Price varies by variant - starting from Rs.600",
+    "image_url": "/static/products/warsaa/boxes-43.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Coaster",
+    "category": "Home Accessories",
+    "price_cents": 15000,
+    "source": "warsaa_catalogue",
+    "description": "Rs.150 each",
+    "image_url": "/static/products/warsaa/coaster-40.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Lamp Shades",
+    "category": "Home Accessories",
+    "price_cents": 80000,
+    "source": "warsaa_catalogue",
+    "description": "Price varies by variant - starting from Rs.800",
+    "image_url": "/static/products/warsaa/lamp-shades-45.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Jars",
+    "category": "Home Accessories",
+    "price_cents": 20000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/jars-46.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Tissue Box Small",
+    "category": "Home Accessories",
+    "price_cents": 60000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/tissue-box-small-47.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Tissue Box Large",
+    "category": "Home Accessories",
+    "price_cents": 80000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/tissue-box-large-48.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Desk Set",
+    "category": "Stationery",
+    "price_cents": 200000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/desk-set-53.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Pencil Boxes",
+    "category": "Stationery",
+    "price_cents": 60000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/pencil-boxes-54.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Desktop Boxes small",
+    "category": "Stationery",
+    "price_cents": 30000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/desktop-boxes-small-55.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Folders Small",
+    "category": "Stationery",
+    "price_cents": 30000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/folders-small-57.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Folders Large",
+    "category": "Stationery",
+    "price_cents": 45000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/folders-large-57.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Handcrafted Notebooks",
+    "category": "Stationery",
+    "price_cents": 40000,
+    "source": "warsaa_catalogue",
+    "description": "Price varies by variant - starting from Rs.400",
+    "image_url": "/static/products/warsaa/handcrafted-notebooks-51.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Brass Locks",
+    "category": "Metalware",
+    "price_cents": 80000,
+    "source": "warsaa_catalogue",
+    "description": "Price varies by variant - starting from Rs.800",
+    "image_url": "/static/products/warsaa/brass-locks-60.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Brass Koyris",
+    "category": "Metalware",
+    "price_cents": 60000,
+    "source": "warsaa_catalogue",
+    "description": "Price varies by variant - starting from Rs.600",
+    "image_url": "/static/products/warsaa/brass-koyris-61.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Miniature Copper Utensils",
+    "category": "Metalware",
+    "price_cents": 150000,
+    "source": "warsaa_catalogue",
+    "description": "Price varies by variant - starting from Rs.1500",
+    "image_url": "/static/products/warsaa/miniature-copper-utensils-62.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Miniature Copper Water Heater",
+    "category": "Metalware",
+    "price_cents": 250000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/miniature-copper-water-heater-63.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Copper Measuring Cup Small",
+    "category": "Metalware",
+    "price_cents": 60000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/copper-measuring-cup-small-66.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Copper Measuring Cup Large",
+    "category": "Metalware",
+    "price_cents": 70000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/copper-measuring-cup-large-66.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Brass Ganeshas",
+    "category": "Metalware",
+    "price_cents": 90000,
+    "source": "warsaa_catalogue",
+    "description": "Price varies by variant - starting from Rs.900",
+    "image_url": "/static/products/warsaa/brass-ganeshas-64.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Brass Carts",
+    "category": "Metalware",
+    "price_cents": 150000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/brass-carts-65.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Pune Queen of the Deccan",
+    "category": "Publications",
+    "price_cents": 350000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/pune-queen-of-the-deccan-70.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Pune Heritage Map",
+    "category": "Publications",
+    "price_cents": 10000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/pune-heritage-map-71.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Glimpses of Pune",
+    "category": "Publications",
+    "price_cents": 13500,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/glimpses-of-pune-74.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Our Built Heritage",
+    "category": "Publications",
+    "price_cents": 13500,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/our-built-heritage-75.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Heritage Postcards",
+    "category": "Publications",
+    "price_cents": 10000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/heritage-postcards-73.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Inclusive India- Re: Pune",
+    "category": "Publications",
+    "price_cents": 60000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/inclusive-india-re-pune-69.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Aurangabad",
+    "category": "Publications",
+    "price_cents": 45000,
+    "source": "warsaa_catalogue",
+    "description": null,
+    "image_url": "/static/products/warsaa/aurangabad-72.jpeg",
+    "product_url": "https://www.intachpune.org/images/warsaa-catalogue.pdf",
+    "stock_quantity": null
+  }
+]

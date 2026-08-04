@@ -1,4 +1,4 @@
-from data_sourcing.osm_overpass import _parse_element
+from data_sourcing.heritage.osm_overpass import _parse_element
 
 
 def test_parse_element_filters_generic_only_names() -> None:

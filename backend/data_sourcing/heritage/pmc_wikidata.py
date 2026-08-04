@@ -10,7 +10,7 @@ from urllib.parse import quote
 import requests
 from bs4 import BeautifulSoup
 
-from data_sourcing.models import RAW_DIR, RawSite, dump_raw_sites
+from data_sourcing.heritage.models import RAW_DIR, RawSite, dump_raw_sites
 
 logger = logging.getLogger(__name__)
 

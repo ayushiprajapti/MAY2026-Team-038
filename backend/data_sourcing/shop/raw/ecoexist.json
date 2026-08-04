@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Cotton bag: 12″ x13″: Pune Heritage: University Marathi",
+    "category": "Bags",
+    "price_cents": 20000,
+    "source": "ecoexist",
+    "description": "Part of the Pune Heritage Cloth Bag Series, launched by INTACH Pune with eCoexist.",
+    "image_url": "https://www.e-coexist.com/wp-content/uploads/2018/04/Pune_Vidyapeeth-800x1067.jpg",
+    "product_url": "https://www.e-coexist.com/product/cotton-bag-12-x13-pune-heritage-university-marathi/",
+    "stock_quantity": null
+  },
+  {
+    "name": "Cotton bag: 12″ x13″: Pune Heritage: University English",
+    "category": "Bags",
+    "price_cents": 20000,
+    "source": "ecoexist",
+    "description": "Part of the Pune Heritage Cloth Bag Series, launched by INTACH Pune with eCoexist.",
+    "image_url": "https://www.e-coexist.com/wp-content/uploads/2018/04/Pune_University_bag_detail-800x600.jpg",
+    "product_url": "https://www.e-coexist.com/product/cotton-bag-12-x13-pune-heritage-university-english/",
+    "stock_quantity": 2
+  },
+  {
+    "name": "Cotton bag: 12″ x13″: Pune heritage: Shaniwar Wada English",
+    "category": "Bags",
+    "price_cents": 20000,
+    "source": "ecoexist",
+    "description": "Part of the Pune Heritage Cloth Bag Series, launched by INTACH Pune with eCoexist.",
+    "image_url": "https://www.e-coexist.com/wp-content/uploads/2018/04/shaniwar_wada_bag_detail-800x600.jpg",
+    "product_url": "https://www.e-coexist.com/product/cotton-bag-12-x13-pune-heritage-shaniwar-wada-english/",
+    "stock_quantity": null
+  },
+  {
+    "name": "Cotton bag: 12″ x13″: Pune heritage: Mandai English",
+    "category": "Bags",
+    "price_cents": 20000,
+    "source": "ecoexist",
+    "description": "Part of the Pune Heritage Cloth Bag Series, launched by INTACH Pune with eCoexist.",
+    "image_url": "https://www.e-coexist.com/wp-content/uploads/2018/04/Mandai_bag_detail-800x600.jpg",
+    "product_url": "https://www.e-coexist.com/product/cotton-bag-12-x13-pune-heritage-mandai-english/",
+    "stock_quantity": null
+  },
+  {
+    "name": "Cotton bag: 12″ x13″: Pune Heritage: Aga Khan English",
+    "category": "Bags",
+    "price_cents": 20000,
+    "source": "ecoexist",
+    "description": "Part of the Pune Heritage Cloth Bag Series, launched by INTACH Pune with eCoexist.",
+    "image_url": "https://www.e-coexist.com/wp-content/uploads/2018/04/image-800x1067.jpeg",
+    "product_url": "https://www.e-coexist.com/product/cotton-bag-12-x13-pune-heritage-aga-khan-english/",
+    "stock_quantity": null
+  }
+]

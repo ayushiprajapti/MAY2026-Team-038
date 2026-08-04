@@ -1,6 +1,6 @@
 from dataclasses import replace
 
-from data_sourcing.loader import (
+from data_sourcing.heritage.loader import (
     _find_match,
     apply_intach_enrichment,
     guess_region_name,
@@ -12,7 +12,7 @@ from data_sourcing.loader import (
     pipeline,
     to_normalized,
 )
-from data_sourcing.models import RawSite
+from data_sourcing.heritage.models import RawSite
 
 
 def test_normalize_name_strips_punctuation_and_case() -> None:

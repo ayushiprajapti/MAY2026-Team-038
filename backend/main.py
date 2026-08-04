@@ -1,5 +1,8 @@
+from pathlib import Path
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from config import settings
 from routes import (
@@ -31,3 +34,9 @@ app.include_router(admin_dashboard.router)
 app.include_router(admin_events.router)
 app.include_router(admin_heritage_review.router)
 app.include_router(chat.router)
+
+# Serves product photos extracted from the Warsaa catalogue PDF, which have
+# no public URL of their own (see data_sourcing/warsaa_catalogue.py).
+STATIC_DIR = Path(__file__).parent / "static"
+STATIC_DIR.mkdir(exist_ok=True)
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
