@@ -6,8 +6,8 @@ from typing import Callable, TypeVar
 import psycopg2
 
 from config import settings
-from data_sourcing import intach_enrichment, loader, osm_overpass, pmc_wikidata
-from data_sourcing.models import RAW_DIR, dump_raw_sites
+from data_sourcing.heritage import intach_enrichment, loader, osm_overpass, pmc_wikidata
+from data_sourcing.heritage.models import RAW_DIR, dump_raw_sites
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

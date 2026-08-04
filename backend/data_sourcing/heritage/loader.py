@@ -10,7 +10,7 @@ from uuid import uuid4
 from psycopg2.extensions import connection
 from psycopg2.extras import RealDictCursor
 
-from data_sourcing.models import RAW_DIR, RawSite, load_raw_sites
+from data_sourcing.heritage.models import RAW_DIR, RawSite, load_raw_sites
 
 logger = logging.getLogger(__name__)
 

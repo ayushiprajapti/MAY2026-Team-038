@@ -11,3 +11,4 @@ venv/
 .pytest_cache/
 
 data_sourcing/raw/
+static/
