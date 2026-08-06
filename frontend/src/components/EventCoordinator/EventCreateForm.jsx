@@ -1,88 +1,67 @@
+import { useState } from "react";
 import eventIllustration from "../../assets/event-illustration.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { events } from "../../data/events";
+import { create, update } from "../../api/events";
+import { ApiError } from "../../api/client";
 
-// Converts "HH:MM" (24h) to "H:MM AM/PM"
-function to12h(timeStr) {
+const EVENT_TYPES = [
+  { value: "heritage_walk", label: "Heritage Walk" },
+  { value: "workshop", label: "Workshop" },
+  { value: "quiz", label: "Quiz" },
+  { value: "competition", label: "Competition" },
+  { value: "cultural_event", label: "Cultural Event" },
+];
+
+// Backend times are "HH:MM:SS" or "HH:MM" — <input type="time"> wants "HH:MM".
+function toInputTime(timeStr) {
   if (!timeStr) return "";
-  const [h, m] = timeStr.split(":").map(Number);
-  const period = h >= 12 ? "PM" : "AM";
-  const hour = h % 12 || 12;
-  return `${hour}:${String(m).padStart(2, "0")} ${period}`;
+  return timeStr.slice(0, 5);
 }
 
-// Parses "7:00 AM" → "07:00" (24h input value)
-function to24h(time12) {
-  if (!time12) return "";
-  const match = time12.trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
-  if (!match) return "";
-  let h = parseInt(match[1]);
-  const m = match[2];
-  const period = match[3].toUpperCase();
-  if (period === "AM" && h === 12) h = 0;
-  if (period === "PM" && h !== 12) h += 12;
-  return `${String(h).padStart(2, "0")}:${m}`;
-}
-
-// Splits "7:00 AM – 9:30 AM" into ["7:00 AM", "9:30 AM"]
-function splitTime(timeStr) {
-  if (!timeStr) return ["", ""];
-  const parts = timeStr.split("–").map((s) => s.trim());
-  return [parts[0] || "", parts[1] || ""];
-}
-
-// Shared version of the original EventPage creation form, used by admins.
 export default function EventCreateForm() {
   const { state } = useLocation();
   const navigate = useNavigate();
   const eventToEdit = state?.event;
+  const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const dateValue = eventToEdit
-    ? `2026-${String(eventToEdit.monthIndex + 1).padStart(2, "0")}-${String(eventToEdit.date).padStart(2, "0")}`
-    : "";
-
-  const [startRaw, endRaw] = splitTime(eventToEdit?.time || "");
-  const startTimeValue = to24h(startRaw);
-  const endTimeValue = to24h(endRaw);
-
-  const saveEvent = (formEvent) => {
+  const saveEvent = async (formEvent) => {
     formEvent.preventDefault();
+    setError("");
+
     const form = new FormData(formEvent.currentTarget);
-    const date = new Date(`${form.get("date")}T00:00:00`);
+    const registrationDeadlineRaw = form.get("registrationDeadline");
 
-    const startTime = form.get("startTime");
-    const endTime = form.get("endTime");
-    const timeLabel =
-      startTime && endTime
-        ? `${to12h(startTime)} – ${to12h(endTime)}`
-        : startTime
-        ? to12h(startTime)
-        : eventToEdit?.time || "Time to be confirmed";
-
-    const currentEvents =
-      JSON.parse(localStorage.getItem("intach-admin-events") || "null") || events;
-    const eventId =
-      eventToEdit?.id || Math.max(0, ...currentEvents.map((e) => e.id)) + 1;
-
-    const nextEvent = {
-      id: eventId,
-      date: date.getDate(),
-      month: date.toLocaleString("en-US", { month: "short" }).toUpperCase(),
-      monthIndex: date.getMonth(),
+    const payload = {
       title: form.get("title"),
-      category: form.get("category"),
-      time: timeLabel,
-      place: form.get("venue"),
-      seats: `${form.get("limit")} seats available`,
-      color: eventToEdit?.color || "ochre",
+      event_date: form.get("date"),
+      start_time: form.get("startTime") || null,
+      end_time: form.get("endTime") || null,
+      venue: form.get("venue") || null,
+      participant_limit: Number(form.get("limit")),
+      registration_deadline: registrationDeadlineRaw ? new Date(registrationDeadlineRaw).toISOString() : null,
+      event_type: form.get("category"),
+      description: form.get("description") || null,
     };
 
-    const nextEvents = eventToEdit
-      ? currentEvents.map((e) => (e.id === eventId ? nextEvent : e))
-      : [...currentEvents, nextEvent];
-
-    localStorage.setItem("intach-admin-events", JSON.stringify(nextEvents));
-    navigate("/admin/events");
+    setIsSubmitting(true);
+    try {
+      if (eventToEdit) {
+        await update(eventToEdit.id, payload);
+      } else {
+        if (!payload.start_time) {
+          setError("Start time is required for a new event.");
+          setIsSubmitting(false);
+          return;
+        }
+        await create(payload);
+      }
+      navigate("/admin/events");
+    } catch (err) {
+      setError(err instanceof ApiError ? err.detail : "Something went wrong, please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -100,6 +79,12 @@ export default function EventCreateForm() {
           </p>
         </header>
 
+        {error && (
+          <div className="mb-6 p-3 bg-red-50 border border-red-200 text-red-800 text-sm rounded font-sans">
+            {error}
+          </div>
+        )}
+
         <section className="grid grid-cols-1 gap-6 lg:grid-cols-[220px_1fr] lg:items-start">
           <aside className="heritage-card hidden rounded-xl p-6 lg:block">
             <img
@@ -115,7 +100,6 @@ export default function EventCreateForm() {
           <div className="heritage-card rounded-xl p-4 sm:p-6 lg:p-8">
             <form className="space-y-5" onSubmit={saveEvent}>
 
-              {/* Event Title */}
               <label className="block text-sm font-semibold text-[#4B3328]">
                 Event Title
                 <input
@@ -128,26 +112,24 @@ export default function EventCreateForm() {
                 />
               </label>
 
-              {/* Date */}
               <label className="block text-sm font-semibold text-[#4B3328]">
                 Event Date
                 <input
                   required
                   name="date"
                   type="date"
-                  defaultValue={dateValue}
+                  defaultValue={eventToEdit?.event_date}
                   className="mt-1 w-full rounded-lg border border-[#D7C3A8] bg-[#FFF8EC] px-3 py-2.5 text-base outline-none focus:ring-2 focus:ring-[#C9903F]"
                 />
               </label>
 
-              {/* Start Time + End Time */}
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <label className="text-sm font-semibold text-[#4B3328]">
                   Start Time
                   <input
                     name="startTime"
                     type="time"
-                    defaultValue={startTimeValue}
+                    defaultValue={toInputTime(eventToEdit?.start_time)}
                     className="mt-1 w-full rounded-lg border border-[#D7C3A8] bg-[#FFF8EC] px-3 py-2.5 text-base outline-none focus:ring-2 focus:ring-[#C9903F]"
                   />
                 </label>
@@ -156,26 +138,23 @@ export default function EventCreateForm() {
                   <input
                     name="endTime"
                     type="time"
-                    defaultValue={endTimeValue}
+                    defaultValue={toInputTime(eventToEdit?.end_time)}
                     className="mt-1 w-full rounded-lg border border-[#D7C3A8] bg-[#FFF8EC] px-3 py-2.5 text-base outline-none focus:ring-2 focus:ring-[#C9903F]"
                   />
                 </label>
               </div>
 
-              {/* Venue */}
               <label className="block text-sm font-semibold text-[#4B3328]">
                 Venue
                 <input
-                  required
                   name="venue"
                   type="text"
-                  defaultValue={eventToEdit?.place}
+                  defaultValue={eventToEdit?.venue}
                   placeholder="Enter venue / location"
                   className="mt-1 w-full rounded-lg border border-[#D7C3A8] bg-[#FFF8EC] px-3 py-2.5 text-base outline-none focus:ring-2 focus:ring-[#C9903F]"
                 />
               </label>
 
-              {/* Participant Limit */}
               <label className="block text-sm font-semibold text-[#4B3328]">
                 Participant Limit
                 <input
@@ -183,19 +162,19 @@ export default function EventCreateForm() {
                   name="limit"
                   type="number"
                   min="1"
-                  defaultValue={eventToEdit?.seats?.match(/\d+/)?.[0]}
+                  defaultValue={eventToEdit?.participant_limit}
                   placeholder="Enter maximum participants"
                   className="mt-1 w-full rounded-lg border border-[#D7C3A8] bg-[#FFF8EC] px-3 py-2.5 text-base outline-none focus:ring-2 focus:ring-[#C9903F]"
                 />
               </label>
 
-              {/* Registration Deadline + Category */}
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <label className="text-sm font-semibold text-[#4B3328]">
                   Registration Deadline{" "}
                   {eventToEdit && <span className="font-normal">(optional)</span>}
                   <input
                     required={!eventToEdit}
+                    name="registrationDeadline"
                     type="datetime-local"
                     className="mt-1 w-full rounded-lg border border-[#D7C3A8] bg-[#FFF8EC] px-3 py-2.5 text-base outline-none focus:ring-2 focus:ring-[#C9903F]"
                   />
@@ -204,33 +183,29 @@ export default function EventCreateForm() {
                   Category
                   <select
                     name="category"
-                    defaultValue={eventToEdit?.category || "Heritage Walk"}
+                    defaultValue={eventToEdit?.event_type || "heritage_walk"}
                     className="mt-1 w-full rounded-lg border border-[#D7C3A8] bg-[#FFF8EC] px-3 py-2.5 text-base outline-none focus:ring-2 focus:ring-[#C9903F]"
                   >
-                    <option>Heritage Walk</option>
-                    <option>Workshop</option>
-                    <option>Heritage Talk</option>
-                    <option>Volunteer Day</option>
-                    <option>Seminar</option>
-                    <option>Exhibition</option>
-                    <option>Awareness Drive</option>
+                    {EVENT_TYPES.map((t) => (
+                      <option key={t.value} value={t.value}>{t.label}</option>
+                    ))}
                   </select>
                 </label>
               </div>
 
-              {/* Event Description */}
               <label className="block text-sm font-semibold text-[#4B3328]">
                 Event Description{" "}
                 {eventToEdit && <span className="font-normal">(optional)</span>}
                 <textarea
                   required={!eventToEdit}
+                  name="description"
                   rows="4"
+                  defaultValue={eventToEdit?.description}
                   placeholder="Describe the event..."
                   className="mt-1 w-full resize-y rounded-lg border border-[#D7C3A8] bg-[#FFF8EC] px-3 py-2.5 text-base outline-none focus:ring-2 focus:ring-[#C9903F]"
                 />
               </label>
 
-              {/* Actions */}
               <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
                 <Link
                   to="/admin/events"
@@ -240,9 +215,10 @@ export default function EventCreateForm() {
                 </Link>
                 <button
                   type="submit"
-                  className="w-full rounded-lg bg-[#C98716] px-6 py-2.5 font-medium text-white shadow-sm transition hover:bg-[#A96D0F] sm:w-auto"
+                  disabled={isSubmitting}
+                  className="w-full rounded-lg bg-[#C98716] px-6 py-2.5 font-medium text-white shadow-sm transition hover:bg-[#A96D0F] sm:w-auto disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  {eventToEdit ? "Save changes" : "Publish Event"}
+                  {isSubmitting ? "Saving…" : eventToEdit ? "Save changes" : "Publish Event"}
                 </button>
               </div>
 

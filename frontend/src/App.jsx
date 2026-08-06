@@ -36,23 +36,14 @@ function ScrollToTop() {
   return null;
 }
 
-// Client-Side Route Protection Component
-function ProtectedRoute({ allowedRoles }) {
-  const storedUser = localStorage.getItem("intach_user");
+// Client-Side Route Protection Component.
+// The backend doesn't expose the caller's roles on GET /auth/me, so this
+// only checks "is logged in" — per-action authorization (e.g. shop_admin
+// only) is enforced server-side and surfaced as an inline 403 message.
+function ProtectedRoute() {
+  const hasToken = localStorage.getItem("intach_token");
 
-  if (!storedUser) {
-    // Not signed in, redirect to login page
-    return <Navigate to="/login" replace />;
-  }
-
-  try {
-    const user = JSON.parse(storedUser);
-    
-    if (allowedRoles && !allowedRoles.includes(user.role)) {
-      // Role not authorized, redirect to home page
-      return <Navigate to="/" replace />;
-    }
-  } catch (e) {
+  if (!hasToken) {
     return <Navigate to="/login" replace />;
   }
 
@@ -110,7 +101,7 @@ function AnimatedRoutes() {
       </Route>
 
       {/* Protected Admin Routes (No Global Header & Footer, gets AdminSidebar layout) */}
-      <Route element={<ProtectedRoute allowedRoles={["event_admin"]} />}>
+      <Route element={<ProtectedRoute />}>
         <Route element={<AdminLayout />}>
           <Route path="/admin-review" element={<AnimatedPage><AdminReviewPage /></AnimatedPage>} />
           <Route path="/admin-db" element={<AnimatedPage><AdminDatabase /></AnimatedPage>} />
