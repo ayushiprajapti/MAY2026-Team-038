@@ -12,7 +12,9 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 
 @router.post("/signup", response_model=UserResponse, status_code=201)
 def signup(payload: SignupRequest, conn: connection = Depends(get_db)) -> dict:
-    return auth_service.create_user(conn, payload)
+    user = auth_service.create_user(conn, payload)
+    user["roles"] = [auth_service.DEFAULT_SIGNUP_ROLE]
+    return user
 
 
 @router.post("/login", response_model=TokenResponse)

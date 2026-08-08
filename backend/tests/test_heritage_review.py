@@ -72,3 +72,63 @@ def test_delete_rejects_when_site_still_referenced():
         app.dependency_overrides.pop(get_current_user, None)
 
     assert response.status_code == 409
+
+
+def test_get_all_pending_requires_page_ge_1():
+    app.dependency_overrides[get_current_user] = lambda: {"id": SUBMISSION_ID}
+    try:
+        response = client.get("/admin/heritage-submissions?page=0")
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+    assert response.status_code == 422
+
+
+def test_get_all_pending_returns_paginated_shape():
+    app.dependency_overrides[get_current_user] = lambda: {"id": SUBMISSION_ID}
+    try:
+        response = client.get("/admin/heritage-submissions?status=all&page=1&page_size=10")
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+    assert response.status_code == 200
+    body = response.json()
+    assert set(body.keys()) == {"items", "total", "page", "page_size"}
+    assert body["page"] == 1
+    assert body["page_size"] == 10
+    assert len(body["items"]) <= 10
+
+
+def test_get_regions_requires_auth():
+    response = client.get("/admin/heritage-submissions/regions")
+    assert response.status_code == 401
+
+
+def test_get_regions_returns_id_and_name():
+    app.dependency_overrides[get_current_user] = lambda: {"id": SUBMISSION_ID}
+    try:
+        response = client.get("/admin/heritage-submissions/regions")
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+    assert response.status_code == 200
+    body = response.json()
+    assert isinstance(body, list)
+    if body:
+        assert set(body[0].keys()) == {"id", "name"}
+
+
+def test_get_all_pending_backfills_cache_on_cold_request():
+    # A cache-miss request answers from a direct query but must leave the
+    # cache warm for the next request with the same filters - a regression
+    # test for the fast-path/background-warm split.
+    from services.heritage_review_service import get_pending_submissions
+
+    get_pending_submissions.cache_clear()
+    app.dependency_overrides[get_current_user] = lambda: {"id": SUBMISSION_ID}
+    try:
+        # status=all maps to status_filter=None inside the route.
+        assert get_pending_submissions.is_cached(None, category=None, region_id=None) is False
+        response = client.get("/admin/heritage-submissions?status=all&page=1&page_size=10")
+        assert response.status_code == 200
+        assert get_pending_submissions.is_cached(None, category=None, region_id=None) is True
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+        get_pending_submissions.cache_clear()

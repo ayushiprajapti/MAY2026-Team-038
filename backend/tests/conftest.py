@@ -5,6 +5,17 @@ from fastapi.testclient import TestClient
 
 from database import get_db
 from main import app
+from utils.cache import clear_all as _clear_all_caches
+
+
+@pytest.fixture(autouse=True)
+def _reset_service_caches():
+    # Service-layer @cached functions live in a module-level dict that
+    # persists across the whole pytest session, but fake_db_store resets
+    # per test - without this, a cached result from one test's fake data
+    # leaks into the next test that hits the same cache key.
+    _clear_all_caches()
+    yield
 
 
 class FakeCursor:
@@ -65,9 +76,12 @@ class FakeCursor:
             )
 
         elif q.startswith("select role from user_roles where user_id"):
+            # auth_service.get_user_roles() uses a plain conn.cursor() (not
+            # RealDictCursor) and indexes rows positionally (row[0]) - a
+            # real psycopg2 plain cursor returns tuples, so this must too.
             user_id = params[0]
             self._results = [
-                {"role": r["role"]}
+                (r["role"],)
                 for r in self.store.get("user_roles", [])
                 if r["user_id"] == user_id
             ]

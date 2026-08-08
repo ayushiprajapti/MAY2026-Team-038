@@ -56,7 +56,17 @@ export async function apiFetch(path, options = {}) {
     let detail = `Request failed with status ${response.status}`;
     try {
       const data = await response.json();
-      if (data && data.detail) detail = data.detail;
+      if (data && data.detail) {
+        // FastAPI's own HTTPException(detail=...) gives a string, but
+        // Pydantic validation errors (422) give an array of
+        // {type, loc, msg, ...} objects instead — normalize both to a
+        // plain string so callers can always render it directly.
+        detail = Array.isArray(data.detail)
+          ? data.detail.map((item) => item.msg || JSON.stringify(item)).join("; ")
+          : typeof data.detail === "string"
+          ? data.detail
+          : JSON.stringify(data.detail);
+      }
     } catch {
       // response body wasn't JSON — keep the generic message
     }

@@ -5,7 +5,13 @@ import SalesChart from "../components/admin-dashboard/SalesChart";
 import EventsPanel from "../components/admin-dashboard/EventsPanel";
 import VolunteerUploads from "../components/admin-dashboard/VolunteerUploads";
 import AdminSidebar from "../components/shared/AdminSidebar";
-import { getShopStats, getEvents, getRecentUploads } from "../api/dashboard";
+import {
+  getShopStats,
+  getEvents,
+  getRecentUploads,
+  getMemberStats,
+  getSalesTrend,
+} from "../api/dashboard";
 import { listPending } from "../api/heritage";
 import { ApiError } from "../api/client";
 
@@ -15,18 +21,29 @@ export default function AdminDashboard() {
   const [shopStats, setShopStats] = useState(null);
   const [eventsData, setEventsData] = useState({ today: [], upcoming: [] });
   const [uploads, setUploads] = useState([]);
+  const [memberStats, setMemberStats] = useState(null);
+  const [salesTrend, setSalesTrend] = useState([]);
   const [dashboardError, setDashboardError] = useState("");
 
   useEffect(() => {
     let cancelled = false;
 
-    Promise.all([getShopStats(), getEvents(), getRecentUploads(), listPending()])
-      .then(([stats, events, recentUploads, pending]) => {
+    Promise.all([
+      getShopStats(),
+      getEvents(),
+      getRecentUploads(),
+      listPending(),
+      getMemberStats(),
+      getSalesTrend(),
+    ])
+      .then(([stats, events, recentUploads, pending, members, trend]) => {
         if (cancelled) return;
         setShopStats(stats);
         setEventsData(events);
         setUploads(recentUploads.uploads);
-        setReviewCount(pending.length);
+        setReviewCount(pending.total);
+        setMemberStats(members);
+        setSalesTrend(trend.points);
       })
       .catch((err) => {
         if (!cancelled) {
@@ -179,13 +196,15 @@ export default function AdminDashboard() {
             shopRevenueCents={shopStats?.total_revenue_cents}
             pendingReviewsCount={reviewCount}
             plannedEventsCount={eventsData.upcoming.length}
+            totalMembers={memberStats?.total_members}
+            newMembersThisWeek={memberStats?.new_this_week}
           />
         </section>
 
         {/* 2. Bento Layout: Analytics & Schedules */}
         <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mb-8">
           <div className="lg:col-span-8 h-full">
-            <SalesChart />
+            <SalesChart points={salesTrend} />
           </div>
           <div className="lg:col-span-4 h-full">
             <EventsPanel todayEvents={eventsData.today} upcomingEvents={eventsData.upcoming} />

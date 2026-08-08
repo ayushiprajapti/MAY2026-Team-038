@@ -5,7 +5,7 @@ import OrderTable from "../components/admin-shop/OrderTable";
 import ProductForm from "../components/admin-shop/ProductForm";
 import ProductList from "../components/admin-shop/ProductList";
 import OutOfStockTable from "../components/admin-shop/OutOfStockTable";
-import { listProducts, createProduct, updateProduct } from "../api/shop";
+import { listProducts, createProduct, updateProduct, deleteProduct } from "../api/shop";
 import { ApiError } from "../api/client";
 
 export default function AdminShop() {
@@ -51,10 +51,10 @@ export default function AdminShop() {
   };
 
   const handleDeleteProduct = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this product? It will be deactivated (there is no hard-delete endpoint).")) return;
+    if (!window.confirm("Are you sure you want to delete this product from the database? This cannot be undone.")) return;
     setError("");
     try {
-      await updateProduct(id, { is_active: false });
+      await deleteProduct(id);
       await fetchProducts();
     } catch (err) {
       setError(err instanceof ApiError ? err.detail : "Something went wrong, please try again.");

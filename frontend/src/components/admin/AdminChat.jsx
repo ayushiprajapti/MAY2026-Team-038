@@ -1,40 +1,33 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { trails } from '../../data/trails';
+import { startSession, sendMessage, listMessages } from '../../api/chat';
+import { ApiError } from '../../api/client';
+import { logout } from '../../api/auth';
 import './AdminChat.css';
 
-// Mock bot logic that searches the database for site names
-function generateBotResponse(message) {
-  const lowerMsg = message.toLowerCase();
-  let foundSite = null;
+const SESSIONS_KEY = 'intach_admin_chat_sessions';
 
-  for (const trail of trails) {
-    for (const site of trail.sites) {
-      if (lowerMsg.includes(site.name.toLowerCase())) {
-        foundSite = site;
-        break;
-      }
-    }
-    if (foundSite) break;
+function loadSessionIndex() {
+  try {
+    return JSON.parse(localStorage.getItem(SESSIONS_KEY) || '[]');
+  } catch {
+    return [];
   }
-
-  if (foundSite) {
-    return `Found it in the database! **${foundSite.name}** is a ${foundSite.type} built in ${foundSite.built}. Here is the signification data we have: \n\n"${foundSite.signification}"`;
-  }
-
-  if (lowerMsg.includes('hello') || lowerMsg.includes('hi')) {
-    return 'Hello! I am your Heritage Database Assistant. Ask me about any site (like "Shaniwar Wada" or "Trimbakeshwar Temple") and I will fetch its data for you.';
-  }
-
-  return 'I couldn\'t find a specific heritage site matching that in our database. Try asking about a specific site by name, like "Torna Fort" or "Rankala Lake Ghat".';
 }
 
-const MOCK_SESSIONS = [
-  { id: 1, title: 'Query about Shaniwar Wada', date: 'Today' },
-  { id: 2, title: 'Nashik Temples analysis', date: 'Yesterday' },
-  { id: 3, title: 'Forts of Pune', date: 'Previous 7 Days' },
-  { id: 4, title: 'Rankala Lake Ghat signification', date: 'Previous 7 Days' },
-];
+function saveSessionIndex(sessions) {
+  localStorage.setItem(SESSIONS_KEY, JSON.stringify(sessions));
+}
+
+function dateLabel(isoString) {
+  const date = new Date(isoString);
+  const today = new Date();
+  const diffDays = Math.floor((today.setHours(0, 0, 0, 0) - new Date(date).setHours(0, 0, 0, 0)) / 86400000);
+  if (diffDays === 0) return 'Today';
+  if (diffDays === 1) return 'Yesterday';
+  if (diffDays <= 7) return 'Previous 7 Days';
+  return 'Older';
+}
 
 function ChatBubbleIcon() {
   return (
@@ -47,12 +40,14 @@ function ChatBubbleIcon() {
 export default function AdminChat() {
   const navigate = useNavigate();
   const [messages, setMessages] = useState([
-    { id: 1, sender: 'bot', text: 'Welcome to the Admin Database Chat! I can help you quickly retrieve information about our approved heritage sites. What are you looking for?' }
+    { id: 'welcome', sender: 'bot', text: 'Welcome to the Heritage Database Assistant! Ask me about any approved heritage site and I will look it up for you.' }
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [error, setError] = useState('');
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedSessionId, setSelectedSessionId] = useState(null);
+  const [currentSessionId, setCurrentSessionId] = useState(null);
+  const [sessions, setSessions] = useState(loadSessionIndex);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [adminUser, setAdminUser] = useState({ fullName: 'Admin User', role: 'Chapter Head' });
   const containerRef = useRef(null);
@@ -63,8 +58,8 @@ export default function AdminChat() {
       try {
         const parsed = JSON.parse(stored);
         setAdminUser({
-          fullName: parsed.fullName || 'Admin User',
-          role: parsed.role === 'event_coordinator' ? 'Chapter Head' : 'Heritage Expert',
+          fullName: parsed.full_name || 'Admin User',
+          role: parsed.roles?.[0] || 'Admin',
         });
       } catch (e) {
         // Safe fallback
@@ -82,68 +77,94 @@ export default function AdminChat() {
     scrollToBottom();
   }, [messages, isTyping]);
 
-  const handleSendMessage = (e) => {
+  const recordSession = (id, title) => {
+    setSessions((prev) => {
+      if (prev.some((s) => s.id === id)) return prev;
+      const next = [{ id, title, date: new Date().toISOString() }, ...prev];
+      saveSessionIndex(next);
+      return next;
+    });
+  };
+
+  const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (!inputValue.trim()) return;
+    const text = inputValue.trim();
+    if (!text) return;
 
-    const userMsg = {
-      id: Date.now(),
-      sender: 'user',
-      text: inputValue.trim()
-    };
-
+    setError('');
+    const userMsg = { id: `local-${Date.now()}`, sender: 'user', text };
     setMessages((prev) => [...prev, userMsg]);
     setInputValue('');
     setIsTyping(true);
 
-    // Simulate network delay for the bot response
-    setTimeout(() => {
-      const botMsg = {
-        id: Date.now() + 1,
-        sender: 'bot',
-        text: generateBotResponse(userMsg.text)
-      };
-      setMessages((prev) => [...prev, botMsg]);
+    try {
+      let sessionId = currentSessionId;
+      if (!sessionId) {
+        const session = await startSession();
+        sessionId = session.id;
+        setCurrentSessionId(sessionId);
+        recordSession(sessionId, text.slice(0, 60));
+      }
+
+      const reply = await sendMessage(sessionId, text);
+      setMessages((prev) => [...prev, { id: reply.id, sender: 'bot', text: reply.content }]);
+    } catch (err) {
+      setError(err instanceof ApiError ? err.detail : 'Something went wrong, please try again.');
+    } finally {
       setIsTyping(false);
-    }, 1000);
+    }
   };
 
   const handleNewChat = () => {
-    setSelectedSessionId(null);
-    setMessages([{ id: Date.now(), sender: 'bot', text: 'Started a new session. How can I help?' }]);
+    setCurrentSessionId(null);
+    setError('');
+    setMessages([{ id: 'welcome', sender: 'bot', text: 'Started a new session. How can I help?' }]);
     setIsSidebarOpen(false);
   };
 
-  const handleSessionClick = (session) => {
-    setSelectedSessionId(session.id);
-    setMessages([
-      { id: Date.now(), sender: 'user', text: `Can you remind me about ${session.title}?` },
-      { id: Date.now() + 1, sender: 'bot', text: `Sure, here is the context from our previous chat about "${session.title}"...` }
-    ]);
+  const handleSessionClick = async (session) => {
+    setError('');
     setIsSidebarOpen(false);
+    setCurrentSessionId(session.id);
+    setIsTyping(true);
+    try {
+      const history = await listMessages(session.id);
+      setMessages(
+        history.map((m) => ({
+          id: m.id,
+          sender: m.role === 'assistant' ? 'bot' : 'user',
+          text: m.content,
+        }))
+      );
+    } catch (err) {
+      setError(err instanceof ApiError ? err.detail : 'Something went wrong, please try again.');
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('intach_user');
+    logout();
     window.dispatchEvent(new Event('auth-change'));
     navigate('/');
   };
 
   const groupedSessions = useMemo(() => {
-    const filtered = MOCK_SESSIONS.filter((s) =>
+    const filtered = sessions.filter((s) =>
       s.title.toLowerCase().includes(searchTerm.trim().toLowerCase())
     );
     const groups = [];
     for (const session of filtered) {
-      let group = groups.find((g) => g.label === session.date);
+      const label = dateLabel(session.date);
+      let group = groups.find((g) => g.label === label);
       if (!group) {
-        group = { label: session.date, items: [] };
+        group = { label, items: [] };
         groups.push(group);
       }
       group.items.push(session);
     }
     return groups;
-  }, [searchTerm]);
+  }, [sessions, searchTerm]);
 
   return (
     <div className="admin-chat-layout w-full h-full">
@@ -205,7 +226,9 @@ export default function AdminChat() {
 
         <div className="chat-sessions">
           {groupedSessions.length === 0 && (
-            <div className="chat-sessions-empty">No chats match "{searchTerm}"</div>
+            <div className="chat-sessions-empty">
+              {sessions.length === 0 ? 'No chats yet — send a message to start one.' : `No chats match "${searchTerm}"`}
+            </div>
           )}
           {groupedSessions.map((group) => (
             <div key={group.label} className="chat-session-group">
@@ -214,7 +237,7 @@ export default function AdminChat() {
                 <button
                   type="button"
                   key={session.id}
-                  className={`chat-session-item ${selectedSessionId === session.id ? 'active' : ''}`}
+                  className={`chat-session-item ${currentSessionId === session.id ? 'active' : ''}`}
                   onClick={() => handleSessionClick(session)}
                 >
                   <span className="chat-session-icon"><ChatBubbleIcon /></span>
@@ -260,6 +283,12 @@ export default function AdminChat() {
           </div>
         </header>
 
+        {error && (
+          <div className="mb-2 mx-4 mt-2 p-2.5 bg-red-50 border border-red-200 text-red-800 text-xs rounded font-sans">
+            {error}
+          </div>
+        )}
+
         <div className="admin-chat-messages" ref={containerRef}>
           {messages.map((msg) => (
             <div key={msg.id} className={`chat-message-row ${msg.sender === 'user' ? 'user-row' : 'bot-row'}`}>
@@ -286,7 +315,7 @@ export default function AdminChat() {
               onChange={(e) => setInputValue(e.target.value)}
               className="chat-input-field"
             />
-            <button type="submit" className="chat-submit-btn" disabled={!inputValue.trim()}>
+            <button type="submit" className="chat-submit-btn" disabled={!inputValue.trim() || isTyping}>
               <svg className="w-4.5 h-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>

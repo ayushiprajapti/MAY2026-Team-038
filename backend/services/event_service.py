@@ -6,8 +6,10 @@ from psycopg2.extras import RealDictCursor
 from fastapi import HTTPException, status
 
 from schemas.events import CreateEventRequest, UpdateEventRequest
+from utils.cache import cached
 
 
+@cached(ttl_seconds=60)
 def list_all_events(conn: connection) -> dict:
     """Return all events plus the three dashboard summary stats.
 
@@ -133,6 +135,7 @@ def create_event(conn: connection, data: CreateEventRequest, coordinator_id: str
 
     # New event has no registrations yet
     row["registration_count"] = 0
+    list_all_events.cache_clear()
     return row
 
 
@@ -202,6 +205,7 @@ def update_event(conn: connection, event_id: str, data: UpdateEventRequest) -> d
         )
         row["registration_count"] = cur.fetchone()["registration_count"]
 
+    list_all_events.cache_clear()
     return row
 
 
@@ -231,6 +235,8 @@ def delete_event(conn: connection, event_id: str) -> None:
         cur.execute("DELETE FROM events WHERE id = %s", (event_id,))
 
         conn.commit()
+
+    list_all_events.cache_clear()
 
 
 def list_event_registrants(conn: connection, event_id: str) -> dict:

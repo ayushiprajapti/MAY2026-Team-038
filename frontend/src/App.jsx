@@ -50,6 +50,21 @@ function ProtectedRoute() {
   return <Outlet />;
 }
 
+// "/" is the public homepage, but a logged-in user on this app is always
+// staff (Login.jsx sends every successful login to /admin-dashboard,
+// regardless of role) - so an already-authenticated visitor landing on "/"
+// (fresh page load, server restart, etc.) belongs on the admin side too,
+// not on the public homepage.
+function HomeOrAdminRedirect() {
+  const hasToken = localStorage.getItem("intach_token");
+
+  if (hasToken) {
+    return <Navigate to="/admin-dashboard" replace />;
+  }
+
+  return <AnimatedPage><Home /></AnimatedPage>;
+}
+
 // Helper wrapper to animate transition for standalone page components
 function AnimatedPage({ children }) {
   return (
@@ -72,7 +87,7 @@ function AnimatedRoutes() {
       
       {/* Site Layout Wrapped Routes (Gets Header & Footer automatically) */}
       <Route element={<SiteLayout />}>
-        <Route path="/" element={<AnimatedPage><Home /></AnimatedPage>} />
+        <Route path="/" element={<HomeOrAdminRedirect />} />
         
         {/* Protected User Routes (Gets Header & Footer) */}
         <Route element={<ProtectedRoute />}>

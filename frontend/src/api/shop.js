@@ -18,6 +18,10 @@ export async function updateProduct(id, payload) {
   });
 }
 
+export async function deleteProduct(id) {
+  return apiFetch(`/shop/admin/products/${id}`, { method: "DELETE" });
+}
+
 export async function getAllOrders() {
   return apiFetch("/shop/admin/orders");
 }

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from psycopg2.extensions import connection
 
 from database import get_db
@@ -6,6 +6,8 @@ from schemas.dashboard import (
     ShopStatsResponse,
     DashboardEventsResponse,
     DashboardRecentUploadsResponse,
+    MemberStatsResponse,
+    SalesTrendResponse,
 )
 from services import dashboard_service
 from utils.auth import get_current_user
@@ -38,3 +40,20 @@ def get_recent_uploads(
     current_user: dict = Depends(get_current_user),
 ):
     return dashboard_service.get_recent_volunteer_uploads(conn)
+
+
+@router.get("/member-stats", response_model=MemberStatsResponse)
+def get_member_stats(
+    conn: connection = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    return dashboard_service.get_member_stats(conn)
+
+
+@router.get("/sales-trend", response_model=SalesTrendResponse)
+def get_sales_trend(
+    months: int = Query(default=6, ge=1, le=24),
+    conn: connection = Depends(get_db),
+    current_user: dict = Depends(get_current_user),
+):
+    return dashboard_service.get_sales_trend(conn, months)

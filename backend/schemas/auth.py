@@ -22,3 +22,20 @@ class UserResponse(BaseModel):
     id: UUID
     email: EmailStr
     full_name: str
+    roles: list[str] = []
+
+
+class AssignRoleRequest(BaseModel):
+    role: str
+
+
+class UserWithRolesResponse(BaseModel):
+    id: UUID
+    email: EmailStr
+    full_name: str
+    roles: list[str] = []
+
+
+class RoleMutationResponse(BaseModel):
+    id: UUID
+    roles: list[str] = []

@@ -9,7 +9,13 @@ function formatINR(cents) {
   });
 }
 
-export default function StatsGrid({ shopRevenueCents, pendingReviewsCount, plannedEventsCount }) {
+export default function StatsGrid({
+  shopRevenueCents,
+  pendingReviewsCount,
+  plannedEventsCount,
+  totalMembers,
+  newMembersThisWeek,
+}) {
   const stats = [
     {
       title: "Shop Sales",
@@ -24,8 +30,8 @@ export default function StatsGrid({ shopRevenueCents, pendingReviewsCount, plann
     },
     {
       title: "Chapter Members",
-      value: "1,248",
-      change: "+48",
+      value: totalMembers === null || totalMembers === undefined ? "…" : totalMembers.toLocaleString("en-IN"),
+      change: newMembersThisWeek ? `+${newMembersThisWeek}` : undefined,
       changeType: "positive",
       period: "new this week",
       icon: (

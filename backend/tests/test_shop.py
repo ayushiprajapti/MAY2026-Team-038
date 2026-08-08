@@ -1,8 +1,37 @@
+from unittest.mock import MagicMock
+
 from fastapi.testclient import TestClient
 
 from main import app
+from services import shop_service
 
 client = TestClient(app)
+
+
+def _mock_conn(rows):
+    conn = MagicMock()
+    cursor = MagicMock()
+    cursor.__enter__.return_value = cursor
+    cursor.__exit__.return_value = False
+    cursor.fetchall.return_value = rows
+    conn.cursor.return_value = cursor
+    return conn, cursor
+
+
+def test_list_products_is_cached():
+    shop_service.list_products.cache_clear()
+    conn, cursor = _mock_conn([{"id": "p1"}])
+
+    try:
+        shop_service.list_products(conn)
+        shop_service.list_products(conn)
+
+        assert cursor.execute.call_count == 1
+    finally:
+        # Cache key has no args besides the (excluded) connection, so a
+        # mocked result here would otherwise leak into the next test that
+        # calls the real endpoint.
+        shop_service.list_products.cache_clear()
 
 # A syntactically-valid UUID that (almost certainly) doesn't exist - used to
 # test the "not found" path without depending on real seeded product data.

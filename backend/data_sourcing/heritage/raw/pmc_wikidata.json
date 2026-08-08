@@ -2002,17 +2002,6 @@
     "historic_type": null
   },
   {
-    "name": "European Tombs",
-    "latitude": 18.52212,
-    "longitude": 18.52212,
-    "source": "pmc_wikidata",
-    "grade": "Grade III",
-    "address": "Photozinco Press Road-1",
-    "description": "",
-    "image_url": null,
-    "historic_type": null
-  },
-  {
     "name": "Florence Bungalow",
     "latitude": 18.51435,
     "longitude": 73.87197,
@@ -2024,7 +2013,7 @@
     "historic_type": null
   },
   {
-    "name": "Ganpati – Phadke wada",
+    "name": "Ganpati \u2013 Phadke wada",
     "latitude": 18.51786,
     "longitude": 73.85876,
     "source": "pmc_wikidata",
@@ -2574,7 +2563,7 @@
     "historic_type": null
   },
   {
-    "name": "St. Emmanuel’s Church",
+    "name": "St. Emmanuel\u2019s Church",
     "latitude": 18.50317,
     "longitude": 73.8832,
     "source": "pmc_wikidata",

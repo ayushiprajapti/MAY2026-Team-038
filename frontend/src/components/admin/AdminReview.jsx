@@ -37,9 +37,9 @@ function AdminReview() {
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
-    listPending()
+    listPending({ pageSize: 100 })
       .then((data) => {
-        if (!cancelled) setSubmissions(data);
+        if (!cancelled) setSubmissions(data.items);
       })
       .catch((err) => {
         if (!cancelled) setError(err instanceof ApiError ? err.detail : "Something went wrong, please try again.");
