@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const API_BASE_URL = "http://127.0.0.1:8000";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { signup } from "../api/auth";
+import { ApiError } from "../api/client";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -24,6 +28,7 @@ export default function Register() {
   };
 
   const handleSubmit = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -67,6 +72,16 @@ export default function Register() {
       setError(err.message);
     } finally {
       setLoading(false);
+    setIsLoading(true);
+
+    try {
+      await signup(fullName, email, password);
+      setSuccess("Account created successfully! Redirecting to login...");
+      setTimeout(() => navigate("/login"), 1500);
+    } catch (err) {
+      setError(err instanceof ApiError ? err.detail : "Something went wrong, please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 

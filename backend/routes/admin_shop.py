@@ -28,11 +28,13 @@ def create_product(
     conn: connection = Depends(get_db),
     current_user: dict = Depends(require_roles("shop_admin")),
 ):
-    return shop_service.create_product(
+    result = shop_service.create_product(
         conn,
         payload,
         str(current_user["id"]),
     )
+    shop_service.list_products.cache_clear()
+    return result
 
 
 @router.patch(
@@ -45,11 +47,26 @@ def update_product(
     conn: connection = Depends(get_db),
     current_user: dict = Depends(require_roles("shop_admin")),
 ):
-    return shop_service.update_product(
+    result = shop_service.update_product(
         conn,
         str(product_id),
         payload,
     )
+    shop_service.list_products.cache_clear()
+    return result
+
+
+@router.delete(
+    "/products/{product_id}",
+    status_code=204,
+)
+def delete_product(
+    product_id: UUID,
+    conn: connection = Depends(get_db),
+    current_user: dict = Depends(require_roles("shop_admin")),
+):
+    shop_service.delete_product(conn, str(product_id))
+    shop_service.list_products.cache_clear()
 
 
 @router.get("/orders")

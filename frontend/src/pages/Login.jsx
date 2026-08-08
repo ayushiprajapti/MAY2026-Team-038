@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const API_BASE_URL = "http://127.0.0.1:8000";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import { login } from "../api/auth";
+import { ApiError } from "../api/client";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -45,6 +49,21 @@ export default function Login() {
           data?.detail || "Invalid email or password."
         );
       }
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+
+    try {
+      await login(email, password);
+      window.dispatchEvent(new Event("auth-change"));
+      navigate("/admin-dashboard");
+    } catch (err) {
+      setError(err instanceof ApiError ? err.detail : "Something went wrong, please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
       localStorage.setItem("access_token", data.access_token);
 
@@ -65,6 +84,33 @@ export default function Login() {
         "intach_user",
         JSON.stringify(user)
       );
+            {/* Password Field */}
+            <div className="relative group text-left">
+              <div className="flex justify-between items-center mb-1 ml-1">
+                <label
+                  className="font-sans text-xs font-semibold text-heritage-charcoal/70 uppercase tracking-wider"
+                  htmlFor="password"
+                >
+                  Password
+                </label>
+                <a
+                  href="#"
+                  onClick={(e) => e.preventDefault()}
+                  className="font-sans text-xs font-semibold text-heritage-red hover:text-heritage-red/80 transition-colors"
+                >
+                  Forgot Password?
+                </a>
+              </div>
+              <input
+                className="w-full bg-transparent border-t-0 border-x-0 border-b border-heritage-border/60 text-heritage-espresso font-sans py-2 px-1 focus:border-heritage-bronze focus:ring-0 focus:outline-none transition-all duration-300 placeholder:text-heritage-charcoal/30 text-sm"
+                id="password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+              />
+            </div>
 
       navigate("/");
     } catch (err) {

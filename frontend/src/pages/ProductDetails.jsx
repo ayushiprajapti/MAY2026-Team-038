@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { getProduct } from "../api/shop";
 import shopItems from "../data/shopItems";
 
 function StarRating({ rating, reviews }) {
@@ -18,7 +19,7 @@ function StarRating({ rating, reviews }) {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-              d="M11.48 3.5a.563.563 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.562.562 0 00-.586 0l-4.725 2.885a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557L2.043 10.386a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
+              d="M11.48 3.5a.563.563 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.562.562 0 00-.586 0l-4.725 2.885a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557L2.043 10.386a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"
             />
           </svg>
         ))}
@@ -34,18 +35,104 @@ export default function ProductDetails() {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const product = useMemo(() => shopItems.find((item) => item.id === Number(id)), [id]);
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const loadProduct = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const apiProduct = await getProduct(id);
+
+        const oldProduct = shopItems.find(
+          (item) =>
+            item.name === apiProduct.name ||
+            item.sku === apiProduct.sku
+        );
+
+        setProduct({
+          ...oldProduct,
+          ...apiProduct,
+          price: apiProduct.price_cents / 100,
+          image: apiProduct.image_url,
+          gallery: apiProduct.image_url
+            ? [apiProduct.image_url]
+            : oldProduct?.gallery || [],
+          shortDescription:
+            apiProduct.description ||
+            oldProduct?.shortDescription ||
+            "",
+          rating: oldProduct?.rating || 0,
+          reviews: oldProduct?.reviews || 0,
+          story: oldProduct?.story || apiProduct.description || "",
+          material: oldProduct?.material || "Not specified",
+          origin: oldProduct?.origin || "Not specified",
+          dimensions: oldProduct?.dimensions || "Not specified",
+          care: oldProduct?.care || "Not specified",
+        });
+      } catch (err) {
+        console.error("Failed to load product:", err);
+        setError(err.message || "Failed to load product.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProduct();
+  }, [id]);
 
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
 
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-[#f8ecd7] flex items-center justify-center px-4">
+        <p className="text-sm text-heritage-charcoal/60">
+          Loading product...
+        </p>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="min-h-screen bg-[#f8ecd7] flex flex-col items-center justify-center gap-4 px-4 text-center">
+        <h2 className="font-serif text-2xl font-bold text-heritage-espresso">
+          Unable to Load Product
+        </h2>
+        <p className="text-sm text-heritage-charcoal/60">{error}</p>
+        <button
+          onClick={() => navigate("/shop")}
+          className="bg-heritage-red hover:bg-heritage-red/90 text-white font-semibold text-sm py-2.5 px-6 rounded shadow shadow-heritage-red/15 cursor-pointer"
+        >
+          Back to Heritage Shop
+        </button>
+      </main>
+    );
+  }
+
   if (!product) {
     return (
       <main className="min-h-screen bg-[#f8ecd7] flex flex-col items-center justify-center gap-4 px-4 text-center">
-        <svg className="w-10 h-10 text-heritage-charcoal/40" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        <svg
+          className="w-10 h-10 text-heritage-charcoal/40"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
         </svg>
-        <h2 className="font-serif text-2xl font-bold text-heritage-espresso">Product Not Found</h2>
+        <h2 className="font-serif text-2xl font-bold text-heritage-espresso">
+          Product Not Found
+        </h2>
         <button
           onClick={() => navigate("/shop")}
           className="bg-heritage-red hover:bg-heritage-red/90 text-white font-semibold text-sm py-2.5 px-6 rounded shadow shadow-heritage-red/15 cursor-pointer transition-colors active:scale-95 duration-150"
@@ -63,7 +150,9 @@ export default function ProductDetails() {
     let updatedCart;
     if (existing) {
       updatedCart = cart.map((item) =>
-        item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
+        item.id === product.id
+          ? { ...item, quantity: item.quantity + quantity }
+          : item
       );
     } else {
       updatedCart = [...cart, { ...product, quantity }];
@@ -86,8 +175,18 @@ export default function ProductDetails() {
           onClick={() => navigate(-1)}
           className="flex items-center gap-1.5 font-sans text-xs font-semibold text-heritage-charcoal/60 hover:text-heritage-red transition-colors cursor-pointer mb-6"
         >
-          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          <svg
+            className="w-3.5 h-3.5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth="2.5"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 19l-7-7 7-7"
+            />
           </svg>
           Continue Shopping
         </button>
@@ -111,10 +210,16 @@ export default function ProductDetails() {
                     onClick={() => setSelectedImage(index)}
                     aria-label={`View image ${index + 1}`}
                     className={`w-16 h-16 rounded-md overflow-hidden border-2 transition-all cursor-pointer ${
-                      selectedImage === index ? "border-heritage-bronze" : "border-transparent opacity-70 hover:opacity-100"
+                      selectedImage === index
+                        ? "border-heritage-bronze"
+                        : "border-transparent opacity-70 hover:opacity-100"
                     }`}
                   >
-                    <img src={image} alt={product.name} className="w-full h-full object-cover" />
+                    <img
+                      src={image}
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                    />
                   </button>
                 ))}
               </div>
@@ -130,7 +235,9 @@ export default function ProductDetails() {
             <span className="inline-block px-2.5 py-1 rounded-full border border-heritage-border text-[10px] font-bold uppercase tracking-wider font-mono bg-heritage-cream text-heritage-charcoal">
               {product.category}
             </span>
-            <h1 className="font-serif text-3xl font-bold text-heritage-espresso mt-3">{product.name}</h1>
+            <h1 className="font-serif text-3xl font-bold text-heritage-espresso mt-3">
+              {product.name}
+            </h1>
 
             <StarRating rating={product.rating} reviews={product.reviews} />
 
@@ -139,17 +246,29 @@ export default function ProductDetails() {
             </div>
 
             <div className="flex flex-wrap gap-2 mt-4">
-              {["Handcrafted", "Authentic Heritage", "Supports Local Artisans"].map((tag) => (
-                <span
-                  key={tag}
-                  className="flex items-center gap-1 bg-heritage-cream text-heritage-charcoal/80 border border-heritage-border/50 px-2.5 py-1 rounded-full text-[11px] font-medium font-sans"
-                >
-                  <svg className="w-3 h-3 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                  {tag}
-                </span>
-              ))}
+              {["Handcrafted", "Authentic Heritage", "Supports Local Artisans"].map(
+                (tag) => (
+                  <span
+                    key={tag}
+                    className="flex items-center gap-1 bg-heritage-cream text-heritage-charcoal/80 border border-heritage-border/50 px-2.5 py-1 rounded-full text-[11px] font-medium font-sans"
+                  >
+                    <svg
+                      className="w-3 h-3 text-emerald-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                    {tag}
+                  </span>
+                )
+              )}
             </div>
 
             <p className="mt-5 text-sm text-heritage-charcoal/80 leading-relaxed font-sans">
@@ -158,16 +277,30 @@ export default function ProductDetails() {
 
             <div className="mt-5 bg-heritage-cream/60 border-l-4 border-heritage-bronze rounded-r-lg p-4">
               <h3 className="font-serif font-bold text-heritage-espresso flex items-center gap-2 text-sm">
-                <svg className="w-4 h-4 text-heritage-bronze" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 21h18M4 18h16M6 18v-7m4 7v-7m4 7v-7m4 7v-7M4 11l8-6 8 6" />
+                <svg
+                  className="w-4 h-4 text-heritage-bronze"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 21h18M4 18h16M6 18v-7m4 7v-7m4 7v-7m4 7v-7M4 11l8-6 8 6"
+                  />
                 </svg>
                 Heritage Story
               </h3>
-              <p className="mt-1.5 text-sm text-heritage-charcoal/80 leading-relaxed font-sans">{product.story}</p>
+              <p className="mt-1.5 text-sm text-heritage-charcoal/80 leading-relaxed font-sans">
+                {product.story}
+              </p>
             </div>
 
             <div className="mt-4 bg-heritage-cream/40 border border-heritage-border/40 rounded-lg p-4">
-              <h4 className="font-serif font-bold text-heritage-espresso text-sm">Authenticity</h4>
+              <h4 className="font-serif font-bold text-heritage-espresso text-sm">
+                Authenticity
+              </h4>
               <p className="mt-1 text-xs text-heritage-charcoal/70 leading-relaxed font-sans">
                 Every purchase supports heritage conservation and skilled local artisans
                 associated with INTACH's heritage initiatives.
@@ -181,17 +314,24 @@ export default function ProductDetails() {
                 { label: "Dimensions", value: product.dimensions },
                 { label: "Care", value: product.care },
               ].map((detail) => (
-                <div key={detail.label} className="bg-heritage-cream/60 border border-heritage-border/40 rounded-lg p-3">
+                <div
+                  key={detail.label}
+                  className="bg-heritage-cream/60 border border-heritage-border/40 rounded-lg p-3"
+                >
                   <span className="block text-[10px] font-bold uppercase tracking-wider text-heritage-charcoal/50 font-sans">
                     {detail.label}
                   </span>
-                  <p className="mt-0.5 text-sm font-semibold text-heritage-espresso">{detail.value}</p>
+                  <p className="mt-0.5 text-sm font-semibold text-heritage-espresso">
+                    {detail.value}
+                  </p>
                 </div>
               ))}
             </div>
 
             <div className="mt-6 flex items-center justify-between gap-4">
-              <span className="text-sm font-semibold font-sans text-heritage-charcoal/80">Quantity</span>
+              <span className="text-sm font-semibold font-sans text-heritage-charcoal/80">
+                Quantity
+              </span>
               <div className="flex items-center gap-4 bg-heritage-cream border border-heritage-border/60 rounded-lg px-3 py-1.5">
                 <button
                   onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -200,7 +340,9 @@ export default function ProductDetails() {
                 >
                   −
                 </button>
-                <span className="min-w-[1.5rem] text-center font-semibold text-heritage-espresso">{quantity}</span>
+                <span className="min-w-[1.5rem] text-center font-semibold text-heritage-espresso">
+                  {quantity}
+                </span>
                 <button
                   onClick={() => setQuantity((q) => q + 1)}
                   aria-label="Increase quantity"
@@ -216,8 +358,18 @@ export default function ProductDetails() {
                 onClick={addToCart}
                 className="flex-1 flex items-center justify-center gap-2 border border-heritage-border/80 text-heritage-charcoal hover:bg-heritage-cream font-semibold text-sm py-3 rounded transition-colors active:scale-95 duration-150 cursor-pointer"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                  />
                 </svg>
                 Add to Cart
               </button>

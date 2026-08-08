@@ -1,5 +1,6 @@
 from uuid import uuid4
 
+import psycopg2.errors
 from fastapi import HTTPException, status
 from psycopg2.extensions import connection
 from psycopg2.extras import RealDictCursor
@@ -9,8 +10,10 @@ from schemas.shop import (
     CreateProductRequest,
     UpdateProductRequest,
 )
+from utils.cache import cached
 
 
+@cached(ttl_seconds=60)
 def list_products(conn: connection) -> list[dict]:
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(
@@ -227,6 +230,26 @@ def update_product(
         )
 
     return product
+
+
+def delete_product(conn: connection, product_id: str) -> None:
+    with conn.cursor() as cur:
+        try:
+            cur.execute("DELETE FROM products WHERE id = %s", (product_id,))
+        except psycopg2.errors.ForeignKeyViolation:
+            conn.rollback()
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="This product has existing orders and cannot be deleted. "
+                "Deactivate it instead.",
+            )
+
+        if cur.rowcount == 0:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Product not found",
+            )
+
 
 def _create_payment(
     cur,

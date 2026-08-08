@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { logout } from "../../api/auth";
 
 export default function AdminSidebar({ activePage }) {
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ export default function AdminSidebar({ activePage }) {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem("intach_user");
+    logout();
     window.dispatchEvent(new Event("auth-change"));
     navigate("/");
   };

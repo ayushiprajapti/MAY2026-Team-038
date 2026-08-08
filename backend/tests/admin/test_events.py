@@ -18,13 +18,17 @@ from uuid import uuid4
 
 from fastapi.testclient import TestClient
 
+from database import get_db
+from main import app
+
 
 # ─── shared helpers ────────────────────────────────────────────────────────────
 
 
 def _auth_headers(client: TestClient) -> dict[str, str]:
-    """Register a coordinator and return a valid Bearer-auth header dict."""
-    client.post(
+    """Register a coordinator, grant system_admin (these routes are now
+    require_roles-gated), and return a valid Bearer-auth header dict."""
+    signup = client.post(
         "/auth/signup",
         json={
             "email": "coordinator@example.com",
@@ -32,6 +36,18 @@ def _auth_headers(client: TestClient) -> dict[str, str]:
             "full_name": "Event Coordinator",
         },
     )
+    user_id = signup.json()["id"]
+
+    # Grant the role through the same FakeConnection the client fixture
+    # already wired up via app.dependency_overrides[get_db], instead of
+    # threading fake_db_store through every test signature.
+    conn = next(app.dependency_overrides[get_db]())
+    with conn.cursor() as cur:
+        cur.execute(
+            "INSERT INTO user_roles (user_id, role) VALUES (%s, %s)",
+            (user_id, "system_admin"),
+        )
+
     resp = client.post(
         "/auth/login",
         json={"email": "coordinator@example.com", "password": "supersecret"},

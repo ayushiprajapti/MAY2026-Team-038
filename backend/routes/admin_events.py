@@ -12,7 +12,7 @@ from schemas.events import (
     UpdateEventRequest,
 )
 from services import event_service
-from utils.auth import get_current_user
+from utils.auth import require_roles
 
 router = APIRouter(prefix="/events/admin", tags=["admin-events"])
 
@@ -20,7 +20,7 @@ router = APIRouter(prefix="/events/admin", tags=["admin-events"])
 @router.get("/", response_model=AdminEventsListResponse)
 def list_events(
     conn: connection = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_roles("system_admin")),
 ) -> dict:
     """List all events with dashboard stat card totals for the admin."""
     return event_service.list_all_events(conn)
@@ -30,7 +30,7 @@ def list_events(
 def create_event(
     payload: CreateEventRequest,
     conn: connection = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_roles("system_admin")),
 ) -> dict:
     """Create and publish a new event. coordinator_id is taken from the auth token."""
     return event_service.create_event(
@@ -42,7 +42,7 @@ def create_event(
 def list_event_registrants(
     event_id: UUID,
     conn: connection = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_roles("system_admin")),
 ) -> dict:
     """Return the event header and full registered-attendee list for an event."""
     return event_service.list_event_registrants(conn, str(event_id))
@@ -53,7 +53,7 @@ def update_event(
     event_id: UUID,
     payload: UpdateEventRequest,
     conn: connection = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_roles("system_admin")),
 ) -> dict:
     """Partially update an existing event. Send only the fields you want to change."""
     return event_service.update_event(conn, str(event_id), payload)
@@ -63,7 +63,7 @@ def update_event(
 def delete_event(
     event_id: UUID,
     conn: connection = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_roles("system_admin")),
 ) -> Response:
     """Permanently delete an event and all its registrations.
     Returns 204 No Content on success, 404 if the event does not exist.

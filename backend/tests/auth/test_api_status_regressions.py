@@ -11,6 +11,7 @@ import uuid
 
 from fastapi.testclient import TestClient
 
+from database import pool
 from main import app
 
 client = TestClient(app)
@@ -23,10 +24,28 @@ FK_REFERENCED_SITE_ID = "1a8445b2-b6ab-44f9-af1f-cc45bfbf0dc3"
 
 def _admin_token() -> str:
     email = f"regression-{uuid.uuid4().hex[:10]}@example.com"
-    client.post(
+    signup = client.post(
         "/auth/signup",
         json={"email": email, "password": "regression-probe-pw", "full_name": "Regression Probe"},
     )
+    user_id = signup.json()["id"]
+
+    # Routes probed below (REG-006, REG-007) are system_admin-gated, so the
+    # probe user needs the role for real - grant it directly against the
+    # live DB rather than mocking, to keep this suite's "real Postgres,
+    # no fakes" guarantee intact.
+    conn = pool.getconn()
+    try:
+        with conn.cursor() as cur:
+            cur.execute(
+                "INSERT INTO user_roles (user_id, role) VALUES (%s, %s) "
+                "ON CONFLICT DO NOTHING",
+                (user_id, "system_admin"),
+            )
+        conn.commit()
+    finally:
+        pool.putconn(conn)
+
     login = client.post("/auth/login", json={"email": email, "password": "regression-probe-pw"})
     return login.json()["access_token"]
 

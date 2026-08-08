@@ -10,6 +10,7 @@ from routes import (
     admin_events,
     admin_heritage_review,
     admin_shop,
+    admin_users,
     auth,
     chat,
     health,
@@ -39,6 +40,7 @@ app.include_router(admin_dashboard.router)
 app.include_router(admin_events.router)
 app.include_router(admin_heritage_review.router)
 app.include_router(volunteer_heritage.router)
+app.include_router(admin_users.router)
 app.include_router(chat.router)
 
 # Serves product photos extracted from the Warsaa catalogue PDF,

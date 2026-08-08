@@ -32,3 +32,20 @@ class UserResponse(BaseModel):
 class UpdateProfileRequest(BaseModel):
     full_name: str | None = Field(default=None, min_length=1)
     phone: str | None = None
+    roles: list[str] = []
+
+
+class AssignRoleRequest(BaseModel):
+    role: str
+
+
+class UserWithRolesResponse(BaseModel):
+    id: UUID
+    email: EmailStr
+    full_name: str
+    roles: list[str] = []
+
+
+class RoleMutationResponse(BaseModel):
+    id: UUID
+    roles: list[str] = []
