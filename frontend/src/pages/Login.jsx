@@ -1,54 +1,15 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-
-const API_BASE_URL = "http://127.0.0.1:8000";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { login } from "../api/auth";
 import { ApiError } from "../api/client";
 
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-  });
-
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/auth/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: form.email,
-          password: form.password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data?.detail || "Invalid email or password."
-        );
-      }
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
@@ -65,25 +26,56 @@ export default function Login() {
     }
   };
 
-      localStorage.setItem("access_token", data.access_token);
+  return (
+    <div className="relative h-screen w-full flex items-center justify-center p-4 overflow-hidden">
+      {/* Full-bleed Heritage Background Collage */}
+      <div className="absolute inset-0 z-0">
+        <div
+          className="absolute inset-0 bg-cover bg-center transition-all duration-700"
+          style={{ backgroundImage: "url('/pune_heritage_collage.png')" }}
+        />
+        {/* Warm Terracotta Overlay */}
+        <div className="absolute inset-0 bg-heritage-red/65 backdrop-blur-[2px]"></div>
+      </div>
 
-      const meResponse = await fetch(`${API_BASE_URL}/auth/me`, {
-        headers: {
-          Authorization: `Bearer ${data.access_token}`,
-        },
-      });
+      {/* Floating Login Card */}
+      <div className="relative z-10 w-full max-w-md bg-heritage-cream-light/95 backdrop-blur-md rounded-xl p-6 md:p-8 border border-heritage-border/30 shadow-[0_20px_50px_rgba(26,17,11,0.25)] flex flex-col max-h-[90vh] overflow-y-auto scrollbar-thin">
+        <div>
+          <div className="text-center mb-6">
+            <h2 className="font-serif text-2xl font-semibold text-heritage-espresso leading-tight">
+              Welcome Back
+            </h2>
+            <p className="font-sans text-xs text-heritage-charcoal/80 mt-1">
+              Access your heritage dashboard
+            </p>
+          </div>
 
-      if (!meResponse.ok) {
-        localStorage.removeItem("access_token");
-        throw new Error("Could not load user information.");
-      }
+          {error && (
+            <div className="mb-4 p-2 bg-red-50 border border-red-200 text-red-800 text-xs rounded font-sans text-center">
+              {error}
+            </div>
+          )}
 
-      const user = await meResponse.json();
+          <form onSubmit={handleLogin} className="space-y-5">
+            {/* Email Field */}
+            <div className="relative group text-left">
+              <label
+                className="block font-sans text-xs font-semibold text-heritage-charcoal/70 uppercase tracking-wider mb-1 ml-1"
+                htmlFor="email"
+              >
+                Email Address
+              </label>
+              <input
+                className="w-full bg-transparent border-t-0 border-x-0 border-b border-heritage-border/60 text-heritage-espresso font-sans py-2 px-1 focus:border-heritage-bronze focus:ring-0 focus:outline-none transition-all duration-300 placeholder:text-heritage-charcoal/30 text-sm"
+                id="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="coordinator@intachpune.org"
+              />
+            </div>
 
-      localStorage.setItem(
-        "intach_user",
-        JSON.stringify(user)
-      );
             {/* Password Field */}
             <div className="relative group text-left">
               <div className="flex justify-between items-center mb-1 ml-1">
@@ -112,82 +104,84 @@ export default function Login() {
               />
             </div>
 
-      navigate("/");
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+            {/* Sign In Button */}
+            <button
+              className={`w-full bg-heritage-red py-3.5 rounded text-white font-sans text-xs font-semibold tracking-wider uppercase transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 shadow-md hover:bg-heritage-red/90 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-heritage-red/20 cursor-pointer ${
+                isLoading ? "opacity-90 cursor-not-allowed" : ""
+              }`}
+              type="submit"
+              disabled={isLoading}
+            >
+              {isLoading ?
+                <>
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    />
+                  </svg>
+                  Authenticating...
+                </>
+              : <>
+                  <span>Sign In</span>
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                    />
+                  </svg>
+                </>
+              }
+            </button>
+          </form>
 
-  return (
-    <div className="min-h-screen bg-[#F8F1E5] flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-md bg-[#FFF9F1] rounded-2xl shadow-lg p-8">
-        <h1 className="text-3xl font-bold text-[#6B2D21] text-center mb-2">
-          Welcome Back
-        </h1>
+        </div>
 
-        <p className="text-center text-gray-600 mb-8">
-          Login to your INTACH Pune account
-        </p>
+        {/* Footer registration link */}
+        <div className="mt-6 pt-4 border-t border-heritage-border/20 text-center">
+          <p className="font-sans text-xs text-heritage-charcoal/80">
+            New to the portal?{" "}
+            <Link
+              to="/register"
+              className="text-heritage-red font-bold hover:underline transition-all ml-1"
+            >
+              Register
+            </Link>
+          </p>
+        </div>
+      </div>
 
-        {error && (
-          <div className="mb-5 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email
-            </label>
-
-            <input
-              type="email"
-              name="email"
-              value={form.email}
-              onChange={handleChange}
-              required
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-[#6B2D21]"
-              placeholder="Enter your email"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-
-            <input
-              type="password"
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              required
-              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-[#6B2D21]"
-              placeholder="Enter your password"
-            />
-          </div>
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-lg bg-[#6B2D21] text-white py-3 font-semibold hover:bg-[#542319] disabled:opacity-60"
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
-
-        <p className="text-center text-sm text-gray-600 mt-6">
-          Don't have an account?{" "}
-          <Link
-            to="/register"
-            className="font-semibold text-[#6B2D21] hover:underline"
-          >
-            Create Account
-          </Link>
-        </p>
+      {/* Decorative Blueprint Line Graphic */}
+      <div className="absolute bottom-10 left-10 opacity-15 pointer-events-none hidden md:block select-none">
+        <svg
+          className="stroke-heritage-cream-dark"
+          height="140"
+          viewBox="0 0 100 100"
+          width="140"
+        >
+          <path d="M10,90 L10,10 L90,10" fill="none" strokeWidth="0.5" />
+          <path d="M20,90 L20,20 L90,20" fill="none" strokeWidth="0.5" />
+        </svg>
       </div>
     </div>
   );

@@ -72,7 +72,7 @@ export default function UploadHeritage() {
     setError("");
     setSuccess("");
 
-    const accessToken = localStorage.getItem("access_token");
+    const accessToken = localStorage.getItem("intach_token");
 
     if (!accessToken) {
       setError("You are not logged in. Please log in again.");
@@ -90,21 +90,55 @@ export default function UploadHeritage() {
       .filter(Boolean)
       .join(", ");
 
-    const payload = {
-      name: formData.heritageName,
-      category: formData.category,
-      address: fullAddress || null,
-      construction_period: formData.era || null,
-      historical_significance: formData.significance || null,
-      description: formData.description || null,
-      image_url: null,
-      latitude,
-      longitude,
-    };
-
     setLoading(true);
 
     try {
+      let imageUrl = null;
+
+      if (selectedFiles.length > 0) {
+        const imageForm = new FormData();
+        imageForm.append("file", selectedFiles[0]);
+
+        const uploadResponse = await fetch(
+          `${API_BASE_URL}/volunteer/heritage-submissions/upload-image`,
+          {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+            body: imageForm,
+          }
+        );
+
+        const uploadData = await uploadResponse.json();
+
+        if (!uploadResponse.ok) {
+          if (uploadResponse.status === 401) {
+            localStorage.removeItem("intach_token");
+            localStorage.removeItem("intach_user");
+            throw new Error("Your session has expired. Please log in again.");
+          }
+
+          throw new Error(
+            uploadData?.detail || "Failed to upload the image."
+          );
+        }
+
+        imageUrl = uploadData.image_url;
+      }
+
+      const payload = {
+        name: formData.heritageName,
+        category: formData.category,
+        address: fullAddress || null,
+        construction_period: formData.era || null,
+        historical_significance: formData.significance || null,
+        description: formData.description || null,
+        image_url: imageUrl,
+        latitude,
+        longitude,
+      };
+
       const response = await fetch(
         `${API_BASE_URL}/volunteer/heritage-submissions`,
         {
@@ -121,7 +155,7 @@ export default function UploadHeritage() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          localStorage.removeItem("access_token");
+          localStorage.removeItem("intach_token");
           localStorage.removeItem("intach_user");
           throw new Error("Your session has expired. Please log in again.");
         }

@@ -25,7 +25,7 @@ export default function UploadHistory() {
 
   useEffect(() => {
     const fetchUploads = async () => {
-      const accessToken = localStorage.getItem("access_token");
+      const accessToken = localStorage.getItem("intach_token");
 
       if (!accessToken) {
         setError("You are not logged in. Please log in again.");
@@ -49,7 +49,7 @@ export default function UploadHistory() {
 
         if (!response.ok) {
           if (response.status === 401) {
-            localStorage.removeItem("access_token");
+            localStorage.removeItem("intach_token");
             localStorage.removeItem("intach_user");
             throw new Error("Your session has expired. Please log in again.");
           }

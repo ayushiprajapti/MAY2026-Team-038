@@ -23,7 +23,7 @@ export default function VolunteerProfile() {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const accessToken = localStorage.getItem("access_token");
+      const accessToken = localStorage.getItem("intach_token");
 
       if (!accessToken) {
         setError("You are not logged in. Please log in again.");
@@ -44,7 +44,7 @@ export default function VolunteerProfile() {
 
         if (!response.ok) {
           if (response.status === 401) {
-            localStorage.removeItem("access_token");
+            localStorage.removeItem("intach_token");
             localStorage.removeItem("intach_user");
           }
 
@@ -84,7 +84,7 @@ export default function VolunteerProfile() {
   const handleSave = async (event) => {
     event.preventDefault();
 
-    const accessToken = localStorage.getItem("access_token");
+    const accessToken = localStorage.getItem("intach_token");
 
     if (!accessToken) {
       setError("You are not logged in. Please log in again.");
@@ -113,7 +113,7 @@ export default function VolunteerProfile() {
 
       if (!response.ok) {
         if (response.status === 401) {
-          localStorage.removeItem("access_token");
+          localStorage.removeItem("intach_token");
           localStorage.removeItem("intach_user");
         }
 

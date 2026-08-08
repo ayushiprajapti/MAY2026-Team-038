@@ -25,6 +25,10 @@ class CreateHeritageSubmissionRequest(BaseModel):
     longitude: float | None = None
 
 
+class ImageUploadResponse(BaseModel):
+    image_url: str
+
+
 class VolunteerHeritageSubmissionResponse(BaseModel):
     id: UUID
     name: str | None

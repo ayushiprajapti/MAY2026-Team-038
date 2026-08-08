@@ -1,9 +1,46 @@
-from uuid import UUID
+from pathlib import Path
+from uuid import UUID, uuid4
 
+from fastapi import HTTPException, UploadFile, status
 from psycopg2.extensions import connection
 from psycopg2.extras import RealDictCursor
 
 from schemas.volunteer_heritage import CreateHeritageSubmissionRequest
+
+
+IMAGE_DIR = Path(__file__).resolve().parent.parent / "static" / "heritage-submissions"
+
+ALLOWED_IMAGE_TYPES = {
+    "image/jpeg": ".jpg",
+    "image/png": ".png",
+    "image/webp": ".webp",
+}
+
+MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024
+
+
+def save_submission_image(file: UploadFile) -> str:
+    extension = ALLOWED_IMAGE_TYPES.get(file.content_type)
+
+    if extension is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Only JPEG, PNG, or WEBP images are allowed",
+        )
+
+    contents = file.file.read()
+
+    if len(contents) > MAX_IMAGE_SIZE_BYTES:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Image must be smaller than 5MB",
+        )
+
+    IMAGE_DIR.mkdir(parents=True, exist_ok=True)
+    filename = f"{uuid4()}{extension}"
+    (IMAGE_DIR / filename).write_bytes(contents)
+
+    return f"/static/heritage-submissions/{filename}"
 
 
 SELECT_COLUMNS = """

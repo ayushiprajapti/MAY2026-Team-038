@@ -1,11 +1,12 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from psycopg2.extensions import connection
 
 from database import get_db
 from schemas.volunteer_heritage import (
     CreateHeritageSubmissionRequest,
+    ImageUploadResponse,
     VolunteerHeritageSubmissionResponse,
 )
 from services import volunteer_heritage_service
@@ -33,6 +34,19 @@ def create_heritage_submission(
         current_user["id"],
         payload,
     )
+
+
+@router.post(
+    "/upload-image",
+    response_model=ImageUploadResponse,
+    status_code=201,
+)
+def upload_heritage_submission_image(
+    file: UploadFile = File(...),
+    current_user: dict = Depends(get_current_user),
+):
+    image_url = volunteer_heritage_service.save_submission_image(file)
+    return {"image_url": image_url}
 
 
 @router.get(
