@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getProducts } from "../api/shopApi";
+import { listProducts } from "../api/shop";
 import shopItems from "../data/shopItems";
 
 const priceRanges = [
@@ -45,7 +45,7 @@ export default function HeritageShop() {
       try {
         setError("");
 
-        const data = await getProducts();
+        const data = await listProducts();
 
         const formattedProducts = data.map((product) => {
           const localItem = shopItems.find(

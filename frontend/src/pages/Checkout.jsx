@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { createOrder } from "../api/shopApi";
+import { createOrder } from "../api/shop";
+import { getToken } from "../api/client";
 
 const inputClass =
   "w-full rounded-lg border border-heritage-border/60 bg-heritage-cream/20 px-4 py-2.5 text-sm text-heritage-espresso focus:outline-none focus:border-heritage-bronze focus:ring-1 focus:ring-heritage-bronze transition";
@@ -83,19 +84,7 @@ export default function Checkout() {
     e.preventDefault();
     if (cartItems.length === 0) return;
 
-    const accessToken =
-      localStorage.getItem("access_token") ||
-      localStorage.getItem("token") ||
-      (() => {
-        try {
-          const user = JSON.parse(localStorage.getItem("intach_user") || "null");
-          return user?.access_token || user?.accessToken || null;
-        } catch {
-          return null;
-        }
-      })();
-
-    if (!accessToken) {
+    if (!getToken()) {
       window.alert("Please log in before placing an order.");
       return;
     }
@@ -120,7 +109,7 @@ export default function Checkout() {
     };
 
     try {
-      await createOrder(orderData, accessToken);
+      await createOrder(orderData);
 
       if (!isBuyNow) localStorage.removeItem("heritage_cart");
 

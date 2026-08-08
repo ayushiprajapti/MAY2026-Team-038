@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getProduct } from "../api/shopApi";
+import { getProduct } from "../api/shop";
 import shopItems from "../data/shopItems";
 
 function StarRating({ rating, reviews }) {

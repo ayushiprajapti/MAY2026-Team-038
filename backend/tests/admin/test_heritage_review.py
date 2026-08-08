@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from fastapi.testclient import TestClient
 
 from main import app
@@ -8,6 +10,14 @@ client = TestClient(app)
 # Any syntactically-valid UUID; these tests only exercise the auth gate, so
 # no request here should ever reach the database.
 SUBMISSION_ID = "00000000-0000-0000-0000-000000000000"
+
+
+def _admin_override():
+    """Bypass auth+role check via dependency_overrides/patch (no real
+    token/DB user needed) - require_roles() re-queries user_roles for the
+    live user id, so get_current_user alone isn't enough anymore."""
+    app.dependency_overrides[get_current_user] = lambda: {"id": SUBMISSION_ID}
+    return patch("utils.auth.get_user_roles", return_value=["system_admin"])
 
 
 def test_get_all_pending_requires_auth():
@@ -45,11 +55,11 @@ def test_get_one_submission_rejects_malformed_id_when_authenticated():
     # Bypass auth via dependency_overrides (no real token/DB user needed) to
     # prove the route's UUID-typed path param rejects a malformed id with a
     # clean 422 instead of it reaching the database.
-    app.dependency_overrides[get_current_user] = lambda: {"id": SUBMISSION_ID}
-    try:
-        response = client.get("/admin/heritage-submissions/not-a-uuid")
-    finally:
-        app.dependency_overrides.pop(get_current_user, None)
+    with _admin_override():
+        try:
+            response = client.get("/admin/heritage-submissions/not-a-uuid")
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
 
     assert response.status_code == 422
 
@@ -65,30 +75,30 @@ def test_delete_rejects_when_site_still_referenced():
     # psycopg2.errors.ForeignKeyViolation and converts it into a clean 409 -
     # a regression test for a bug where an earlier revision let this crash
     # the request with an unhandled 500 instead.
-    app.dependency_overrides[get_current_user] = lambda: {"id": SUBMISSION_ID}
-    try:
-        response = client.delete(f"/admin/heritage-submissions/{FK_REFERENCED_SITE_ID}")
-    finally:
-        app.dependency_overrides.pop(get_current_user, None)
+    with _admin_override():
+        try:
+            response = client.delete(f"/admin/heritage-submissions/{FK_REFERENCED_SITE_ID}")
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
 
     assert response.status_code == 409
 
 
 def test_get_all_pending_requires_page_ge_1():
-    app.dependency_overrides[get_current_user] = lambda: {"id": SUBMISSION_ID}
-    try:
-        response = client.get("/admin/heritage-submissions?page=0")
-    finally:
-        app.dependency_overrides.pop(get_current_user, None)
+    with _admin_override():
+        try:
+            response = client.get("/admin/heritage-submissions?page=0")
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
     assert response.status_code == 422
 
 
 def test_get_all_pending_returns_paginated_shape():
-    app.dependency_overrides[get_current_user] = lambda: {"id": SUBMISSION_ID}
-    try:
-        response = client.get("/admin/heritage-submissions?status=all&page=1&page_size=10")
-    finally:
-        app.dependency_overrides.pop(get_current_user, None)
+    with _admin_override():
+        try:
+            response = client.get("/admin/heritage-submissions?status=all&page=1&page_size=10")
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
     assert response.status_code == 200
     body = response.json()
     assert set(body.keys()) == {"items", "total", "page", "page_size"}
@@ -103,11 +113,11 @@ def test_get_regions_requires_auth():
 
 
 def test_get_regions_returns_id_and_name():
-    app.dependency_overrides[get_current_user] = lambda: {"id": SUBMISSION_ID}
-    try:
-        response = client.get("/admin/heritage-submissions/regions")
-    finally:
-        app.dependency_overrides.pop(get_current_user, None)
+    with _admin_override():
+        try:
+            response = client.get("/admin/heritage-submissions/regions")
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
     assert response.status_code == 200
     body = response.json()
     assert isinstance(body, list)
@@ -122,13 +132,13 @@ def test_get_all_pending_backfills_cache_on_cold_request():
     from services.heritage_review_service import get_pending_submissions
 
     get_pending_submissions.cache_clear()
-    app.dependency_overrides[get_current_user] = lambda: {"id": SUBMISSION_ID}
-    try:
-        # status=all maps to status_filter=None inside the route.
-        assert get_pending_submissions.is_cached(None, category=None, region_id=None) is False
-        response = client.get("/admin/heritage-submissions?status=all&page=1&page_size=10")
-        assert response.status_code == 200
-        assert get_pending_submissions.is_cached(None, category=None, region_id=None) is True
-    finally:
-        app.dependency_overrides.pop(get_current_user, None)
-        get_pending_submissions.cache_clear()
+    with _admin_override():
+        try:
+            # status=all maps to status_filter=None inside the route.
+            assert get_pending_submissions.is_cached(None, category=None, region_id=None) is False
+            response = client.get("/admin/heritage-submissions?status=all&page=1&page_size=10")
+            assert response.status_code == 200
+            assert get_pending_submissions.is_cached(None, category=None, region_id=None) is True
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+            get_pending_submissions.cache_clear()

@@ -10,7 +10,7 @@ from schemas.dashboard import (
     SalesTrendResponse,
 )
 from services import dashboard_service
-from utils.auth import get_current_user
+from utils.auth import require_roles
 
 router = APIRouter(
     prefix="/admin/dashboard",
@@ -21,7 +21,7 @@ router = APIRouter(
 @router.get("/shop-stats", response_model=ShopStatsResponse)
 def get_shop_stats(
     conn: connection = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_roles("system_admin")),
 ):
     return dashboard_service.get_shop_stats(conn)
 
@@ -29,7 +29,7 @@ def get_shop_stats(
 @router.get("/events", response_model=DashboardEventsResponse)
 def get_dashboard_events(
     conn: connection = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_roles("system_admin")),
 ):
     return dashboard_service.get_dashboard_events(conn)
 
@@ -37,7 +37,7 @@ def get_dashboard_events(
 @router.get("/recent-volunteers", response_model=DashboardRecentUploadsResponse)
 def get_recent_uploads(
     conn: connection = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_roles("system_admin")),
 ):
     return dashboard_service.get_recent_volunteer_uploads(conn)
 
@@ -45,7 +45,7 @@ def get_recent_uploads(
 @router.get("/member-stats", response_model=MemberStatsResponse)
 def get_member_stats(
     conn: connection = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_roles("system_admin")),
 ):
     return dashboard_service.get_member_stats(conn)
 
@@ -54,6 +54,6 @@ def get_member_stats(
 def get_sales_trend(
     months: int = Query(default=6, ge=1, le=24),
     conn: connection = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_roles("system_admin")),
 ):
     return dashboard_service.get_sales_trend(conn, months)

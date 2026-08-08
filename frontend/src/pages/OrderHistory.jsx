@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getOrderHistory } from "../api/shopApi";
+import { getOrderHistory } from "../api/shop";
+import { getToken } from "../api/client";
 
 const statusBadge = (status) => {
   const map = {
@@ -27,26 +28,12 @@ export default function OrderHistory() {
         setLoading(true);
         setError("");
 
-        const accessToken =
-          localStorage.getItem("access_token") ||
-          localStorage.getItem("token") ||
-          (() => {
-            try {
-              const user = JSON.parse(
-                localStorage.getItem("intach_user") || "null"
-              );
-              return user?.access_token || user?.accessToken || null;
-            } catch {
-              return null;
-            }
-          })();
-
-        if (!accessToken) {
+        if (!getToken()) {
           setError("Please log in to view your orders.");
           return;
         }
 
-        const data = await getOrderHistory(accessToken);
+        const data = await getOrderHistory();
 
         const formattedOrders = (data || []).map((order) => ({
           ...order,

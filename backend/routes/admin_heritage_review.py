@@ -20,7 +20,7 @@ from services.heritage_review_service import (
     reject_submission,
     delete_submission,
 )
-from utils.auth import get_current_user
+from utils.auth import require_roles
 
 router = APIRouter(
     prefix="/admin/heritage-submissions",
@@ -31,7 +31,7 @@ router = APIRouter(
 @router.get("/regions", response_model=list[RegionResponse])
 def get_regions(
     conn: connection = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_roles("system_admin")),
 ):
     return get_all_regions(conn)
 
@@ -48,7 +48,7 @@ def get_all_pending(
     page: int = Query(default=1, ge=1),
     page_size: int = Query(default=10, ge=1, le=100),
     conn: connection = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_roles("system_admin")),
 ):
     """Defaults to pending_review only. Pass ?status=approved/rejected to
     filter by another status, or ?status=all to see every submission."""
@@ -92,7 +92,7 @@ def get_all_pending(
 def get_one_submission(
     submission_id: UUID,
     conn: connection = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_roles("system_admin")),
 ):
     submission = get_submission_by_id(conn, submission_id)
 
@@ -113,7 +113,7 @@ def approve(
     submission_id: UUID,
     body: ReviewRequest,
     conn: connection = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_roles("system_admin")),
 ):
     submission = approve_submission(
         conn,
@@ -139,7 +139,7 @@ def reject(
     submission_id: UUID,
     body: ReviewRequest,
     conn: connection = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_roles("system_admin")),
 ):
     submission = reject_submission(
         conn,
@@ -161,7 +161,7 @@ def reject(
 def delete(
     submission_id: UUID,
     conn: connection = Depends(get_db),
-    current_user: dict = Depends(get_current_user),
+    current_user: dict = Depends(require_roles("system_admin")),
 ):
     deleted = delete_submission(conn, submission_id)
 
