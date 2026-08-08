@@ -1,36 +1,77 @@
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+const API_BASE_URL = "http://127.0.0.1:8000";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { signup } from "../api/auth";
 import { ApiError } from "../api/client";
 
 export default function Register() {
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [language, setLanguage] = useState("english");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [agreeTerms, setAgreeTerms] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
+  const [form, setForm] = useState({
+    full_name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
   const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
-    setSuccess("");
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match");
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match.");
       return;
     }
 
-    if (!agreeTerms) {
-      setError("You must agree to the Terms & Privacy Policy");
+    if (form.password.length < 8) {
+      setError("Password must be at least 8 characters.");
       return;
     }
 
+    setLoading(true);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          full_name: form.full_name,
+          email: form.email,
+          password: form.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          data?.detail || "Registration failed. Please try again."
+        );
+      }
+
+      alert("Registration successful. Please log in.");
+
+      navigate("/login");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     setIsLoading(true);
 
     try {
@@ -45,249 +86,106 @@ export default function Register() {
   };
 
   return (
-    <div className="relative h-screen w-full flex items-center justify-center p-4 overflow-hidden">
-      {/* Full-bleed Heritage Background Collage */}
-      <div className="absolute inset-0 z-0">
-        <div
-          className="absolute inset-0 bg-cover bg-center transition-all duration-700"
-          style={{ backgroundImage: "url('/pune_heritage_collage.png')" }}
-        />
-        {/* Warm Terracotta Overlay */}
-        <div className="absolute inset-0 bg-heritage-red/65 backdrop-blur-[2px]"></div>
-      </div>
+    <div className="min-h-screen bg-[#F8F1E5] flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-md bg-[#FFF9F1] rounded-2xl shadow-lg p-8">
+        <h1 className="text-3xl font-bold text-[#6B2D21] text-center mb-2">
+          Create Account
+        </h1>
 
-      {/* Floating Register Card */}
-      <div className="relative z-10 w-full max-w-lg bg-heritage-cream-light/95 backdrop-blur-md rounded-xl p-6 md:p-8 border border-heritage-border/30 shadow-[0_20px_50px_rgba(26,17,11,0.25)] flex flex-col max-h-[90vh] overflow-y-auto scrollbar-thin">
-        <div>
-          <div className="text-center mb-5">
-            <h2 className="font-serif text-2xl font-semibold text-heritage-espresso leading-tight">
-              Join INTACH Pune
-            </h2>
-            <p className="font-sans text-xs text-heritage-charcoal/80 mt-1">
-              Become a steward of Pune's heritage
-            </p>
+        <p className="text-center text-gray-600 mb-8">
+          Join the INTACH Pune heritage community
+        </p>
+
+        {error && (
+          <div className="mb-5 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Full Name
+            </label>
+
+            <input
+              type="text"
+              name="full_name"
+              value={form.full_name}
+              onChange={handleChange}
+              required
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-[#6B2D21]"
+              placeholder="Enter your full name"
+            />
           </div>
 
-          {error && (
-            <div className="mb-4 p-2 bg-red-50 border border-red-200 text-red-800 text-xs rounded font-sans text-center">
-              {error}
-            </div>
-          )}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
 
-          {success && (
-            <div className="mb-4 p-2 bg-green-50 border border-green-200 text-green-800 text-xs rounded font-sans text-center">
-              {success}
-            </div>
-          )}
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              required
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-[#6B2D21]"
+              placeholder="Enter your email"
+            />
+          </div>
 
-          <form onSubmit={handleRegister} className="space-y-4">
-            {/* Full Name */}
-            <div className="relative group text-left">
-              <label
-                className="block font-sans text-xs font-semibold text-heritage-charcoal/70 uppercase tracking-wider mb-1 ml-1"
-                htmlFor="fullName"
-              >
-                Full Name
-              </label>
-              <input
-                className="w-full bg-transparent border-t-0 border-x-0 border-b border-heritage-border/60 text-heritage-espresso font-sans py-1.5 px-1 focus:border-heritage-bronze focus:ring-0 focus:outline-none transition-all duration-300 placeholder:text-heritage-charcoal/30 text-sm"
-                id="fullName"
-                type="text"
-                required
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                placeholder="e.g. Malhar Rao"
-              />
-            </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Password
+            </label>
 
-            {/* Email Address */}
-            <div className="relative group text-left">
-              <label
-                className="block font-sans text-xs font-semibold text-heritage-charcoal/70 uppercase tracking-wider mb-1 ml-1"
-                htmlFor="email"
-              >
-                Email Address
-              </label>
-              <input
-                className="w-full bg-transparent border-t-0 border-x-0 border-b border-heritage-border/60 text-heritage-espresso font-sans py-1.5 px-1 focus:border-heritage-bronze focus:ring-0 focus:outline-none transition-all duration-300 placeholder:text-heritage-charcoal/30 text-sm"
-                id="email"
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="malhar@example.com"
-              />
-            </div>
+            <input
+              type="password"
+              name="password"
+              value={form.password}
+              onChange={handleChange}
+              required
+              minLength={8}
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-[#6B2D21]"
+              placeholder="Minimum 8 characters"
+            />
+          </div>
 
-            {/* Phone & Language Row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="relative group text-left">
-                <label
-                  className="block font-sans text-xs font-semibold text-heritage-charcoal/70 uppercase tracking-wider mb-1 ml-1"
-                  htmlFor="phone"
-                >
-                  Phone Number
-                </label>
-                <input
-                  className="w-full bg-transparent border-t-0 border-x-0 border-b border-heritage-border/60 text-heritage-espresso font-sans py-1.5 px-1 focus:border-heritage-bronze focus:ring-0 focus:outline-none transition-all duration-300 placeholder:text-heritage-charcoal/30 text-sm"
-                  id="phone"
-                  type="tel"
-                  required
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="+91 98765 43210"
-                />
-              </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Confirm Password
+            </label>
 
-              <div className="relative group text-left">
-                <label
-                  className="block font-sans text-xs font-semibold text-heritage-charcoal/70 uppercase tracking-wider mb-1 ml-1"
-                  htmlFor="language"
-                >
-                  Preferred Language
-                </label>
-                <select
-                  className="w-full bg-transparent border-t-0 border-x-0 border-b border-heritage-border/60 text-heritage-espresso font-sans py-1.5 px-1 focus:border-heritage-bronze focus:ring-0 focus:outline-none transition-all duration-300 cursor-pointer text-sm"
-                  id="language"
-                  value={language}
-                  onChange={(e) => setLanguage(e.target.value)}
-                >
-                  <option value="english" className="bg-heritage-cream-light text-heritage-espresso">English</option>
-                  <option value="marathi" className="bg-heritage-cream-light text-heritage-espresso">Marathi (मराठी)</option>
-                  <option value="hindi" className="bg-heritage-cream-light text-heritage-espresso">Hindi (हिन्दी)</option>
-                </select>
-              </div>
-            </div>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={form.confirmPassword}
+              onChange={handleChange}
+              required
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:border-[#6B2D21]"
+              placeholder="Re-enter your password"
+            />
+          </div>
 
-            {/* Password & Confirm Row */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="relative group text-left">
-                <label
-                  className="block font-sans text-xs font-semibold text-heritage-charcoal/70 uppercase tracking-wider mb-1 ml-1"
-                  htmlFor="password"
-                >
-                  Password
-                </label>
-                <input
-                  className="w-full bg-transparent border-t-0 border-x-0 border-b border-heritage-border/60 text-heritage-espresso font-sans py-1.5 px-1 focus:border-heritage-bronze focus:ring-0 focus:outline-none transition-all duration-300 placeholder:text-heritage-charcoal/30 text-sm"
-                  id="password"
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                />
-              </div>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-lg bg-[#6B2D21] text-white py-3 font-semibold hover:bg-[#542319] disabled:opacity-60"
+          >
+            {loading ? "Creating Account..." : "Create Account"}
+          </button>
+        </form>
 
-              <div className="relative group text-left">
-                <label
-                  className="block font-sans text-xs font-semibold text-heritage-charcoal/70 uppercase tracking-wider mb-1 ml-1"
-                  htmlFor="confirmPassword"
-                >
-                  Confirm Password
-                </label>
-                <input
-                  className="w-full bg-transparent border-t-0 border-x-0 border-b border-heritage-border/60 text-heritage-espresso font-sans py-1.5 px-1 focus:border-heritage-bronze focus:ring-0 focus:outline-none transition-all duration-300 placeholder:text-heritage-charcoal/30 text-sm"
-                  id="confirmPassword"
-                  type="password"
-                  required
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="••••••••"
-                />
-              </div>
-            </div>
-
-            {/* Terms Agreement */}
-            <div className="flex items-start gap-2 py-1 text-left">
-              <input
-                className="mt-0.5 rounded-sm border-heritage-border text-heritage-red focus:ring-heritage-red/45 h-3.5 w-3.5 bg-transparent cursor-pointer"
-                id="terms"
-                type="checkbox"
-                checked={agreeTerms}
-                onChange={(e) => setAgreeTerms(e.target.checked)}
-              />
-              <label
-                className="font-sans text-[11px] text-heritage-charcoal/80 cursor-pointer select-none leading-normal"
-                htmlFor="terms"
-              >
-                I agree to the{" "}
-                <a href="#" onClick={(e) => { e.preventDefault(); alert("Privacy Policy Details"); }} className="text-heritage-red hover:underline">
-                  Privacy Policy
-                </a>{" "}
-                and{" "}
-                <a href="#" onClick={(e) => { e.preventDefault(); alert("Membership Terms Details"); }} className="text-heritage-red hover:underline">
-                  Terms
-                </a>
-                .
-              </label>
-            </div>
-
-            {/* Register Button */}
-            <button
-              className={`w-full bg-heritage-red py-3.5 rounded text-white font-sans text-xs font-semibold tracking-wider uppercase transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 shadow-md hover:bg-heritage-red/90 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-heritage-red/20 cursor-pointer ${
-                isLoading ? "opacity-90 cursor-not-allowed" : ""
-              }`}
-              type="submit"
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <>
-                  <svg
-                    className="animate-spin -ml-1 mr-3 h-4 w-4 text-white"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
-                  </svg>
-                  Creating Account...
-                </>
-              ) : (
-                <>
-                  <span>Create Account</span>
-                  <svg
-                    className="w-3.5 h-3.5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth="2.2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M14 5l7 7m0 0l-7 7m7-7H3"
-                    />
-                  </svg>
-                </>
-              )}
-            </button>
-          </form>
-        </div>
-
-        {/* Footer login link */}
-        <div className="mt-5 pt-4 border-t border-heritage-border/20 text-center">
-          <p className="font-sans text-xs text-heritage-charcoal/80">
-            Already have an account?{" "}
-            <Link
-              to="/login"
-              className="text-heritage-red font-bold hover:underline transition-all ml-1"
-            >
-              Sign In
-            </Link>
-          </p>
-        </div>
+        <p className="text-center text-sm text-gray-600 mt-6">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="font-semibold text-[#6B2D21] hover:underline"
+          >
+            Login
+          </Link>
+        </p>
       </div>
     </div>
   );
