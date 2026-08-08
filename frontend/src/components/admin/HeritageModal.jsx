@@ -3,7 +3,9 @@ import { motion } from "framer-motion";
 
 const statusBadge = (status) => {
   const map = {
-    "Pending Review": "bg-amber-50 text-amber-700 border-amber-200",
+    pending_review: "bg-amber-50 text-amber-700 border-amber-200",
+    approved: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    rejected: "bg-red-50 text-red-700 border-red-200",
   };
   return map[status] || "bg-heritage-cream-dark/60 text-heritage-charcoal/70 border-heritage-border/50";
 };
@@ -22,12 +24,9 @@ function HeritageModal({ submission, onClose, onApprove, onReject }) {
   if (!submission) return null;
 
   const facts = [
-    { label: "Heritage Type", value: submission.heritageType },
-    { label: "Era", value: submission.era },
-    { label: "Condition", value: submission.condition },
-    { label: "City", value: submission.city },
-    { label: "State", value: submission.state },
-    { label: "PIN Code", value: submission.pincode },
+    { label: "Category", value: submission.category },
+    { label: "Construction Period", value: submission.construction_period },
+    { label: "Status", value: submission.status },
   ];
 
   return (
@@ -48,11 +47,11 @@ function HeritageModal({ submission, onClose, onApprove, onReject }) {
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
-        aria-label={`${submission.site} submission details`}
+        aria-label={`${submission.name} submission details`}
       >
         <img
-          src={submission.image}
-          alt={submission.site}
+          src={submission.image_url}
+          alt={submission.name}
           className="w-full h-40 sm:h-full object-contain bg-heritage-cream-dark/20"
         />
 
@@ -68,7 +67,7 @@ function HeritageModal({ submission, onClose, onApprove, onReject }) {
           </button>
 
           <div className="pr-8">
-            <h2 className="font-serif text-lg font-bold text-heritage-espresso leading-tight">{submission.site}</h2>
+            <h2 className="font-serif text-lg font-bold text-heritage-espresso leading-tight">{submission.name}</h2>
             <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
               <span className={`inline-block px-2 py-0.5 rounded border text-[9px] font-bold uppercase tracking-wider font-mono ${factBadge}`}>
                 {submission.category}
@@ -99,20 +98,19 @@ function HeritageModal({ submission, onClose, onApprove, onReject }) {
               <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
-            <span>
-              {submission.address}, {submission.city}, {submission.state} {submission.pincode}
-            </span>
+            <span>{submission.address}</span>
           </div>
 
           <p className="mt-3 text-xs text-heritage-charcoal/80 leading-relaxed line-clamp-2">
             {submission.description}
           </p>
 
-          <div className="mt-3 pt-3 border-t border-heritage-border/40 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-heritage-charcoal/70">
-            <span className="font-semibold text-heritage-espresso">{submission.contactName}</span>
-            <span>{submission.contactEmail}</span>
-            <span>{submission.contactPhone}</span>
-          </div>
+          {submission.historical_significance && (
+            <p className="mt-2 text-xs text-heritage-charcoal/70 leading-relaxed line-clamp-2">
+              <span className="font-semibold text-heritage-espresso">Significance: </span>
+              {submission.historical_significance}
+            </p>
+          )}
 
           <div className="flex flex-wrap gap-2.5 mt-4">
             <button
@@ -129,7 +127,7 @@ function HeritageModal({ submission, onClose, onApprove, onReject }) {
             </button>
             <button
               onClick={() => {
-                if (onReject(submission.id, submission.site)) onClose();
+                if (onReject(submission.id, submission.name)) onClose();
               }}
               className="flex items-center gap-1.5 bg-heritage-red hover:bg-heritage-red/90 text-white font-semibold text-xs py-2 px-4 rounded shadow shadow-heritage-red/15 cursor-pointer transition-colors active:scale-95 duration-150"
             >

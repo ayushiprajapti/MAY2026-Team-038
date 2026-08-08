@@ -35,3 +35,17 @@ class DashboardEventsResponse(BaseModel):
 
 class DashboardRecentUploadsResponse(BaseModel):
     uploads: list[VolunteerUploadResponse]
+
+
+class MemberStatsResponse(BaseModel):
+    total_members: int
+    new_this_week: int
+
+
+class SalesTrendPoint(BaseModel):
+    month: str
+    total_cents: int
+
+
+class SalesTrendResponse(BaseModel):
+    points: list[SalesTrendPoint]

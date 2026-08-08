@@ -1,7 +1,10 @@
 from psycopg2.extensions import connection
 from psycopg2.extras import RealDictCursor
 
+from utils.cache import cached
 
+
+@cached(ttl_seconds=60)
 def get_shop_stats(conn: connection) -> dict:
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(
@@ -23,6 +26,7 @@ def get_shop_stats(conn: connection) -> dict:
     return stats
 
 
+@cached(ttl_seconds=60)
 def get_dashboard_events(conn: connection) -> dict:
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(
@@ -64,6 +68,7 @@ def get_dashboard_events(conn: connection) -> dict:
     }
 
 
+@cached(ttl_seconds=60)
 def get_recent_volunteer_uploads(conn: connection) -> dict:
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(
@@ -88,3 +93,47 @@ def get_recent_volunteer_uploads(conn: connection) -> dict:
     return {
         "uploads": uploads,
     }
+
+
+@cached(ttl_seconds=60)
+def get_member_stats(conn: connection) -> dict:
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute(
+            """
+            SELECT
+                COUNT(*) FILTER (WHERE is_active) AS total_members,
+                COUNT(*) FILTER (
+                    WHERE is_active AND created_at >= now() - interval '7 days'
+                ) AS new_this_week
+            FROM users
+            """
+        )
+
+        return cur.fetchone()
+
+
+@cached(ttl_seconds=60)
+def get_sales_trend(conn: connection, months: int) -> dict:
+    with conn.cursor(cursor_factory=RealDictCursor) as cur:
+        cur.execute(
+            """
+            SELECT
+                to_char(month_start, 'YYYY-MM') AS month,
+                COALESCE(
+                    SUM(o.total_cents) FILTER (WHERE o.status != 'cancelled'),
+                    0
+                ) AS total_cents
+            FROM generate_series(
+                date_trunc('month', now()) - (%(months)s - 1) * interval '1 month',
+                date_trunc('month', now()),
+                interval '1 month'
+            ) AS month_start
+            LEFT JOIN orders o
+                ON date_trunc('month', o.placed_at) = month_start
+            GROUP BY month_start
+            ORDER BY month_start
+            """,
+            {"months": months},
+        )
+
+        return {"points": cur.fetchall()}

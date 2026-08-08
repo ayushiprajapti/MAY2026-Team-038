@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { signup } from "../api/auth";
+import { ApiError } from "../api/client";
 
 export default function Register() {
   const [fullName, setFullName] = useState("");
@@ -14,7 +16,7 @@ export default function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
@@ -31,35 +33,15 @@ export default function Register() {
 
     setIsLoading(true);
 
-    setTimeout(() => {
-      const users = JSON.parse(localStorage.getItem("intach_users") || "[]");
-      
-      // Check if user already exists
-      if (users.some((u) => u.email.toLowerCase() === email.toLowerCase())) {
-        setError("Email is already registered. Try signing in.");
-        setIsLoading(false);
-        return;
-      }
-
-      const newUser = {
-        fullName,
-        email,
-        phone,
-        language,
-        password,
-        role: "registered_member",
-      };
-
-      users.push(newUser);
-      localStorage.setItem("intach_users", JSON.stringify(users));
-
+    try {
+      await signup(fullName, email, password);
       setSuccess("Account created successfully! Redirecting to login...");
+      setTimeout(() => navigate("/login"), 1500);
+    } catch (err) {
+      setError(err instanceof ApiError ? err.detail : "Something went wrong, please try again.");
+    } finally {
       setIsLoading(false);
-
-      setTimeout(() => {
-        navigate("/login");
-      }, 1500);
-    }, 1200);
+    }
   };
 
   return (

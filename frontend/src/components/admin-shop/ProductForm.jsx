@@ -89,22 +89,20 @@ export default function ProductForm({ onAddProduct, onClose }) {
     // Convert price in Rupees to price_cents for DBML schema
     const priceCents = Math.round(price * 100);
 
-    // Call parent handler to update lists
+    // Call parent handler — it POSTs to the backend, which assigns id/is_active/created_at.
     onAddProduct({
-      id: crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).substr(2, 9),
       sku: sku.trim().toUpperCase(),
       name: name.trim(),
       description: description.trim(),
       category,
       price_cents: priceCents,
       stock_quantity: stock,
-      // First image used as primary; fall back to placeholder if none uploaded
+      // First image used as primary; fall back to placeholder if none uploaded.
+      // Data-URLs work for this prototype but are not durable — there is no
+      // image upload/storage endpoint on the backend yet.
       image_url: images.length > 0
         ? images[0].dataUrl
         : "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400",
-      images: images.map((img) => img.dataUrl),
-      is_active: true,
-      created_at: new Date().toISOString(),
     });
 
     // Reset Form

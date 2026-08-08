@@ -34,6 +34,7 @@ def get_current_user(
     if user is None:
         raise credentials_exception
 
+    user["roles"] = get_user_roles(conn, user["id"])
     return user
 
 
@@ -41,7 +42,18 @@ def require_roles(*allowed_roles: str) -> Callable[..., dict]:
     """Drop `current_user: dict = Depends(require_roles("shop_admin"))` into
     a route to require both a valid Bearer token AND at least one of the
     given roles - `system_admin` is always allowed, since it's the
-    platform-wide admin role."""
+    platform-wide admin role.
+
+    Must be called with at least one role. `require_roles("system_admin")`
+    is how you restrict a route to system_admin only - don't call this with
+    no arguments to try to express that; it's confusable with "any logged-in
+    user" at a glance even though the system_admin-always-allowed check
+    still makes it correctly restrictive."""
+    if not allowed_roles:
+        raise RuntimeError(
+            "require_roles() needs at least one role - use "
+            'require_roles("system_admin") to restrict to system admins.'
+        )
 
     def dependency(
         current_user: dict = Depends(get_current_user),

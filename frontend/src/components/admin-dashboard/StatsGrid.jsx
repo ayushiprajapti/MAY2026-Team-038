@@ -1,13 +1,26 @@
 import React from "react";
 
-export default function StatsGrid() {
+function formatINR(cents) {
+  if (cents === null || cents === undefined) return "…";
+  return (cents / 100).toLocaleString("en-IN", {
+    style: "currency",
+    currency: "INR",
+    maximumFractionDigits: 0,
+  });
+}
+
+export default function StatsGrid({
+  shopRevenueCents,
+  pendingReviewsCount,
+  plannedEventsCount,
+  totalMembers,
+  newMembersThisWeek,
+}) {
   const stats = [
     {
       title: "Shop Sales",
-      value: "₹1,42,800",
-      change: "+12%",
-      changeType: "positive",
-      period: "vs last month",
+      value: formatINR(shopRevenueCents),
+      period: "total revenue to date",
       icon: (
         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -17,8 +30,8 @@ export default function StatsGrid() {
     },
     {
       title: "Chapter Members",
-      value: "1,248",
-      change: "+48",
+      value: totalMembers === null || totalMembers === undefined ? "…" : totalMembers.toLocaleString("en-IN"),
+      change: newMembersThisWeek ? `+${newMembersThisWeek}` : undefined,
       changeType: "positive",
       period: "new this week",
       icon: (
@@ -30,9 +43,9 @@ export default function StatsGrid() {
     },
     {
       title: "Pending Reviews",
-      value: "3",
-      change: "Urgent",
-      changeType: "neutral",
+      value: pendingReviewsCount === null || pendingReviewsCount === undefined ? "…" : String(pendingReviewsCount),
+      change: pendingReviewsCount > 0 ? "Urgent" : "Clear",
+      changeType: pendingReviewsCount > 0 ? "neutral" : "positive",
       period: "requires action",
       icon: (
         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -43,8 +56,8 @@ export default function StatsGrid() {
     },
     {
       title: "Planned Events",
-      value: "14",
-      change: "Next 30 Days",
+      value: plannedEventsCount === null || plannedEventsCount === undefined ? "…" : String(plannedEventsCount),
+      change: "Upcoming",
       changeType: "info",
       period: "scheduled walks/crafts",
       icon: (
@@ -67,17 +80,19 @@ export default function StatsGrid() {
             <div className={`w-12 h-12 rounded-lg flex items-center justify-center border border-heritage-border/30 shadow-sm shrink-0 ${stat.iconColor}`}>
               {stat.icon}
             </div>
-            <span
-              className={`text-[10px] font-semibold px-2 py-0.5 rounded-full font-mono uppercase tracking-wider ${
-                stat.changeType === "positive"
-                  ? "text-emerald-700 bg-emerald-50 border border-emerald-100"
-                  : stat.changeType === "neutral"
-                  ? "text-heritage-red bg-heritage-red/5 border border-heritage-red/10 animate-pulse"
-                  : "text-heritage-charcoal/70 bg-heritage-cream-dark/50 border border-heritage-border/30"
-              }`}
-            >
-              {stat.change}
-            </span>
+            {stat.change && (
+              <span
+                className={`text-[10px] font-semibold px-2 py-0.5 rounded-full font-mono uppercase tracking-wider ${
+                  stat.changeType === "positive"
+                    ? "text-emerald-700 bg-emerald-50 border border-emerald-100"
+                    : stat.changeType === "neutral"
+                    ? "text-heritage-red bg-heritage-red/5 border border-heritage-red/10 animate-pulse"
+                    : "text-heritage-charcoal/70 bg-heritage-cream-dark/50 border border-heritage-border/30"
+                }`}
+              >
+                {stat.change}
+              </span>
+            )}
           </div>
           <p className="text-heritage-charcoal/60 font-sans text-xs font-semibold uppercase tracking-wider">
             {stat.title}
