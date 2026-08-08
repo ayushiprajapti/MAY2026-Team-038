@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { createOrder } from "../api/shopApi";
 
 const inputClass =
   "w-full rounded-lg border border-heritage-border/60 bg-heritage-cream/20 px-4 py-2.5 text-sm text-heritage-espresso focus:outline-none focus:border-heritage-bronze focus:ring-1 focus:ring-heritage-bronze transition";
@@ -78,29 +79,58 @@ export default function Checkout() {
     setShipping((prev) => ({ ...prev, [name]: value }));
   };
 
-  const placeOrder = (e) => {
+  const placeOrder = async (e) => {
     e.preventDefault();
     if (cartItems.length === 0) return;
 
-    const previousOrders = JSON.parse(localStorage.getItem("heritage_orders")) || [];
-    const newOrder = {
-      orderId: `HS${Date.now()}`,
-      date: new Date().toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" }),
-      status: "In Progress",
-      items: [...cartItems],
-      total: totalAmount,
-      shipping,
-      paymentMethod,
+    const accessToken =
+      localStorage.getItem("access_token") ||
+      localStorage.getItem("token") ||
+      (() => {
+        try {
+          const user = JSON.parse(localStorage.getItem("intach_user") || "null");
+          return user?.access_token || user?.accessToken || null;
+        } catch {
+          return null;
+        }
+      })();
+
+    if (!accessToken) {
+      window.alert("Please log in before placing an order.");
+      return;
+    }
+
+    const shippingAddress = [
+      shipping.fullName,
+      shipping.phone,
+      shipping.address,
+      shipping.city,
+      shipping.state,
+      shipping.pincode,
+    ]
+      .filter(Boolean)
+      .join(", ");
+
+    const orderData = {
+      shipping_address: shippingAddress,
+      items: cartItems.map((item) => ({
+        product_id: item.id,
+        quantity: item.quantity,
+      })),
     };
 
-    previousOrders.unshift(newOrder);
-    localStorage.setItem("heritage_orders", JSON.stringify(previousOrders));
+    try {
+      await createOrder(orderData, accessToken);
 
-    if (!isBuyNow) localStorage.removeItem("heritage_cart");
+      if (!isBuyNow) localStorage.removeItem("heritage_cart");
 
-    setCartItems([]);
-    setOrderPlaced(true);
-    setTimeout(() => navigate("/orders"), 1800);
+      setCartItems([]);
+      setOrderPlaced(true);
+      setTimeout(() => navigate("/orders"), 1800);
+    } catch (error) {
+      console.error("Failed to place order:", error);
+      window.alert(error.message || "Failed to place order.");
+    }
   };
 
   if (orderPlaced) {
