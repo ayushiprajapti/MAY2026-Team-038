@@ -13,6 +13,7 @@ from routes import (
     admin_users,
     auth,
     chat,
+    events,
     health,
     shop,
     volunteer_heritage,
@@ -33,6 +34,7 @@ app.add_middleware(
 
 app.include_router(health.router)
 app.include_router(auth.router)
+app.include_router(events.router)
 app.include_router(shop.router)
 app.include_router(admin_shop.router)
 
