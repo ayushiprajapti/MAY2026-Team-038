@@ -1,32 +1,33 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import copperCarafe from "../../assets/home/copper-carafe.jpg";
-import heritageMap from "../../assets/home/heritage-map.jpg";
-import puneBook from "../../assets/home/pune-book.jpg";
+import { listProducts } from "../../api/shop";
+
+const FEATURED_SKUS = ["METAL001", "PUB001", "PUB002"];
+
+function formatPrice(cents) {
+  return `₹${(cents / 100).toLocaleString("en-IN")}`;
+}
 
 export default function WarsaaTeaser() {
-  const products = [
-    {
-      name: "Handcrafted Copper Carafe",
-      category: "Tambat Metalware",
-      price: "₹1,850",
-      description: "Directly beaten and shaped by Pune's traditional coppersmiths using centuries-old techniques.",
-      image: copperCarafe
-    },
-    {
-      name: "Pune Heritage Map",
-      category: "Publications",
-      price: "₹120",
-      description: "A meticulously illustrated foldout guide mapping historical Peshwa wadas, shrines, and old lanes.",
-      image: heritageMap
-    },
-    {
-      name: '"Pune, Queen of the Deccan"',
-      category: "Books",
-      price: "₹650",
-      description: "The definitive historical compilation detailing Pune's urban growth, climate, and architectural legacy.",
-      image: puneBook
-    }
-  ];
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    listProducts()
+      .then((data) => {
+        if (cancelled || !Array.isArray(data)) return;
+        const featured = FEATURED_SKUS.map((sku) =>
+          data.find((p) => p.sku === sku),
+        ).filter(Boolean);
+        setProducts(featured.length > 0 ? featured : data.slice(0, 3));
+      })
+      .catch(() => setProducts([]));
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <section id="warsaa" className="bg-heritage-cream-light py-20 sm:py-28 border-y border-heritage-border/40">
@@ -87,12 +88,12 @@ export default function WarsaaTeaser() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {products.map((prod) => (
             <div
-              key={prod.name}
+              key={prod.id}
               className="group p-5 rounded border border-heritage-border/40 bg-heritage-cream hover:bg-heritage-cream-dark/45 transition-all duration-300 text-left flex flex-col"
             >
               <div className="w-full h-44 overflow-hidden rounded border border-heritage-border/30 bg-heritage-cream-light mb-4 shrink-0">
                 <img
-                  src={prod.image}
+                  src={prod.image_url}
                   alt={prod.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
@@ -107,19 +108,22 @@ export default function WarsaaTeaser() {
                   </h4>
                 </div>
                 <span className="font-mono font-bold text-heritage-espresso text-base shrink-0 mt-0.5">
-                  {prod.price}
+                  {formatPrice(prod.price_cents)}
                 </span>
               </div>
               <p className="text-xs text-heritage-charcoal/80 leading-relaxed mt-2.5 flex-grow">
                 {prod.description}
               </p>
-              
-              <button className="mt-6 w-full py-2 bg-heritage-espresso text-heritage-cream text-xs font-medium rounded hover:bg-heritage-espresso/90 transition-colors flex items-center justify-center gap-1">
+
+              <Link
+                to={`/product/${prod.id}`}
+                className="mt-6 w-full py-2 bg-heritage-espresso text-heritage-cream text-xs font-medium rounded hover:bg-heritage-espresso/90 transition-colors flex items-center justify-center gap-1"
+              >
                 <span>View Details</span>
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
                 </svg>
-              </button>
+              </Link>
             </div>
           ))}
         </div>

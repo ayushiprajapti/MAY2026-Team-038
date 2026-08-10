@@ -1,106 +1,77 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import HeritageModal from "./HeritageModal";
-
-import charminarImg from "../../assets/heritage/charminar.jpg";
-import golcondaImg from "../../assets/heritage/golconda.jpg";
-import warangalImg from "../../assets/heritage/warangal.jpg";
-
-const initialSubmissions = [
-  {
-    id: 1,
-    site: "Charminar",
-    category: "Mosque",
-    heritageType: "Tangible",
-    era: "16th Century",
-    address: "Charminar Road, Ghansi Bazaar",
-    city: "Hyderabad",
-    state: "Telangana",
-    pincode: "500002",
-    mapsLink: "",
-    description:
-      "A monumental mosque and landmark built to commemorate the founding of Hyderabad, with four grand arches facing the cardinal directions.",
-    significance: "One of the most recognisable examples of Qutb Shahi architecture in India.",
-    condition: "Good",
-    contactName: "Volunteer 101",
-    contactEmail: "volunteer101@example.com",
-    contactPhone: "+91 90000 00101",
-    dateSubmitted: "Today",
-    image: charminarImg,
-    status: "Pending Review",
-  },
-  {
-    id: 2,
-    site: "Golconda Fort",
-    category: "Fort",
-    heritageType: "Tangible",
-    era: "16th Century",
-    address: "Ibrahim Bagh Road, Near Banjara Hills",
-    city: "Hyderabad",
-    state: "Telangana",
-    pincode: "500008",
-    mapsLink: "",
-    description:
-      "A fortified citadel known for its acoustic architecture, sprawling ramparts and the ruins of royal apartments.",
-    significance: "A major Qutb Shahi dynasty stronghold and a well-known example of military architecture.",
-    condition: "Needs Restoration",
-    contactName: "Volunteer 204",
-    contactEmail: "volunteer204@example.com",
-    contactPhone: "+91 90000 00204",
-    dateSubmitted: "Today",
-    image: golcondaImg,
-    status: "Pending Review",
-  },
-  {
-    id: 3,
-    site: "Warangal Fort",
-    category: "Fort",
-    heritageType: "Tangible",
-    era: "13th Century",
-    address: "Fort Road",
-    city: "Warangal",
-    state: "Telangana",
-    pincode: "506002",
-    mapsLink: "",
-    description:
-      "A Kakatiya-dynasty fort recognised for its carved stone gateways (Kirti Toranas) and remnants of its outer fortifications.",
-    significance: "A key surviving monument of Kakatiya rule and Deccan military architecture.",
-    condition: "Ruins",
-    contactName: "Volunteer 315",
-    contactEmail: "volunteer315@example.com",
-    contactPhone: "+91 90000 00315",
-    dateSubmitted: "Today",
-    image: warangalImg,
-    status: "Pending Review",
-  },
-];
+import { listPending, approve, reject } from "../../api/heritage";
+import { ApiError } from "../../api/client";
 
 const ITEMS_PER_PAGE = 2;
 
+const formatDate = (isoString) => {
+  if (!isoString) return "—";
+  return new Date(isoString).toLocaleDateString("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+};
+
 const statusBadge = (status) => {
   const map = {
-    "Pending Review": "bg-amber-50 text-amber-700 border-amber-200",
+    pending_review: "bg-amber-50 text-amber-700 border-amber-200",
+    approved: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    rejected: "bg-red-50 text-red-700 border-red-200",
   };
   return map[status] || "bg-heritage-cream-dark/60 text-heritage-charcoal/70 border-heritage-border/50";
 };
 
 function AdminReview() {
-  const [submissions, setSubmissions] = useState(initialSubmissions);
-  const [approvedToday, setApprovedToday] = useState(12);
-  const [rejectedToday, setRejectedToday] = useState(2);
+  const [submissions, setSubmissions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [approvedToday, setApprovedToday] = useState(0);
+  const [rejectedToday, setRejectedToday] = useState(0);
   const [search, setSearch] = useState("");
   const [selectedSubmission, setSelectedSubmission] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const handleApprove = (id) => {
-    setSubmissions((prev) => prev.filter((submission) => submission.id !== id));
-    setApprovedToday((n) => n + 1);
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    listPending({ pageSize: 100 })
+      .then((data) => {
+        if (!cancelled) setSubmissions(data.items);
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err instanceof ApiError ? err.detail : "Something went wrong, please try again.");
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const handleApprove = async (id) => {
+    try {
+      await approve(id);
+      setSubmissions((prev) => prev.filter((submission) => submission.id !== id));
+      setApprovedToday((n) => n + 1);
+    } catch (err) {
+      setError(err instanceof ApiError ? err.detail : "Something went wrong, please try again.");
+    }
   };
 
   const handleReject = (id, site) => {
     if (!window.confirm(`Reject the submission for "${site}"? This cannot be undone.`)) return false;
-    setSubmissions((prev) => prev.filter((submission) => submission.id !== id));
-    setRejectedToday((n) => n + 1);
+    reject(id)
+      .then(() => {
+        setSubmissions((prev) => prev.filter((submission) => submission.id !== id));
+        setRejectedToday((n) => n + 1);
+      })
+      .catch((err) => {
+        setError(err instanceof ApiError ? err.detail : "Something went wrong, please try again.");
+      });
     return true;
   };
 
@@ -111,7 +82,7 @@ function AdminReview() {
   const filteredSubmissions = useMemo(
     () =>
       submissions.filter((submission) =>
-        submission.site.toLowerCase().includes(search.toLowerCase())
+        submission.name.toLowerCase().includes(search.toLowerCase())
       ),
     [submissions, search]
   );
@@ -145,6 +116,15 @@ function AdminReview() {
           </p>
         </div>
       </header>
+
+      {loading && (
+        <div className="mb-6 text-sm font-sans text-heritage-charcoal/60">Loading submissions…</div>
+      )}
+      {error && (
+        <div className="mb-6 p-3 bg-red-50 border border-red-200 text-red-800 text-xs rounded font-sans">
+          {error}
+        </div>
+      )}
 
       {/* Stat Cards */}
       <section className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8 text-left">
@@ -222,7 +202,7 @@ function AdminReview() {
                   <thead>
                     <tr className="border-b border-heritage-border/40 text-heritage-charcoal/60 uppercase font-semibold tracking-wider text-[10px]">
                       <th className="py-2.5 px-3">Site</th>
-                      <th className="py-2.5 px-3">Submitted By</th>
+                      <th className="py-2.5 px-3">Submitted By (ID)</th>
                       <th className="py-2.5 px-3">Category</th>
                       <th className="py-2.5 px-3">Submitted</th>
                       <th className="py-2.5 px-3">Status</th>
@@ -244,25 +224,18 @@ function AdminReview() {
                           <td className="py-3 px-3">
                             <div className="flex items-center gap-3">
                               <img
-                                src={submission.image}
-                                alt={submission.site}
+                                src={submission.image_url}
+                                alt={submission.name}
                                 className="w-12 h-12 rounded-lg object-cover border border-heritage-border/60 shrink-0"
                               />
                               <div>
-                                <p className="font-semibold text-sm">{submission.site}</p>
-                                <p className="text-[10px] text-heritage-charcoal/60 flex items-center gap-1 mt-0.5">
-                                  <svg className="w-3 h-3 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                  </svg>
-                                  {submission.city}, {submission.state}
-                                </p>
+                                <p className="font-semibold text-sm">{submission.name}</p>
                               </div>
                             </div>
                           </td>
-                          <td className="py-3 px-3 text-heritage-charcoal/80">{submission.contactName}</td>
+                          <td className="py-3 px-3 text-heritage-charcoal/80">{submission.submitted_by ? submission.submitted_by : "—"}</td>
                           <td className="py-3 px-3 text-heritage-charcoal/80">{submission.category}</td>
-                          <td className="py-3 px-3 text-heritage-charcoal/60">{submission.dateSubmitted}</td>
+                          <td className="py-3 px-3 text-heritage-charcoal/60">{formatDate(submission.created_at)}</td>
                           <td className="py-3 px-3">
                             <span className={`inline-block px-2 py-0.5 rounded-full border text-[9px] font-bold uppercase tracking-wider font-mono ${statusBadge(submission.status)}`}>
                               {submission.status}
@@ -272,7 +245,7 @@ function AdminReview() {
                             <div className="flex items-center justify-center gap-2">
                               <button
                                 onClick={() => handleApprove(submission.id)}
-                                aria-label={`Approve submission for ${submission.site}`}
+                                aria-label={`Approve submission for ${submission.name}`}
                                 title="Approve"
                                 className="p-1.5 border border-heritage-border/60 text-heritage-charcoal hover:text-emerald-700 hover:bg-emerald-50 hover:border-emerald-200 rounded-md transition-all cursor-pointer shadow-sm active:scale-90"
                               >
@@ -281,8 +254,8 @@ function AdminReview() {
                                 </svg>
                               </button>
                               <button
-                                onClick={() => handleReject(submission.id, submission.site)}
-                                aria-label={`Reject submission for ${submission.site}`}
+                                onClick={() => handleReject(submission.id, submission.name)}
+                                aria-label={`Reject submission for ${submission.name}`}
                                 title="Reject"
                                 className="p-1.5 border border-heritage-border/60 text-heritage-charcoal hover:bg-red-50 hover:text-red-700 hover:border-red-200 rounded-md transition-all cursor-pointer shadow-sm active:scale-90"
                               >
@@ -292,7 +265,7 @@ function AdminReview() {
                               </button>
                               <button
                                 onClick={() => handleView(submission)}
-                                aria-label={`View details for ${submission.site} submission`}
+                                aria-label={`View details for ${submission.name} submission`}
                                 title="View Details"
                                 className="p-1.5 border border-heritage-border/60 text-heritage-charcoal hover:text-heritage-red hover:bg-heritage-cream rounded-md transition-all cursor-pointer shadow-sm active:scale-90"
                               >

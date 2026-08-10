@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+
+.venv/
+venv/
+
+.env
+
+*.log
+
+.pytest_cache/
+
+data_sourcing/raw/
+static/
