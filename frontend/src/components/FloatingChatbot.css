@@ -137,6 +137,29 @@
   border-bottom-left-radius: 4px;
 }
 
+.floating-chat-error {
+  padding: 0.6rem 1rem;
+  font-size: 0.8rem;
+  color: #8a4527;
+  background-color: #fbe9db;
+  border-top: 1px solid rgba(214, 159, 76, 0.2);
+}
+
+.floating-chat-login-prompt {
+  padding: 0.85rem 1rem;
+  font-size: 0.85rem;
+  text-align: center;
+  color: var(--color-heritage-charcoal, #2b2118);
+  border-top: 1px solid rgba(214, 159, 76, 0.2);
+  background-color: #fff;
+}
+
+.floating-chat-login-prompt a {
+  color: var(--color-heritage-ochre, #d69f4c);
+  font-weight: 600;
+  text-decoration: underline;
+}
+
 .floating-chat-input-area {
   display: flex;
   padding: 1rem;

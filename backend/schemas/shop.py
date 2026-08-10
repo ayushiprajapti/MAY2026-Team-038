@@ -16,6 +16,13 @@ class ProductResponse(BaseModel):
     stock_quantity: int
     image_url: Optional[str] = None
     is_active: bool
+    rating: Optional[float] = None
+    reviews: Optional[int] = None
+    story: Optional[str] = None
+    material: Optional[str] = None
+    origin: Optional[str] = None
+    dimensions: Optional[str] = None
+    care: Optional[str] = None
 
 
 class CreateProductRequest(BaseModel):
@@ -26,6 +33,13 @@ class CreateProductRequest(BaseModel):
     price_cents: int = Field(..., ge=0)
     stock_quantity: int = Field(..., ge=0)
     image_url: Optional[str] = None
+    rating: Optional[float] = None
+    reviews: Optional[int] = None
+    story: Optional[str] = None
+    material: Optional[str] = None
+    origin: Optional[str] = None
+    dimensions: Optional[str] = None
+    care: Optional[str] = None
 
 
 class UpdateProductRequest(BaseModel):
@@ -37,6 +51,13 @@ class UpdateProductRequest(BaseModel):
     stock_quantity: Optional[int] = Field(default=None, ge=0)
     image_url: Optional[str] = None
     is_active: Optional[bool] = None
+    rating: Optional[float] = None
+    reviews: Optional[int] = None
+    story: Optional[str] = None
+    material: Optional[str] = None
+    origin: Optional[str] = None
+    dimensions: Optional[str] = None
+    care: Optional[str] = None
 
 
 # ---------- Orders ----------

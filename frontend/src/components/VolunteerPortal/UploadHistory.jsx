@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-
-const API_BASE_URL = "http://127.0.0.1:8000";
+import { listMySubmissions } from "../../api/volunteerHeritage";
+import { ApiError } from "../../api/client";
 
 export default function UploadHistory() {
   const [statusFilter, setStatusFilter] = useState("All");
@@ -25,43 +25,15 @@ export default function UploadHistory() {
 
   useEffect(() => {
     const fetchUploads = async () => {
-      const accessToken = localStorage.getItem("intach_token");
-
-      if (!accessToken) {
-        setError("You are not logged in. Please log in again.");
-        setLoading(false);
-        return;
-      }
-
       try {
-        const response = await fetch(
-          `${API_BASE_URL}/volunteer/heritage-submissions`,
-          {
-            method: "GET",
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          if (response.status === 401) {
-            localStorage.removeItem("intach_token");
-            localStorage.removeItem("intach_user");
-            throw new Error("Your session has expired. Please log in again.");
-          }
-
-          throw new Error(
-            data?.detail || "Failed to load your heritage submissions."
-          );
-        }
-
+        const data = await listMySubmissions();
         setUploads(Array.isArray(data) ? data : []);
       } catch (err) {
-        setError(err.message || "Failed to load your submissions.");
+        setError(
+          err instanceof ApiError
+            ? err.detail
+            : "Failed to load your submissions."
+        );
       } finally {
         setLoading(false);
       }

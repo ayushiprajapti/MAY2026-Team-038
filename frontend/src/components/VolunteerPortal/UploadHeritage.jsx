@@ -1,6 +1,6 @@
 import { useState } from "react";
-
-const API_BASE_URL = "http://127.0.0.1:8000";
+import { createSubmission, uploadSubmissionImage } from "../../api/volunteerHeritage";
+import { ApiError } from "../../api/client";
 
 function extractCoordinates(mapsLink) {
   if (!mapsLink) {
@@ -72,13 +72,6 @@ export default function UploadHeritage() {
     setError("");
     setSuccess("");
 
-    const accessToken = localStorage.getItem("intach_token");
-
-    if (!accessToken) {
-      setError("You are not logged in. Please log in again.");
-      return;
-    }
-
     const { latitude, longitude } = extractCoordinates(formData.mapsLink);
 
     const fullAddress = [
@@ -96,34 +89,7 @@ export default function UploadHeritage() {
       let imageUrl = null;
 
       if (selectedFiles.length > 0) {
-        const imageForm = new FormData();
-        imageForm.append("file", selectedFiles[0]);
-
-        const uploadResponse = await fetch(
-          `${API_BASE_URL}/volunteer/heritage-submissions/upload-image`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-            body: imageForm,
-          }
-        );
-
-        const uploadData = await uploadResponse.json();
-
-        if (!uploadResponse.ok) {
-          if (uploadResponse.status === 401) {
-            localStorage.removeItem("intach_token");
-            localStorage.removeItem("intach_user");
-            throw new Error("Your session has expired. Please log in again.");
-          }
-
-          throw new Error(
-            uploadData?.detail || "Failed to upload the image."
-          );
-        }
-
+        const uploadData = await uploadSubmissionImage(selectedFiles[0]);
         imageUrl = uploadData.image_url;
       }
 
@@ -139,31 +105,7 @@ export default function UploadHeritage() {
         longitude,
       };
 
-      const response = await fetch(
-        `${API_BASE_URL}/volunteer/heritage-submissions`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-          body: JSON.stringify(payload),
-        }
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          localStorage.removeItem("intach_token");
-          localStorage.removeItem("intach_user");
-          throw new Error("Your session has expired. Please log in again.");
-        }
-
-        throw new Error(
-          data?.detail || "Failed to submit the heritage site."
-        );
-      }
+      const data = await createSubmission(payload);
 
       setSuccess(
         `Heritage submission "${data.name}" was successfully sent for review.`
@@ -190,7 +132,11 @@ export default function UploadHeritage() {
 
       setSelectedFiles([]);
     } catch (err) {
-      setError(err.message || "Something went wrong while submitting.");
+      setError(
+        err instanceof ApiError
+          ? err.detail
+          : "Something went wrong while submitting."
+      );
     } finally {
       setLoading(false);
     }

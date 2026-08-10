@@ -25,25 +25,7 @@ export function clearAuth() {
   localStorage.removeItem(USER_KEY);
 }
 
-export async function apiFetch(path, options = {}) {
-  const token = getToken();
-  const headers = { ...(options.headers || {}) };
-
-  let body = options.body;
-  if (body !== undefined && body !== null) {
-    headers["Content-Type"] = "application/json";
-    body = JSON.stringify(body);
-  }
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
-
-  const response = await fetch(`${API_BASE_URL}${path}`, {
-    ...options,
-    headers,
-    body,
-  });
-
+async function handleResponse(response) {
   if (response.status === 401) {
     clearAuth();
     if (window.location.pathname !== "/login") {
@@ -77,4 +59,46 @@ export async function apiFetch(path, options = {}) {
 
   const text = await response.text();
   return text ? JSON.parse(text) : null;
+}
+
+export async function apiFetch(path, options = {}) {
+  const token = getToken();
+  const headers = { ...(options.headers || {}) };
+
+  let body = options.body;
+  if (body !== undefined && body !== null) {
+    headers["Content-Type"] = "application/json";
+    body = JSON.stringify(body);
+  }
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    ...options,
+    headers,
+    body,
+  });
+
+  return handleResponse(response);
+}
+
+// For multipart/form-data uploads - the browser sets the Content-Type
+// boundary itself, so the body must not be JSON.stringify'd like apiFetch does.
+export async function apiFetchForm(path, formData, options = {}) {
+  const token = getToken();
+  const headers = { ...(options.headers || {}) };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(`${API_BASE_URL}${path}`, {
+    ...options,
+    method: options.method || "POST",
+    headers,
+    body: formData,
+  });
+
+  return handleResponse(response);
 }

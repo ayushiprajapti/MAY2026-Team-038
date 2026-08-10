@@ -34,7 +34,7 @@ export default function Register() {
     setIsLoading(true);
 
     try {
-      await signup(fullName, email, password);
+      await signup(fullName, email, password, phone);
       setSuccess("Account created successfully! Redirecting to login...");
       setTimeout(() => navigate("/login"), 1500);
     } catch (err) {

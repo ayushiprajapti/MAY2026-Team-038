@@ -1,7 +1,51 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import eventIllustration from "../../assets/volunteer-illustration.png";
+import { listMySubmissions } from "../../api/volunteerHeritage";
+
+const formatStatus = (status) => {
+  switch (status?.toLowerCase()) {
+    case "pending_review":
+      return "Pending";
+    case "approved":
+      return "Approved";
+    case "rejected":
+      return "Rejected";
+    default:
+      return status || "Unknown";
+  }
+};
+
+const formatDate = (dateString) => {
+  if (!dateString) return "—";
+  const date = new Date(dateString);
+  if (Number.isNaN(date.getTime())) return dateString;
+  return date.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
 
 export default function VolunteerPortal() {
+  const [submissions, setSubmissions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchSubmissions = async () => {
+      try {
+        const data = await listMySubmissions();
+        setSubmissions(Array.isArray(data) ? data : []);
+      } catch {
+        setSubmissions([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSubmissions();
+  }, []);
+
   const getStatusBadge = (status) => {
     switch (status) {
       case "Approved":
@@ -57,59 +101,49 @@ export default function VolunteerPortal() {
     },
   ];
 
+  const pendingCount = submissions.filter(
+    (s) => formatStatus(s.status) === "Pending",
+  ).length;
+  const approvedCount = submissions.filter(
+    (s) => formatStatus(s.status) === "Approved",
+  ).length;
+  const rejectedCount = submissions.filter(
+    (s) => formatStatus(s.status) === "Rejected",
+  ).length;
+
+  const pad = (n) => String(n).padStart(2, "0");
+
   const stats = [
     {
       title: "Pending",
-      value: "04",
+      value: pad(pendingCount),
       color: "#c28230",
     },
     {
       title: "Approved",
-      value: "12",
+      value: pad(approvedCount),
       color: "#256645",
     },
     {
       title: "Rejected",
-      value: "02",
+      value: pad(rejectedCount),
       color: "#9c2d19",
     },
     {
       title: "Total Uploads",
-      value: "18",
+      value: pad(submissions.length),
       color: "#1a110b",
     },
   ];
 
-  const recentUploads = [
-    {
-      site: "Shaniwar Wada",
-      category: "built",
-      construction_period: "1732 AD (Peshwa Era)",
-      date: "16 Jul 2026",
-      status: "Pending",
-    },
-    {
-      site: "Sinhagad Fort",
-      category: "built",
-      construction_period: "13th Century",
-      date: "12 Jul 2026",
-      status: "Approved",
-    },
-    {
-      site: "Pataleshwar Cave Temple",
-      category: "built",
-      construction_period: "8th Century AD",
-      date: "09 Jul 2026",
-      status: "Rejected",
-    },
-    {
-      site: "Aga Khan Palace",
-      category: "built",
-      construction_period: "1892 AD",
-      date: "03 Jul 2026",
-      status: "Approved",
-    },
-  ];
+  const recentUploads = submissions.slice(0, 4).map((s) => ({
+    id: s.id,
+    site: s.name || "Unnamed Site",
+    category: s.category,
+    construction_period: s.construction_period || "—",
+    date: formatDate(s.created_at),
+    status: formatStatus(s.status),
+  }));
 
   return (
     <main className="heritage-page w-full min-h-screen flex flex-col">
@@ -232,9 +266,22 @@ export default function VolunteerPortal() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-heritage-border/20 text-heritage-espresso font-medium">
-                {recentUploads.map((item) => (
+                {loading ? (
+                  <tr>
+                    <td colSpan="5" className="py-8 text-center text-heritage-charcoal/60 font-semibold">
+                      Loading your submissions...
+                    </td>
+                  </tr>
+                ) : recentUploads.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" className="py-8 text-center text-heritage-charcoal/60 font-semibold">
+                      You have not submitted any heritage sites yet.
+                    </td>
+                  </tr>
+                ) : (
+                recentUploads.map((item) => (
                   <tr
-                    key={item.site}
+                    key={item.id}
                     className="hover:bg-heritage-cream/10 transition-colors"
                   >
                     <td className="py-3.5 px-4 font-semibold text-heritage-espresso">
@@ -265,7 +312,8 @@ export default function VolunteerPortal() {
                       </span>
                     </td>
                   </tr>
-                ))}
+                ))
+                )}
               </tbody>
             </table>
           </div>

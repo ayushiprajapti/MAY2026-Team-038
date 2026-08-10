@@ -25,3 +25,25 @@ export async function remove(id) {
 export async function listRegistrants(id) {
   return apiFetch(`/events/admin/${id}/registrations`);
 }
+
+// ── Public / signed-in user endpoints ─────────────────────────────────────
+
+export async function listUpcoming(eventType) {
+  const query = eventType ? `?type=${encodeURIComponent(eventType)}` : "";
+  return apiFetch(`/events/${query}`);
+}
+
+export async function registerForEvent(id, payload) {
+  return apiFetch(`/events/${id}/register`, {
+    method: "POST",
+    body: payload,
+  });
+}
+
+export async function revokeRegistration(id) {
+  return apiFetch(`/events/${id}/register`, { method: "DELETE" });
+}
+
+export async function myHistory() {
+  return apiFetch("/events/my-history");
+}

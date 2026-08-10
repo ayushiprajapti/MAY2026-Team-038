@@ -27,7 +27,14 @@ def list_products(conn: connection) -> list[dict]:
                 price_cents,
                 stock_quantity,
                 image_url,
-                is_active
+                is_active,
+                rating,
+                reviews,
+                story,
+                material,
+                origin,
+                dimensions,
+                care
             FROM products
             WHERE is_active = TRUE
             ORDER BY created_at DESC
@@ -49,7 +56,14 @@ def get_product(conn: connection, product_id: str) -> dict:
                 price_cents,
                 stock_quantity,
                 image_url,
-                is_active
+                is_active,
+                rating,
+                reviews,
+                story,
+                material,
+                origin,
+                dimensions,
+                care
             FROM products
             WHERE id = %s
             """,
@@ -88,7 +102,14 @@ def search_products(conn: connection, query: str) -> list[dict]:
                 price_cents,
                 stock_quantity,
                 image_url,
-                is_active
+                is_active,
+                rating,
+                reviews,
+                story,
+                material,
+                origin,
+                dimensions,
+                care
             FROM products
             WHERE
                 is_active = TRUE
@@ -140,13 +161,20 @@ def create_product(
                 stock_quantity,
                 image_url,
                 is_active,
+                rating,
+                reviews,
+                story,
+                material,
+                origin,
+                dimensions,
+                care,
                 created_by,
                 created_at,
                 updated_at
             )
             VALUES
             (
-                %s,%s,%s,%s,%s,%s,%s,%s,TRUE,%s,now(),now()
+                %s,%s,%s,%s,%s,%s,%s,%s,TRUE,%s,%s,%s,%s,%s,%s,%s,%s,now(),now()
             )
             RETURNING
                 id,
@@ -157,7 +185,14 @@ def create_product(
                 price_cents,
                 stock_quantity,
                 image_url,
-                is_active
+                is_active,
+                rating,
+                reviews,
+                story,
+                material,
+                origin,
+                dimensions,
+                care
             """,
             (
                 str(uuid4()),
@@ -168,6 +203,13 @@ def create_product(
                 data.price_cents,
                 data.stock_quantity,
                 data.image_url,
+                data.rating,
+                data.reviews,
+                data.story,
+                data.material,
+                data.origin,
+                data.dimensions,
+                data.care,
                 created_by,
             ),
         )
@@ -195,6 +237,13 @@ def update_product(
                 stock_quantity = COALESCE(%s, stock_quantity),
                 image_url = COALESCE(%s, image_url),
                 is_active = COALESCE(%s, is_active),
+                rating = COALESCE(%s, rating),
+                reviews = COALESCE(%s, reviews),
+                story = COALESCE(%s, story),
+                material = COALESCE(%s, material),
+                origin = COALESCE(%s, origin),
+                dimensions = COALESCE(%s, dimensions),
+                care = COALESCE(%s, care),
                 updated_at = now()
             WHERE id = %s
             RETURNING
@@ -206,7 +255,14 @@ def update_product(
                 price_cents,
                 stock_quantity,
                 image_url,
-                is_active
+                is_active,
+                rating,
+                reviews,
+                story,
+                material,
+                origin,
+                dimensions,
+                care
             """,
             (
                 data.sku,
@@ -217,6 +273,13 @@ def update_product(
                 data.stock_quantity,
                 data.image_url,
                 data.is_active,
+                data.rating,
+                data.reviews,
+                data.story,
+                data.material,
+                data.origin,
+                data.dimensions,
+                data.care,
                 product_id,
             ),
         )

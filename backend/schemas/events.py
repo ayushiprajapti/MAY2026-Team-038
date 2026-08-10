@@ -2,7 +2,7 @@ from datetime import date, datetime, time
 from typing import Literal
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, EmailStr, Field
 
 
 # Valid event_type values must match the DB enum exactly
@@ -120,3 +120,85 @@ class EventRegistrantsResponse(BaseModel):
     # Attendee list
     total_registrations: int
     registrants: list[RegistrantResponse]
+
+
+# ── User-facing schemas ───────────────────────────────────────────────────────
+
+
+class PublicEventResponse(BaseModel):
+    """One card in the public 'Upcoming Events' list / calendar view.
+
+    Returned by GET /events/ — no auth required.
+    """
+
+    id: UUID
+    title: str
+    description: str | None
+    event_type: str
+    site_id: UUID | None
+    venue: str | None
+    event_date: date
+    start_time: time
+    end_time: time | None
+    participant_limit: int
+    registration_deadline: datetime | None
+    status: str
+
+    # Derived: participant_limit − confirmed/waitlisted registrations
+    seats_left: int
+
+
+class PublicEventsListResponse(BaseModel):
+    """Top-level response for GET /events/."""
+
+    events: list[PublicEventResponse]
+
+
+class EventRegistrationResponse(BaseModel):
+    """Confirmation returned after a signed-in user registers for an event."""
+
+    registration_id: UUID
+    event_id: UUID
+    user_id: UUID
+    registration_status: Literal["confirmed", "waitlisted"]
+    registered_at: datetime
+    attendee_count: int
+
+
+class EventRegistrationRequest(BaseModel):
+    """Details submitted from the public event-registration form."""
+
+    first_name: str = Field(min_length=1, max_length=100)
+    last_name: str = Field(min_length=1, max_length=100)
+    email: EmailStr
+    phone: str = Field(min_length=7, max_length=30)
+    attendee_count: int = Field(ge=1, le=20)
+    note: str | None = Field(default=None, max_length=1000)
+    receive_event_updates: bool = False
+
+
+class UserRegistrationResponse(BaseModel):
+    """One row in 'Your event history' (GET /events/my-history).
+
+    Shows each event the authenticated user has ever registered for,
+    together with the current registration status.
+    """
+
+    registration_id: UUID
+    registration_status: str   # confirmed | waitlisted | cancelled
+    history_status: Literal["registered", "revoked", "attended", "waitlisted"]
+    registered_at: datetime
+    attendee_count: int
+    first_name: str | None
+    last_name: str | None
+
+    # Event fields (denormalised for the frontend card)
+    event_id: UUID
+    title: str
+    description: str | None
+    event_type: str
+    venue: str | None
+    event_date: date
+    start_time: time
+    end_time: time | None
+    event_status: str           # draft | published | cancelled | completed
