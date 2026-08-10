@@ -155,6 +155,13 @@ CREATE TABLE event_registrations (
     event_id UUID,
     user_id UUID,
     status registration_status,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    attendee_count INT NOT NULL DEFAULT 1 CHECK (attendee_count > 0),
+    note TEXT,
+    receive_event_updates BOOLEAN NOT NULL DEFAULT FALSE,
     registered_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     payment_id UUID
 );
