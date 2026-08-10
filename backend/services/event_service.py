@@ -299,6 +299,7 @@ def list_event_registrants(conn: connection, event_id: str) -> dict:
     }
 
 
+@cached(ttl_seconds=60)
 def list_upcoming_events(
     conn: connection,
     event_type: str | None = None,
@@ -465,6 +466,7 @@ def register_for_event(
 
     # Keep the admin event dashboard's registration totals current.
     list_all_events.cache_clear()
+    list_upcoming_events.cache_clear()
     return registration
 
 
@@ -532,6 +534,7 @@ def revoke_event_registration(conn: connection, event_id: str, user_id: str) -> 
         conn.commit()
 
     list_all_events.cache_clear()
+    list_upcoming_events.cache_clear()
 
 
 def list_user_event_history(conn: connection, user_id: str) -> list[dict]:

@@ -1,6 +1,76 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { events, userEventHistory } from "../../data/events";
+import { listUpcoming, myHistory, revokeRegistration } from "../../api/events";
+import { getToken } from "../../api/client";
+
+const CATEGORY_LABELS = {
+  heritage_walk: "Heritage Walk",
+  workshop: "Workshop",
+  quiz: "Quiz",
+  competition: "Competition",
+  cultural_event: "Cultural Event",
+};
+
+const CATEGORY_COLORS = {
+  heritage_walk: "ochre",
+  workshop: "terracotta",
+  quiz: "olive",
+  competition: "ochre",
+  cultural_event: "terracotta",
+};
+
+const MONTH_ABBR = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+
+function formatTimeRange(startTime, endTime) {
+  const toLabel = (value) => {
+    if (!value) return "";
+    const [h, m] = value.split(":").map(Number);
+    const period = h >= 12 ? "PM" : "AM";
+    const hour12 = h % 12 === 0 ? 12 : h % 12;
+    return `${hour12}:${String(m).padStart(2, "0")} ${period}`;
+  };
+  return endTime ? `${toLabel(startTime)} – ${toLabel(endTime)}` : toLabel(startTime);
+}
+
+function toCardEvent(event) {
+  const eventDate = new Date(`${event.event_date}T00:00:00`);
+  return {
+    id: event.id,
+    date: eventDate.getDate(),
+    month: MONTH_ABBR[eventDate.getMonth()],
+    monthIndex: eventDate.getMonth(),
+    year: eventDate.getFullYear(),
+    title: event.title,
+    category: CATEGORY_LABELS[event.event_type] || event.event_type,
+    color: CATEGORY_COLORS[event.event_type] || "ochre",
+    time: formatTimeRange(event.start_time, event.end_time),
+    place: event.venue || "Venue to be announced",
+    seats: event.seats_left > 0 ? `${event.seats_left} seats left` : "Fully booked",
+  };
+}
+
+function toHistoryEvent(registration) {
+  const eventDate = new Date(`${registration.event_date}T00:00:00`);
+  const statusLabel = {
+    attended: "Attended",
+    revoked: "Revoked",
+    waitlisted: "Waitlisted",
+    registered: "Registered",
+  }[registration.history_status] || "Registered";
+  return {
+    id: registration.registration_id,
+    eventId: registration.event_id,
+    date: eventDate.getDate(),
+    month: MONTH_ABBR[eventDate.getMonth()],
+    title: registration.title,
+    category: CATEGORY_LABELS[registration.event_type] || registration.event_type,
+    color: CATEGORY_COLORS[registration.event_type] || "ochre",
+    time: formatTimeRange(registration.start_time, registration.end_time),
+    place: registration.venue || "Venue to be announced",
+    status: statusLabel,
+    active: registration.registration_status !== "cancelled",
+  };
+}
 
 const Icon = ({ name, className = "" }) => {
   const paths = {
@@ -79,22 +149,62 @@ export default function EventCoordinator() {
   const navigate = useNavigate();
   const [view, setView] = useState("calendar");
   const [category, setCategory] = useState("All events");
-  const [calendarMonth, setCalendarMonth] = useState(6);
-  const [calendarYear, setCalendarYear] = useState(2026);
-  const [selectedDate, setSelectedDate] = useState(19);
-  const [registeredIds, setRegisteredIds] = useState(() => JSON.parse(localStorage.getItem("intach-registered-events") || "[]"));
+  const now = new Date();
+  const [calendarMonth, setCalendarMonth] = useState(now.getMonth());
+  const [calendarYear, setCalendarYear] = useState(now.getFullYear());
+  const [selectedDate, setSelectedDate] = useState(now.getDate());
+  const [events, setEvents] = useState([]);
+  const [history, setHistory] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const shownEvents = useMemo(() => category === "All events" ? events : events.filter((event) => event.category === category), [category]);
+  const loadHistory = async () => {
+    if (!getToken()) {
+      setHistory([]);
+      return;
+    }
+    const rows = await myHistory();
+    setHistory((rows || []).map(toHistoryEvent));
+  };
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        setLoading(true);
+        setError("");
+        const [upcoming] = await Promise.all([
+          listUpcoming().then((res) => (res?.events || []).map(toCardEvent)),
+          loadHistory(),
+        ]);
+        setEvents(upcoming);
+      } catch (err) {
+        setError(err.message || "Could not load events.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    load();
+  }, []);
+
+  const registeredEventIds = useMemo(
+    () => new Set(history.filter((item) => item.active && item.status !== "Revoked").map((item) => item.eventId)),
+    [history]
+  );
+
+  const shownEvents = useMemo(() => category === "All events" ? events : events.filter((event) => event.category === category), [category, events]);
   const calendarEvents = shownEvents.filter((event) => event.monthIndex === calendarMonth);
   const selectedEvents = calendarEvents.filter((event) => event.date === selectedDate);
   const categories = ["All events", ...new Set(events.map((event) => event.category))];
+
   const register = (event) => navigate("/events/register", { state: { event } });
-  const revoke = (event) => {
-    const nextIds = registeredIds.filter((id) => id !== event.id);
-    localStorage.setItem("intach-registered-events", JSON.stringify(nextIds));
-    const registrations = JSON.parse(localStorage.getItem("intach-event-registrations") || "[]");
-    localStorage.setItem("intach-event-registrations", JSON.stringify(registrations.filter((registration) => registration.eventId !== event.id)));
-    setRegisteredIds(nextIds);
+
+  const revoke = async (event) => {
+    try {
+      await revokeRegistration(event.id);
+      await loadHistory();
+    } catch (err) {
+      setError(err.message || "Could not revoke registration.");
+    }
   };
 
   const monthName = new Date(calendarYear, calendarMonth).toLocaleString("en-US", { month: "long" });
@@ -113,11 +223,13 @@ export default function EventCoordinator() {
         <div className="mx-auto max-w-7xl text-center">
           <p className="font-sans text-xs font-bold uppercase tracking-[0.25em] text-[#ad741d]">INTACH Pune Chapter</p>
           <h1 className="mt-3 font-serif text-4xl leading-tight text-[#3a2719] sm:text-5xl">Heritage happens when we gather.</h1>
-          <p className="mx-auto mt-4 max-w-2xl font-body text-base leading-7 text-[#6e5540] sm:text-lg">Discover walks, conversations and hands-on sessions that keep Pune’s living heritage close to its people.</p>
+          <p className="mx-auto mt-4 max-w-2xl font-body text-base leading-7 text-[#6e5540] sm:text-lg">Discover walks, conversations and hands-on sessions that keep Pune's living heritage close to its people.</p>
         </div>
       </section>
 
       <section className="mx-auto max-w-7xl px-4 pt-8 sm:px-6 lg:px-8">
+        {error && <p className="mb-4 rounded-lg border border-[#e3b48c] bg-[#fbe9db] px-4 py-3 font-sans text-sm text-[#8a4527]">{error}</p>}
+
         <div className="flex flex-col gap-5 border-b border-[#dec9a3] pb-6 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="font-sans text-xs font-bold uppercase tracking-[0.2em] text-[#a2651b]">Plan your visit</p>
@@ -135,7 +247,9 @@ export default function EventCoordinator() {
           </div>
         </div>
 
-        {view === "calendar" ? (
+        {loading ? (
+          <p className="mt-8 font-sans text-sm text-[#755d48]">Loading events…</p>
+        ) : view === "calendar" ? (
           <div className="mt-7 grid gap-6 xl:grid-cols-[minmax(0,1fr)_330px]">
             <section className="overflow-hidden rounded-2xl border border-[#dfcda8] bg-[#fffaf0] shadow-[0_10px_28px_rgba(96,69,30,0.08)]">
               <div className="flex items-center justify-between border-b border-[#eadcc2] px-5 py-4 sm:px-7"><button onClick={() => changeMonth(-1)} className="font-sans text-sm font-bold text-[#9c6719]" aria-label="Previous month">←</button><h3 className="font-serif text-2xl text-[#422b1b]">{monthName} {calendarYear}</h3><button onClick={() => changeMonth(1)} className="font-sans text-sm font-bold text-[#9c6719]" aria-label="Next month">→</button></div>
@@ -145,19 +259,19 @@ export default function EventCoordinator() {
                 {days.map((day) => {
                   const dayEvents = calendarEvents.filter((event) => event.date === day);
                   const active = selectedDate === day;
-                  const today = calendarYear === 2026 && calendarMonth === 6 && day === 19;
+                  const today = calendarYear === now.getFullYear() && calendarMonth === now.getMonth() && day === now.getDate();
                   return <button key={day} onClick={() => setSelectedDate(day)} className={`min-h-[68px] border-b border-r border-[#f0e5d2] p-1 text-left transition hover:bg-[#fff6e8] sm:min-h-[94px] sm:p-2 ${active ? "bg-[#fcf0d8]" : ""}`}><span className={`flex h-6 w-6 items-center justify-center rounded-full font-sans text-xs ${today ? "bg-[#a96918] font-bold text-white" : "text-[#604833]"}`}>{day}</span>{dayEvents.map((event) => <span key={event.id} className={`mt-1 block truncate rounded px-1 py-0.5 font-sans text-[8px] font-bold sm:text-[10px] calendar-${event.color}`}>{event.title}</span>)}</button>;
                 })}
               </div>
             </section>
             <aside className="rounded-2xl border border-[#dfcda8] bg-[#fffaf0] p-5 shadow-[0_10px_28px_rgba(96,69,30,0.08)] sm:p-6">
-              <p className="font-sans text-xs font-bold uppercase tracking-[0.18em] text-[#a2651b]">{calendarYear === 2026 && calendarMonth === 6 && selectedDate === 19 ? "Today · " : ""}{monthName} {selectedDate}</p>
+              <p className="font-sans text-xs font-bold uppercase tracking-[0.18em] text-[#a2651b]">{calendarYear === now.getFullYear() && calendarMonth === now.getMonth() && selectedDate === now.getDate() ? "Today · " : ""}{monthName} {selectedDate}</p>
               <h3 className="mt-1 font-serif text-2xl text-[#442d1d]">On this day</h3>
-              <div className="mt-5 space-y-4">{selectedEvents.length ? selectedEvents.map((event) => <EventCard key={event.id} event={event} compact onRegister={register} onRevoke={revoke} registered={registeredIds.includes(event.id)} />) : <p className="rounded-xl bg-[#faf1e1] p-4 font-body text-sm leading-6 text-[#795f47]">No matching events today. Pick another highlighted date, or browse the full list.</p>}</div>
+              <div className="mt-5 space-y-4">{selectedEvents.length ? selectedEvents.map((event) => <EventCard key={event.id} event={event} compact onRegister={register} onRevoke={revoke} registered={registeredEventIds.has(event.id)} />) : <p className="rounded-xl bg-[#faf1e1] p-4 font-body text-sm leading-6 text-[#795f47]">No matching events today. Pick another highlighted date, or browse the full list.</p>}</div>
             </aside>
           </div>
         ) : (
-          <section className="mt-7 space-y-4">{shownEvents.map((event) => <EventCard key={event.id} event={event} onRegister={register} onRevoke={revoke} registered={registeredIds.includes(event.id)} />)}</section>
+          <section className="mt-7 space-y-4">{shownEvents.length ? shownEvents.map((event) => <EventCard key={event.id} event={event} onRegister={register} onRevoke={revoke} registered={registeredEventIds.has(event.id)} />) : <p className="rounded-xl bg-[#faf1e1] p-4 font-body text-sm leading-6 text-[#795f47]">No upcoming events in this category.</p>}</section>
         )}
 
         <section className="mt-14 border-t border-[#dec9a3] pt-8">
@@ -167,9 +281,17 @@ export default function EventCoordinator() {
               <h2 className="mt-1 font-serif text-3xl text-[#442d1d]">Your event history</h2>
               <p className="mt-2 font-body text-[#755d48]">Events you attended or registered for in the past.</p>
             </div>
-            <span className="font-sans text-sm text-[#7d634b]">{userEventHistory.length} past events</span>
+            <span className="font-sans text-sm text-[#7d634b]">{history.length} past events</span>
           </div>
-          <div className="mt-6 space-y-3">{userEventHistory.map((event) => <HistoryCard key={event.id} event={event} />)}</div>
+          <div className="mt-6 space-y-3">
+            {!getToken() ? (
+              <p className="rounded-xl bg-[#faf1e1] p-4 font-body text-sm leading-6 text-[#795f47]">Log in to see your event history.</p>
+            ) : history.length ? (
+              history.map((event) => <HistoryCard key={event.id} event={event} />)
+            ) : (
+              <p className="rounded-xl bg-[#faf1e1] p-4 font-body text-sm leading-6 text-[#795f47]">You haven't registered for any events yet.</p>
+            )}
+          </div>
         </section>
       </section>
     </main>
