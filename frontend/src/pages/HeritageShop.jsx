@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { listProducts } from "../api/shop";
-import shopItems from "../data/shopItems";
 
 const priceRanges = [
   { id: "all", label: "All Prices", test: null },
@@ -20,13 +19,8 @@ export default function HeritageShop() {
   const [sortBy, setSortBy] = useState("featured");
   const [cartItems, setCartItems] = useState([]);
 
-  const [products, setProducts] = useState(() =>
-    shopItems.map((item) => ({
-      ...item,
-      shortDescription: item.shortDescription || item.description || "",
-    }))
-  );
-  const [loading, setLoading] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -47,22 +41,13 @@ export default function HeritageShop() {
 
         const data = await listProducts();
 
-        const formattedProducts = data.map((product) => {
-          const localItem = shopItems.find(
-            (item) => item.name.toLowerCase() === product.name.toLowerCase()
-          );
-
-          return {
-            ...localItem,
-            ...product,
-            price: product.price_cents / 100,
-            image: product.image_url || localItem?.image || "",
-            shortDescription:
-              product.description ||
-              localItem?.shortDescription ||
-              "Heritage product from the INTACH marketplace.",
-          };
-        });
+        const formattedProducts = data.map((product) => ({
+          ...product,
+          price: product.price_cents / 100,
+          image: product.image_url || "",
+          shortDescription:
+            product.description || "Heritage product from the INTACH marketplace.",
+        }));
 
         setProducts(formattedProducts);
       } catch (err) {

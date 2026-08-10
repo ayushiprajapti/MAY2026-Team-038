@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-
-const API_BASE_URL = "http://127.0.0.1:8000";
+import { getMe, updateMe } from "../../api/auth";
+import { ApiError } from "../../api/client";
 
 export default function VolunteerProfile() {
   const [profile, setProfile] = useState({
@@ -23,35 +23,8 @@ export default function VolunteerProfile() {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const accessToken = localStorage.getItem("intach_token");
-
-      if (!accessToken) {
-        setError("You are not logged in. Please log in again.");
-        setLoading(false);
-        return;
-      }
-
       try {
-        const response = await fetch(`${API_BASE_URL}/auth/me`, {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          if (response.status === 401) {
-            localStorage.removeItem("intach_token");
-            localStorage.removeItem("intach_user");
-          }
-
-          throw new Error(
-            data?.detail || "Failed to load your profile."
-          );
-        }
+        const data = await getMe();
 
         setProfile(data);
 
@@ -60,7 +33,9 @@ export default function VolunteerProfile() {
           phone: data.phone || "",
         });
       } catch (err) {
-        setError(err.message || "Failed to load your profile.");
+        setError(
+          err instanceof ApiError ? err.detail : "Failed to load your profile."
+        );
       } finally {
         setLoading(false);
       }
@@ -84,43 +59,15 @@ export default function VolunteerProfile() {
   const handleSave = async (event) => {
     event.preventDefault();
 
-    const accessToken = localStorage.getItem("intach_token");
-
-    if (!accessToken) {
-      setError("You are not logged in. Please log in again.");
-      return;
-    }
-
     setSaving(true);
     setError("");
     setSuccess("");
 
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/me`, {
-        method: "PATCH",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          full_name: form.full_name,
-          phone: form.phone || null,
-        }),
+      const data = await updateMe({
+        full_name: form.full_name,
+        phone: form.phone || null,
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        if (response.status === 401) {
-          localStorage.removeItem("intach_token");
-          localStorage.removeItem("intach_user");
-        }
-
-        throw new Error(
-          data?.detail || "Failed to update your profile."
-        );
-      }
 
       setProfile(data);
 
@@ -153,7 +100,9 @@ export default function VolunteerProfile() {
         }
       }
     } catch (err) {
-      setError(err.message || "Failed to update your profile.");
+      setError(
+        err instanceof ApiError ? err.detail : "Failed to update your profile."
+      );
     } finally {
       setSaving(false);
     }

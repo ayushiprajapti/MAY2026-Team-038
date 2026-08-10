@@ -12,10 +12,21 @@ export async function login(email, password) {
   return user;
 }
 
-export async function signup(fullName, email, password) {
+export async function signup(fullName, email, password, phone) {
   return apiFetch("/auth/signup", {
     method: "POST",
-    body: { full_name: fullName, email, password },
+    body: { full_name: fullName, email, password, phone: phone || null },
+  });
+}
+
+export async function getMe() {
+  return apiFetch("/auth/me");
+}
+
+export async function updateMe(payload) {
+  return apiFetch("/auth/me", {
+    method: "PATCH",
+    body: payload,
   });
 }
 

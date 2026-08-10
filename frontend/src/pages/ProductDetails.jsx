@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { getProduct } from "../api/shop";
-import shopItems from "../data/shopItems";
 
 function StarRating({ rating, reviews }) {
   return (
@@ -47,31 +46,19 @@ export default function ProductDetails() {
 
         const apiProduct = await getProduct(id);
 
-        const oldProduct = shopItems.find(
-          (item) =>
-            item.name === apiProduct.name ||
-            item.sku === apiProduct.sku
-        );
-
         setProduct({
-          ...oldProduct,
           ...apiProduct,
           price: apiProduct.price_cents / 100,
           image: apiProduct.image_url,
-          gallery: apiProduct.image_url
-            ? [apiProduct.image_url]
-            : oldProduct?.gallery || [],
-          shortDescription:
-            apiProduct.description ||
-            oldProduct?.shortDescription ||
-            "",
-          rating: oldProduct?.rating || 0,
-          reviews: oldProduct?.reviews || 0,
-          story: oldProduct?.story || apiProduct.description || "",
-          material: oldProduct?.material || "Not specified",
-          origin: oldProduct?.origin || "Not specified",
-          dimensions: oldProduct?.dimensions || "Not specified",
-          care: oldProduct?.care || "Not specified",
+          gallery: apiProduct.image_url ? [apiProduct.image_url] : [],
+          shortDescription: apiProduct.description || "",
+          rating: apiProduct.rating || 0,
+          reviews: apiProduct.reviews || 0,
+          story: apiProduct.story || apiProduct.description || "",
+          material: apiProduct.material || "Not specified",
+          origin: apiProduct.origin || "Not specified",
+          dimensions: apiProduct.dimensions || "Not specified",
+          care: apiProduct.care || "Not specified",
         });
       } catch (err) {
         console.error("Failed to load product:", err);

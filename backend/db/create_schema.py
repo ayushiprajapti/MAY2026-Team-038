@@ -178,6 +178,13 @@ CREATE TABLE products (
     stock_quantity INT,
     image_url TEXT,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    rating NUMERIC(2,1),
+    reviews INT,
+    story TEXT,
+    material TEXT,
+    origin TEXT,
+    dimensions TEXT,
+    care TEXT,
     created_by UUID,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
