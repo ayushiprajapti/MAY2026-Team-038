@@ -370,6 +370,506 @@
     "stock_quantity": null
   },
   {
+    "name": "Sai Baba",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 180000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62600c8d610ad.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/sai-baba",
+    "stock_quantity": null
+  },
+  {
+    "name": "Radha Krishna Swing",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 162000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6260147d9bf26.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/radha-krishna-swing",
+    "stock_quantity": null
+  },
+  {
+    "name": "Nandi",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 360000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6260ee81b2d26.jpeg",
+    "product_url": "https://mahatribes.com/all-wood-craft/nandi",
+    "stock_quantity": null
+  },
+  {
+    "name": "Radha Krishna",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 135000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-626007bed85ed.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/radha-krishna-2",
+    "stock_quantity": null
+  },
+  {
+    "name": "Budha",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 180000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6260f0c883c92.jpeg",
+    "product_url": "https://mahatribes.com/all-wood-craft/budha",
+    "stock_quantity": null
+  },
+  {
+    "name": "Ganesh",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 315000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6260f1b8c86f9.jpeg",
+    "product_url": "https://mahatribes.com/all-wood-craft/ganesh",
+    "stock_quantity": null
+  },
+  {
+    "name": "Gavalani Art",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 135000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6260f340c7158.jpeg",
+    "product_url": "https://mahatribes.com/all-wood-craft/gavalani-art",
+    "stock_quantity": null
+  },
+  {
+    "name": "Peacock",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 270000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6260f4dc75aa9.jpeg",
+    "product_url": "https://mahatribes.com/all-wood-craft/peacock-3",
+    "stock_quantity": null
+  },
+  {
+    "name": "Adivasi Art",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 180000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6261055145aff.jpeg",
+    "product_url": "https://mahatribes.com/all-wood-craft/adivasi-art",
+    "stock_quantity": null
+  },
+  {
+    "name": "2 Peacock Art",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 225000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-626100f7b0bd4.jpeg",
+    "product_url": "https://mahatribes.com/all-wood-craft/2-peacock-art",
+    "stock_quantity": null
+  },
+  {
+    "name": "Musician",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 18000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6261031e551fb.jpeg",
+    "product_url": "https://mahatribes.com/all-wood-craft/musician",
+    "stock_quantity": null
+  },
+  {
+    "name": "Alankar Art",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 72000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/item-6261064503e94.jpeg",
+    "product_url": "https://mahatribes.com/all-wood-craft/alankar-art",
+    "stock_quantity": null
+  },
+  {
+    "name": "Butterfly",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 225000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62876c20098d2.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/butterfly",
+    "stock_quantity": null
+  },
+  {
+    "name": "Garud",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 180000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62876d2d3325b.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/garud",
+    "stock_quantity": null
+  },
+  {
+    "name": "Fish",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 135000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62876e6d5dcce.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/fish",
+    "stock_quantity": null
+  },
+  {
+    "name": "Elephant",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 108000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62876f1a86096.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/elephant",
+    "stock_quantity": null
+  },
+  {
+    "name": "Sparrow",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 1170000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-628771ee8dfc7.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/sparrow",
+    "stock_quantity": null
+  },
+  {
+    "name": "Peacock",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 1170000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62877298771ac.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/peacock",
+    "stock_quantity": null
+  },
+  {
+    "name": "Tree Birds Statue",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 225000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-628774dd72a12.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/tree-birds-statue",
+    "stock_quantity": null
+  },
+  {
+    "name": "Peacock (2 Birds)",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 270000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-628776201c765.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/peacock-2-birds",
+    "stock_quantity": null
+  },
+  {
+    "name": "Tree",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 225000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6287772ebd4c3.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/tree",
+    "stock_quantity": null
+  },
+  {
+    "name": "Paper Art - Bird On Branches",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 270000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62877ea50d181.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/paper-art-bird-on-branches",
+    "stock_quantity": null
+  },
+  {
+    "name": "Paper Art - Elephant",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 180000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6287820b23c77.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/paper-art-elephant",
+    "stock_quantity": null
+  },
+  {
+    "name": "Radha Krishna",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 180000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6260017717352.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/radha-krishna",
+    "stock_quantity": null
+  },
+  {
+    "name": "Aeroplane",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 54000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/item-625573992056a.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/aeroplane-3",
+    "stock_quantity": null
+  },
+  {
+    "name": "Aeroplane Trianguler",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-625577bf66a0f.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/aeroplane-trianguler",
+    "stock_quantity": null
+  },
+  {
+    "name": "Cardbox",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62568905d9e5e.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/cardbox",
+    "stock_quantity": null
+  },
+  {
+    "name": "Mobile + Pen Holder",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 90000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62568a6d56132.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/mobile-pain-holder",
+    "stock_quantity": null
+  },
+  {
+    "name": "Pen(3piece)",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 27000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62568c18d61a1.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/pen-3piece",
+    "stock_quantity": null
+  },
+  {
+    "name": "Hairclip(12piece)",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 63000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62568d820f345.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/hairclip-12piece",
+    "stock_quantity": null
+  },
+  {
+    "name": "Keyholder MDF",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6257df02015ce.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/keyholder-mdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Keyholder(Teakwood)",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6257efa90f1d4.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/keyholder-teakwood-2",
+    "stock_quantity": null
+  },
+  {
+    "name": "Paperweight (Small)",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 18000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6257f4ffb59ec.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/paperweight-small-2",
+    "stock_quantity": null
+  },
+  {
+    "name": "Paperweight (Small)",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 27000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6257f5c07dfee.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/paperweight-small",
+    "stock_quantity": null
+  },
+  {
+    "name": "Tarpakitchen",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 13500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6257f793641a5.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/tarpakitchen",
+    "stock_quantity": null
+  },
+  {
+    "name": "Kurhadlkichen",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 13500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6257f99573505.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/kurhadlkichen",
+    "stock_quantity": null
+  },
+  {
+    "name": "Teatray(MDF)",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 90000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-625801b7ab983.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/teatray-mdf",
+    "stock_quantity": null
+  },
+  {
+    "name": "Handmade Flower(12piece)",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-625aa8c7735a8.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/handmade-flower-12piece",
+    "stock_quantity": null
+  },
+  {
+    "name": "Wooden Art (1 Peacock)",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 270000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/item-625e5ae963899.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/wooden-art-1-peacock",
+    "stock_quantity": null
+  },
+  {
+    "name": "Wooden Art (2 Peacock)",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 360000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-625e5a2fa8554.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/wooden-art-2-peacock",
+    "stock_quantity": null
+  },
+  {
+    "name": "Wooden Eagle",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 270000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-625e5c731ecd5.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/wooden-eagle",
+    "stock_quantity": null
+  },
+  {
+    "name": "Wooden Eagle With Baby",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 270000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-625e5d5a16b24.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/wooden-eagle-with-baby",
+    "stock_quantity": null
+  },
+  {
+    "name": "Baby Peacock",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 270000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-625e5fff3e71f.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/baby-peacock",
+    "stock_quantity": null
+  },
+  {
+    "name": "Wooden Art Peacock With Baby",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 270000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-625e612710bbd.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/wooden-art-peacock-with-baby",
+    "stock_quantity": null
+  },
+  {
+    "name": "Bamboo Natural Piece",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 72000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62624afc61f6f.jpg",
+    "product_url": "https://mahatribes.com/all-wood-craft/bamboo-natural-piece",
+    "stock_quantity": null
+  },
+  {
+    "name": "Bamboo Root Art",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 90000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-626262ce903ab.jpg",
+    "product_url": "https://mahatribes.com/all-wood-craft/bamboo-root-art",
+    "stock_quantity": null
+  },
+  {
+    "name": "Bamboo Trunk Art",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 72000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6262647935554.jpg",
+    "product_url": "https://mahatribes.com/all-wood-craft/bamboo-trunk-art",
+    "stock_quantity": null
+  },
+  {
+    "name": "Wooden Mobile Stand With Sound Amplification",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 22500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62628716ca937.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/wooden-mobile-stand-with-sound-amplification-2",
+    "stock_quantity": null
+  },
+  {
+    "name": "Teakwood Bird Art",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 225000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62627a74eeab8.jpg",
+    "product_url": "https://mahatribes.com/all-wood-craft/teakwood-bird-art",
+    "stock_quantity": null
+  },
+  {
+    "name": "Wooden Plate",
+    "category": "Artifacts (Wood Craft)",
+    "price_cents": 27000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62551a05f379b.JPG",
+    "product_url": "https://mahatribes.com/all-wood-craft/wooden-plate",
+    "stock_quantity": null
+  },
+  {
     "name": "Holi Festival",
     "category": "Art & Paintings (Warli)",
     "price_cents": 86400,
@@ -727,6 +1227,966 @@
     "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
     "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624e93bb6bc8a.png",
     "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-185",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624e94c7c0feb.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-184",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624e9613d6ae0.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-183",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624e97051b30e.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-182",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624e9765a1ee9.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-181",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624e979b5178b.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-180",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624ea58410ab4.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-179",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624ea60878262.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-178",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624ea7476f4ff.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-177",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624ea79ed9f3a.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-176",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624eb4e1f2241.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-175",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624eb859c50af.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-174",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624ecfe93d586.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-173",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624ee5e60e75a.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-172",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/item-62540b45c0bfe.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-171",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fd60ac8296.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-170",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fd69892440.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-169",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fd6ef240da.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-168",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fd75264fb6.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-167",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fd79863880.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-166",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fd802c28f8.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-165",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fd8dac29be.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-164",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fda37bbb89.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-163",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fdaab81e14.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-162",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fdaf3a6ec7.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-161",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fdb2538812.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-160",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fdb5763158.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-159",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 36000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fdbba9e9f0.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-158",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fe598e0126.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-157",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fe6631a259.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-156",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fe7002b998.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-155",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fe735dc68a.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-154",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fea1907678.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-153",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fee7639eba.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-152",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624fefb3c0d1e.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-151",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-624ff00c86454.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-150",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-625001f653b6f.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-149",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-625002b311212.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-148",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6250031622f56.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-147",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-625004221aadc.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-146",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62500700f1c04.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-145",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6250078cd613c.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-144",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6250095194307.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-143",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62500a321b4e8.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-142",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6250106484cd4.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-141",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6250112386b4f.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-140",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6250116332b2b.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-139",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6250124cc6575.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-138",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6250139288899.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-137",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-625013c3ad1cf.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-136",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62501e7a31209.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-135",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62501f97cd28a.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-134",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62501ffd59d17.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-133",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62502bb305457.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-131",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62502c15db94e.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-130",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62502c4306f4a.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-129",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62502cb311cd2.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-128",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62502cea82a90.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-127",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62502dfc75940.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-126",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62502e35a1198.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-125",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62502e8c16297.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-124",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62502ebed5d60.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-123",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62502efbac13e.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-122",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62502f66f0867.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-121",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 40500,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-62502f8f25541.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-120",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251a2313474c.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-119",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251a2ed515da.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-118",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251a3a53a7ac.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-117",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251a3ed81a08.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-116",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251a536b8638.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-115",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251b3e476cd6.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-114",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251b46311570.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-113",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251b4bf86c22.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-112",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251b513ab610.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-111",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251b5604f9d9.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-110",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251b5efd6c94.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-109",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251b6477046f.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-108",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251b6971ac0b.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-107",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251b6d977789.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-106",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251b71862dbc.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-105",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251b75eaa4b9.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-104",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251b7ab8255f.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-103",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251b829ce797.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-102",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251b98befefe.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-101",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251b9d6c50ec.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-100",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251ba249ab8d.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-99",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251ba648dbc9.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-98",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251baf32b88f.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-97",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251bb2aa197a.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-96",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251bb7b5e7c0.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-95",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 45000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251bc9627aae.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-94",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 54000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251bf6fc72da.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-93",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 54000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251bfe8e4ec6.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-92",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 54000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251c02b847d5.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-91",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 54000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251c0fa4fe6e.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-90",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 54000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251c237c9689.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-89",
+    "stock_quantity": null
+  },
+  {
+    "name": "Warli Paper Painting",
+    "category": "Art & Paintings (Warli)",
+    "price_cents": 54000,
+    "source": "mahatribes",
+    "description": "Sold via Maha Tribes, a Maharashtra Tribal Research and Training Institute marketplace supporting tribal artisans and self-help groups.",
+    "image_url": "https://mahatribes.com/storage/app/public/images/products/product-6251c28c1ede0.png",
+    "product_url": "https://mahatribes.com/paintings-paintings-warli-all-painting/warli-paper-painting-88",
     "stock_quantity": null
   },
   {

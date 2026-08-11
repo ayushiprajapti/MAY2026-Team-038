@@ -1,0 +1,72 @@
+.trails-map-container {
+  flex: 1;
+  position: relative;
+  min-height: 400px;
+}
+
+/* Custom Marker Styling */
+.custom-colored-marker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Popup Styling */
+.trail-popup .leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.trail-popup .leaflet-popup-content {
+  margin: 1rem;
+}
+
+.trail-popup h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  color: #222;
+}
+
+.trail-popup-category {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.8rem;
+  color: #666;
+  text-transform: capitalize;
+}
+
+.trail-popup-trailname {
+  margin: 0 0 1rem 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4a5d23;
+}
+
+.trail-popup-btn {
+  display: inline-block;
+  background-color: #d69f4c;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.trail-popup-btn:hover {
+  background-color: #b8863b;
+  color: white;
+}
+
+.trails-map-loading, .trails-map-error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 1.2rem;
+  color: #666;
+}
+
+.trails-map-error {
+  color: #d32f2f;
+}
