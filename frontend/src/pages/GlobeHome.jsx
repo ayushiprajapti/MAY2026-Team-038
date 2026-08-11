@@ -4,6 +4,7 @@ import FilterBar from '../components/trails/FilterBar.jsx'
 import TrailPanel from '../components/trails/TrailPanel.jsx'
 import FloatingChatbot from '../components/FloatingChatbot.jsx'
 import { themes } from '../data/trails.js'
+import { apiFetch } from '../api/client.js'
 import './GlobeHome.css'
 
 const CITY_COORDS = {
@@ -35,10 +36,13 @@ export default function GlobeHome() {
   const [viewMode, setViewMode] = useState('map') // 'map' or 'directory'
   
   const [trails, setTrails] = useState([])
-  
+  const [trailsLoading, setTrailsLoading] = useState(true)
+  const [trailsError, setTrailsError] = useState(null)
+
   useEffect(() => {
-    fetch('http://127.0.0.1:8000/trails/dynamic')
-      .then(res => res.json())
+    setTrailsLoading(true)
+    setTrailsError(null)
+    apiFetch('/trails/dynamic')
       .then(data => {
         // Map dynamic trails to match the structure expected by TrailPanel
         const mappedTrails = data.trails.map(t => {
@@ -73,8 +77,13 @@ export default function GlobeHome() {
         }
       })
       setTrails(mappedTrails)
+      setTrailsLoading(false)
       })
-      .catch(err => console.error("Failed to fetch trails", err))
+      .catch(err => {
+        console.error("Failed to fetch trails", err)
+        setTrailsError('Could not load trails. Please try again later.')
+        setTrailsLoading(false)
+      })
   }, [])
 
   const matches = useMemo(
@@ -143,6 +152,13 @@ export default function GlobeHome() {
         </FilterBar>
       </div>
 
+      {trailsLoading && (
+        <div className="home__status">Loading trails…</div>
+      )}
+      {trailsError && (
+        <div className="home__status home__status--error">{trailsError}</div>
+      )}
+
       {viewMode === 'map' ? (
         <div className="home__body">
           <TrailsMap 
@@ -168,6 +184,7 @@ export default function GlobeHome() {
                 {allSites
                   .filter(site => {
                     const parentTrail = trails.find(t => t.id === site.trailId);
+                    if (!parentTrail) return false;
                     const matchesRegion = !region || parentTrail.region === region;
                     const matchesTheme = !theme || parentTrail.theme === theme;
                     return matchesRegion && matchesTheme;
@@ -175,6 +192,7 @@ export default function GlobeHome() {
                   .sort((a, b) => a.name.localeCompare(b.name))
                   .map((site) => {
                     const parentTrail = trails.find(t => t.id === site.trailId);
+                    if (!parentTrail) return null;
                     return (
                       <tr key={site.id}>
                         <td className="td-name"><strong>{site.name}</strong></td>

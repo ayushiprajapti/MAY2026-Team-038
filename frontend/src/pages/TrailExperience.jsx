@@ -44,19 +44,26 @@ export default function TrailExperience() {
     }
 
     setIsTranslating(true)
+    let cancelled = false
     const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${language}&dt=t&q=${encodeURIComponent(site.narration.en)}`
     fetch(url)
       .then(res => res.json())
       .then(data => {
+        if (cancelled) return
         const result = data[0].map(x => x[0]).join('')
         setTranslatedText(result)
         setIsTranslating(false)
       })
       .catch(e => {
+        if (cancelled) return
         console.error("Translation failed", e)
         setTranslatedText(site.narration.en) // fallback
         setIsTranslating(false)
       })
+
+    return () => {
+      cancelled = true
+    }
   }, [stepIndex, language, site])
 
   const activeText = translatedText || originalText

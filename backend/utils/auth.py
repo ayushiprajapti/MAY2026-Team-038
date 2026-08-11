@@ -10,6 +10,32 @@ from services.auth_service import get_user_by_id, get_user_roles
 from utils.security import decode_access_token
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
+optional_oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login", auto_error=False)
+
+
+def get_optional_user(
+    token: str | None = Depends(optional_oauth2_scheme), conn: connection = Depends(get_db)
+) -> dict | None:
+    """Like `get_current_user`, but returns None instead of raising 401 when
+    no (or an invalid) Bearer token is present. Use for routes that should
+    work for anonymous callers but still personalize/scope behavior for
+    logged-in ones."""
+    if token is None:
+        return None
+    try:
+        payload = decode_access_token(token)
+        user_id = payload.get("sub")
+        if user_id is None:
+            return None
+    except JWTError:
+        return None
+
+    user = get_user_by_id(conn, user_id)
+    if user is None:
+        return None
+
+    user["roles"] = get_user_roles(conn, user["id"])
+    return user
 
 
 def get_current_user(

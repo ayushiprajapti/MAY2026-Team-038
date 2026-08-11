@@ -20,10 +20,22 @@ def _auth_headers(client: TestClient) -> dict:
     return {"Authorization": f"Bearer {token}"}
 
 
-def test_start_session_without_token_is_rejected(client: TestClient) -> None:
+@patch("routes.chat.chat_service.create_session")
+def test_start_session_without_token_is_allowed_anonymously(mock_create_session, client: TestClient) -> None:
+    # Chat is intentionally open to anonymous callers (utils.auth.get_optional_user
+    # returns None instead of raising) - anon sessions are just stored with
+    # user_id=None rather than being rejected outright.
+    session_id = str(uuid4())
+    mock_create_session.return_value = {
+        "id": session_id, "user_id": None,
+        "started_at": "2026-07-31T00:00:00Z", "ended_at": None,
+    }
+
     response = client.post("/chat/sessions")
 
-    assert response.status_code == 401
+    assert response.status_code == 201
+    mock_create_session.assert_called_once()
+    assert mock_create_session.call_args.args[1] is None  # user_id passed as None
 
 
 @patch("routes.chat.chat_service.create_session")
@@ -61,10 +73,20 @@ def test_send_message_returns_assistant_reply(mock_send_message, client: TestCli
     assert response.json()["content"] == "Shaniwar Wada was built in 1732."
 
 
-def test_send_message_without_token_is_rejected(client: TestClient) -> None:
-    response = client.post(f"/chat/sessions/{uuid4()}/messages", json={"content": "hi"})
+@patch("routes.chat.chat_service.send_message")
+def test_send_message_without_token_is_allowed_anonymously(mock_send_message, client: TestClient) -> None:
+    session_id = str(uuid4())
+    mock_send_message.return_value = {
+        "id": str(uuid4()), "session_id": session_id, "role": "assistant",
+        "content": "Hi there.", "referenced_site_ids": [],
+        "created_at": "2026-07-31T00:00:00Z",
+    }
 
-    assert response.status_code == 401
+    response = client.post(f"/chat/sessions/{session_id}/messages", json={"content": "hi"})
+
+    assert response.status_code == 200
+    mock_send_message.assert_called_once()
+    assert mock_send_message.call_args.args[2] is None  # user_id passed as None
 
 
 def test_send_message_with_blank_content_is_rejected(client: TestClient) -> None:

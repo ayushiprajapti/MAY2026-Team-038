@@ -386,3 +386,13 @@
   margin: 0;
   white-space: pre-wrap;
 }
+
+.home__status {
+  padding: 0.6rem 1.5rem;
+  font-size: 0.9rem;
+  color: var(--color-heritage-charcoal, #2b2118);
+}
+
+.home__status--error {
+  color: #b3261e;
+}

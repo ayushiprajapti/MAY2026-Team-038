@@ -17,7 +17,8 @@ export default function useVoiceGuide(text, stepKey, language) {
     if (!supported) return
     const load = () => setVoices(window.speechSynthesis.getVoices())
     load()
-    window.speechSynthesis.onvoiceschanged = load
+    window.speechSynthesis.addEventListener('voiceschanged', load)
+    return () => window.speechSynthesis.removeEventListener('voiceschanged', load)
   }, [supported])
 
   // stop narration whenever the step changes
