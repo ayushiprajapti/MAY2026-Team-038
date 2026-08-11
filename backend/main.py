@@ -16,6 +16,7 @@ from routes import (
     health,
     shop,
     volunteer_heritage,
+    trails,
 )
 
 app = FastAPI(title="INTACH Pune API")
@@ -36,6 +37,7 @@ app.include_router(auth.router)
 app.include_router(events.router)
 app.include_router(shop.router)
 app.include_router(admin_shop.router)
+app.include_router(trails.router)
 
 app.include_router(admin_dashboard.router)
 app.include_router(admin_events.router)

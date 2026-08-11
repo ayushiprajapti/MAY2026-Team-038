@@ -1,5 +1,5 @@
 import { useMemo, useState, useRef, useEffect } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useLocation } from 'react-router-dom'
 import { getTrailById } from '../data/trails.js'
 import useVoiceGuide, { LANGUAGES } from '../hooks/useVoiceGuide.js'
 import useAmbientAudio from '../hooks/useAmbientAudio.js'
@@ -12,9 +12,12 @@ import './TrailExperience.css'
 
 export default function TrailExperience() {
   const { trailId } = useParams()
-  const trail = useMemo(() => getTrailById(trailId), [trailId])
+  const location = useLocation()
+  const trail = useMemo(() => location.state?.trail || getTrailById(trailId), [trailId, location.state])
   const [stepIndex, setStepIndex] = useState(0)
   const [language, setLanguage] = useState('en')
+  const [translatedText, setTranslatedText] = useState('')
+  const [isTranslating, setIsTranslating] = useState(false)
   const nodeRefs = useRef([])
 
   if (!trail) {
@@ -30,7 +33,35 @@ export default function TrailExperience() {
   const isLast = stepIndex === trail.sites.length - 1
   const isFirst = stepIndex === 0
 
-  const { isPlaying, toggleSpeech } = useVoiceGuide(site.narration, site.id, language)
+  const originalText = site.narration[language] || site.narration.en || 'No description available.'
+
+  useEffect(() => {
+    // If it's english or we already have hardcoded translation in dummy data, use it directly
+    if (language === 'en' || site.narration[language]) {
+      setTranslatedText(site.narration[language] || site.narration.en)
+      setIsTranslating(false)
+      return
+    }
+
+    setIsTranslating(true)
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${language}&dt=t&q=${encodeURIComponent(site.narration.en)}`
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        const result = data[0].map(x => x[0]).join('')
+        setTranslatedText(result)
+        setIsTranslating(false)
+      })
+      .catch(e => {
+        console.error("Translation failed", e)
+        setTranslatedText(site.narration.en) // fallback
+        setIsTranslating(false)
+      })
+  }, [stepIndex, language, site])
+
+  const activeText = translatedText || originalText
+
+  const { isPlaying, toggleSpeech } = useVoiceGuide(activeText, site.id, language)
 
   // Site type drives the Web Audio synth (temple / fort / stepwell / wada)
   const siteType = site.icon || 'wada'
@@ -53,7 +84,8 @@ export default function TrailExperience() {
   }, [stepIndex])
 
   let activeSiteImg = siteWadaImg
-  if (site.name?.includes('Wada') || site.id === 'wada') activeSiteImg = siteWadaImg
+  if (site.image_url) activeSiteImg = site.image_url
+  else if (site.name?.includes('Wada') || site.id === 'wada') activeSiteImg = siteWadaImg
   else if (site.icon === 'fort')      activeSiteImg = siteFortImg
   else if (site.icon === 'temple')    activeSiteImg = siteTempleImg
   else if (site.icon === 'stepwell')  activeSiteImg = siteStepwellImg
@@ -134,11 +166,13 @@ export default function TrailExperience() {
                   {isActive && (
                     <div className={`trail__node-content ${alignClass}`}>
                       <img src={activeSiteImg} alt={s.name} className="trail__node-hero" />
-                      <div className="trail__node-text">
+                      <div className="trail__node-text" style={{ maxHeight: '250px', overflowY: 'auto' }}>
                         <span className="trail__stop-label">Stop {i + 1} of {trail.sites.length}</span>
                         <h2 className="trail__stop-name">{s.name}</h2>
                         <p className="trail__stop-meta">{s.type} · built {s.built}</p>
-                        <p className="trail__stop-desc">{s.narration[language] || s.narration.en}</p>
+                        <p className="trail__stop-desc">
+                          {isTranslating ? 'Translating...' : activeText}
+                        </p>
                       </div>
                     </div>
                   )}
@@ -174,8 +208,8 @@ export default function TrailExperience() {
       <div className={`trail__guide ${isPlaying ? 'trail__guide--speaking' : ''}`} onClick={toggleSpeech}>
         <div className="trail__guide-bubble">
           {isPlaying
-            ? site.narration[language]?.slice(0, 80) + '…'
-            : 'Tap me to hear the story of ' + site.name}
+            ? activeText.slice(0, 80) + '…'
+            : (language === 'en' ? 'Tap me to hear the story of ' : (language === 'hi' ? 'कहानी सुनने के लिए मुझे टैप करें ' : 'कथा ऐकण्यासाठी मला टॅप करा ')) + site.name}
         </div>
         <div className="trail__guide-avatar">
           <img src={aiGuideImg} alt="Heritage Guide" />
