@@ -41,3 +41,35 @@ def test_generate_answer_returns_message_content(mock_post):
     )
 
     assert result == "Shaniwar Wada is a fort."
+    sent_json = mock_post.call_args.kwargs["json"]
+    assert sent_json["max_tokens"] == 1024  # default unchanged for existing callers
+    assert sent_json["model"] == llm_client.GENERATION_MODEL
+
+
+@patch("rag.llm_client.requests.post")
+def test_generate_answer_max_tokens_is_overridable(mock_post):
+    # genai/fetch_hidden_pune_sites.py needs a higher cap than the RAG chat
+    # default so multi-site JSON extractions don't get truncated mid-array.
+    mock_post.return_value = _mock_response(
+        {"choices": [{"message": {"role": "assistant", "content": "[]"}}]}
+    )
+
+    llm_client.generate_answer(
+        [{"role": "user", "content": "extract sites"}], max_tokens=4096
+    )
+
+    sent_json = mock_post.call_args.kwargs["json"]
+    assert sent_json["max_tokens"] == 4096
+
+
+@patch("rag.llm_client.requests.post")
+def test_generate_answer_uses_nvidia_endpoint_and_auth_header(mock_post):
+    mock_post.return_value = _mock_response(
+        {"choices": [{"message": {"role": "assistant", "content": "ok"}}]}
+    )
+
+    llm_client.generate_answer([{"role": "user", "content": "hi"}])
+
+    assert mock_post.call_args.args[0] == llm_client.CHAT_URL
+    headers = mock_post.call_args.kwargs["headers"]
+    assert headers["Authorization"].startswith("Bearer ")

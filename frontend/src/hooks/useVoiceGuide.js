@@ -6,7 +6,7 @@ export const LANGUAGES = [
   { code: 'mr', speechLang: 'mr-IN', label: 'मराठी' },
 ]
 
-export default function useVoiceGuide(narration, stepKey, language) {
+export default function useVoiceGuide(text, stepKey, language) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [voices, setVoices] = useState([])
   const [error, setError] = useState(null)
@@ -17,7 +17,8 @@ export default function useVoiceGuide(narration, stepKey, language) {
     if (!supported) return
     const load = () => setVoices(window.speechSynthesis.getVoices())
     load()
-    window.speechSynthesis.onvoiceschanged = load
+    window.speechSynthesis.addEventListener('voiceschanged', load)
+    return () => window.speechSynthesis.removeEventListener('voiceschanged', load)
   }, [supported])
 
   // stop narration whenever the step changes
@@ -44,7 +45,6 @@ export default function useVoiceGuide(narration, stepKey, language) {
     }
 
     const currentLang = LANGUAGES.find((l) => l.code === language) || LANGUAGES[0]
-    const text = narration[language] || narration.en
     const utter = new SpeechSynthesisUtterance(text)
     utter.lang = currentLang.speechLang
     utter.rate = 0.96

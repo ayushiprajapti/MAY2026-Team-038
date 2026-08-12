@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 
 class ChatSessionResponse(BaseModel):
     id: UUID
-    user_id: UUID
+    user_id: UUID | None
     started_at: datetime
     ended_at: datetime | None = None
 

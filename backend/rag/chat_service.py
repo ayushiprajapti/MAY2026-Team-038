@@ -56,20 +56,23 @@ RETURNING id, session_id, role, content, referenced_site_ids, created_at
 """
 
 
-def create_session(conn: connection, user_id: str) -> dict:
+def create_session(conn: connection, user_id: str | None) -> dict:
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(CREATE_SESSION, {"id": str(uuid4()), "user_id": user_id})
         return cur.fetchone()
 
 
-def get_owned_session(conn: connection, session_id: str, user_id: str) -> dict:
+def get_owned_session(conn: connection, session_id: str, user_id: str | None) -> dict:
+    """A session created by a logged-in user is private to them. A session
+    created anonymously (user_id is None) has no owner to protect, so any
+    caller holding the session id can use it."""
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(SELECT_SESSION, {"id": session_id})
         session = cur.fetchone()
 
     if session is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Session not found")
-    if str(session["user_id"]) != user_id:
+    if session["user_id"] is not None and str(session["user_id"]) != user_id:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Not your session")
     return session
 
@@ -95,7 +98,7 @@ def _build_prompt(history: list[dict], context_sites: list[dict], new_message: s
     return messages
 
 
-def send_message(conn: connection, session_id: str, user_id: str, content: str) -> dict:
+def send_message(conn: connection, session_id: str, user_id: str | None, content: str) -> dict:
     get_owned_session(conn, session_id, user_id)
 
     with conn.cursor(cursor_factory=RealDictCursor) as cur:

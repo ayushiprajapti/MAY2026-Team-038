@@ -26,7 +26,7 @@ export default function useAmbientAudio(siteType) {
 
     const audio = new Audio(src)
     audio.loop = true
-    audio.volume = 0.5
+    audio.volume = 1.0 // Increased from 0.5 for better ambience
     audio.muted = true // Start muted to bypass browser autoplay blocks
     audioRef.current = audio
 

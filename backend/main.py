@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from config import settings
+from utils.rate_limit import RateLimitMiddleware
 from routes import (
     admin_dashboard,
     admin_events,
@@ -16,9 +17,12 @@ from routes import (
     health,
     shop,
     volunteer_heritage,
+    trails,
 )
 
 app = FastAPI(title="INTACH Pune API")
+
+app.add_middleware(RateLimitMiddleware, max_requests=60, window_seconds=60.0)
 
 app.add_middleware(
     CORSMiddleware,
@@ -36,6 +40,7 @@ app.include_router(auth.router)
 app.include_router(events.router)
 app.include_router(shop.router)
 app.include_router(admin_shop.router)
+app.include_router(trails.router)
 
 app.include_router(admin_dashboard.router)
 app.include_router(admin_events.router)

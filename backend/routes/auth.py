@@ -9,7 +9,7 @@ from schemas.auth import (
     UpdateProfileRequest,
     UserResponse,
 )
-from services import auth_service
+from services import auth_service, trails_service
 from utils.auth import get_current_user
 from utils.security import create_access_token
 
@@ -43,6 +43,10 @@ def login(
     token = create_access_token(
         subject=str(user["id"]),
     )
+
+    # Warm the trails cache so the first post-login dashboard load doesn't
+    # pay the DBSCAN clustering cost.
+    trails_service.get_dynamic_trails(conn)
 
     return TokenResponse(
         access_token=token,

@@ -1,20 +1,37 @@
 import re
 from datetime import datetime, timezone
 
+import fakeredis
+import fakeredis.aioredis
 import pytest
 from fastapi.testclient import TestClient
 
 from database import get_db
 from main import app
+from utils import redis_client
 from utils.cache import clear_all as _clear_all_caches
 
 
 @pytest.fixture(autouse=True)
-def _reset_service_caches():
-    # Service-layer @cached functions live in a module-level dict that
-    # persists across the whole pytest session, but fake_db_store resets
-    # per test - without this, a cached result from one test's fake data
-    # leaks into the next test that hits the same cache key.
+def _fake_redis():
+    # Every test gets a fresh, isolated fakeredis instance instead of
+    # talking to a real Redis server - both utils.cache (sync client) and
+    # utils.rate_limit (async client) resolve through utils.redis_client,
+    # so overriding those two module-level singletons is enough to redirect
+    # every @cached() call and the rate-limit middleware.
+    fake_sync = fakeredis.FakeRedis()
+    fake_async = fakeredis.aioredis.FakeRedis()
+    redis_client.set_redis_client(fake_sync)
+    redis_client.set_async_redis_client(fake_async)
+    yield
+    fake_sync.flushall()
+
+
+@pytest.fixture(autouse=True)
+def _reset_service_caches(_fake_redis):
+    # Service-layer @cached functions are keyed per test via the fresh
+    # fakeredis instance above, but clear defensively in case a test
+    # reaches for the real client somehow (e.g. a fixture ordering bug).
     _clear_all_caches()
     yield
 
@@ -406,6 +423,15 @@ class FakeCursor:
                         "phone": user.get("phone"),
                     })
             self._results = attendees
+            self._result = None
+
+        elif "st_clusterdbscan" in q:
+            # trails_service.get_dynamic_trails, warmed on every login.
+            # fake_db_store doesn't model heritage_sites/regions/PostGIS, so
+            # this always returns no trails - callers only assert on the
+            # auth flow itself, not on trail data, in the tests that exercise
+            # this path indirectly via login.
+            self._results = []
             self._result = None
 
         else:

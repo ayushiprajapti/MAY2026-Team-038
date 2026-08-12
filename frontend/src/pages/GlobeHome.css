@@ -124,7 +124,7 @@
   list-style: none;
   margin: 0;
   padding: 0.3rem;
-  z-index: 20;
+  z-index: 9999;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
@@ -385,4 +385,14 @@
 .td-signification p {
   margin: 0;
   white-space: pre-wrap;
+}
+
+.home__status {
+  padding: 0.6rem 1.5rem;
+  font-size: 0.9rem;
+  color: var(--color-heritage-charcoal, #2b2118);
+}
+
+.home__status--error {
+  color: #b3261e;
 }

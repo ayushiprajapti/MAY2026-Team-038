@@ -37,7 +37,7 @@ def embed_texts(texts: list[str], input_type: str) -> list[list[float]]:
     return [item["embedding"] for item in ordered]
 
 
-def generate_answer(messages: list[dict[str, str]]) -> str:
+def generate_answer(messages: list[dict[str, str]], max_tokens: int = 1024) -> str:
     response = requests.post(
         CHAT_URL,
         headers=_headers(),
@@ -45,7 +45,7 @@ def generate_answer(messages: list[dict[str, str]]) -> str:
             "model": GENERATION_MODEL,
             "messages": messages,
             "temperature": 0.2,
-            "max_tokens": 1024,
+            "max_tokens": max_tokens,
         },
         timeout=TIMEOUT_SECONDS,
     )

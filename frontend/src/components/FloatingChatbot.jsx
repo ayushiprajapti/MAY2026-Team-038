@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { startSession, sendMessage } from '../api/chat';
-import { ApiError, getToken } from '../api/client';
+import { ApiError } from '../api/client';
 import './FloatingChatbot.css';
 
 export default function FloatingChatbot() {
@@ -81,22 +80,16 @@ export default function FloatingChatbot() {
 
           {error && <div className="floating-chat-error">{error}</div>}
 
-          {getToken() ? (
-            <form className="floating-chat-input-area" onSubmit={handleSend}>
-              <input
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Ask about a site..."
-                disabled={isTyping}
-              />
-              <button type="submit" disabled={!inputValue.trim() || isTyping}>Send</button>
-            </form>
-          ) : (
-            <div className="floating-chat-login-prompt">
-              <Link to="/login">Log in</Link> to chat with the Heritage Assistant.
-            </div>
-          )}
+          <form className="floating-chat-input-area" onSubmit={handleSend}>
+            <input
+              type="text"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              placeholder="Ask about a site..."
+              disabled={isTyping}
+            />
+            <button type="submit" disabled={!inputValue.trim() || isTyping}>Send</button>
+          </form>
         </div>
       )}
 

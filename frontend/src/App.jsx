@@ -109,11 +109,8 @@ function AnimatedRoutes() {
       <Route path="/login" element={<AnimatedPage><Login /></AnimatedPage>} />
       <Route path="/register" element={<AnimatedPage><Register /></AnimatedPage>} />
       
-      {/* Protected Standalone Routes (No Header & Footer) */}
-      <Route element={<ProtectedRoute />}>
-        {/* Immersive trail — no global header/footer */}
-        <Route path="/trails/:trailId" element={<AnimatedPage><TrailExperience /></AnimatedPage>} />
-      </Route>
+      {/* Immersive trail — standalone public route (no global header/footer) */}
+      <Route path="/trails/:trailId" element={<AnimatedPage><TrailExperience /></AnimatedPage>} />
 
       {/* Protected Admin Routes (No Global Header & Footer, gets AdminSidebar layout) */}
       <Route element={<ProtectedRoute />}>
