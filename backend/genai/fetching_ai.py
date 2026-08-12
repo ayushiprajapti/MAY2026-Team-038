@@ -4,9 +4,9 @@ import time
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import psycopg2
-import google.generativeai as genai
 from config import settings
 from dotenv import load_dotenv
+from rag.llm_client import generate_answer
 
 load_dotenv()
 
@@ -15,16 +15,11 @@ sys.stdout.reconfigure(encoding='utf-8')
 def main():
     print(f"Connecting to database: {settings.database_url.split('@')[-1]}")
     conn = psycopg2.connect(settings.database_url)
-    
-    api_key = os.environ.get("GEMINI_API_KEY")
-    if not api_key:
-        print("GEMINI_API_KEY not found in .env file!")
+
+    if not settings.nvidia_api_key:
+        print("NVIDIA_API_KEY not found in .env file!")
         return
 
-    genai.configure(api_key=api_key)
-    # Use gemini-3.5-flash as it is the standard supported model in 2026
-    model = genai.GenerativeModel('gemini-3.5-flash')
-    
     updates = 0
     try:
         with conn.cursor() as cur:
@@ -36,22 +31,23 @@ def main():
             """)
             missing_sites = cur.fetchall()
             print(f"Found {len(missing_sites)} sites missing descriptions.")
-            
+
             for site_id, name in missing_sites:
-                print(f"Generating Gemini description for: {name}...")
-                
+                print(f"Generating description via NVIDIA for: {name}...")
+
                 try:
-                    response = model.generate_content(
-                        f"Write a 3-4 sentence historically accurate and engaging description for the Indian heritage site '{name}' located in Maharashtra. This is for an audio tour guide. Do not include any preambles, just the description itself.",
-                        generation_config=genai.types.GenerationConfig(
-                            temperature=0.2,
-                            top_p=0.7,
-                            max_output_tokens=256,
-                        )
-                    )
-                    
-                    new_desc = response.text.strip()
-                    
+                    new_desc = generate_answer([
+                        {
+                            "role": "user",
+                            "content": (
+                                f"Write a 3-4 sentence historically accurate and engaging "
+                                f"description for the Indian heritage site '{name}' located "
+                                f"in Maharashtra. This is for an audio tour guide. Do not "
+                                f"include any preambles, just the description itself."
+                            ),
+                        }
+                    ]).strip()
+
                     if new_desc:
                         print(f"  - Generated description ({len(new_desc)} chars)")
                         cur.execute("""
@@ -60,20 +56,20 @@ def main():
                             WHERE id = %s
                         """, (new_desc, site_id))
                         updates += 1
-                        
+
                         if updates % 5 == 0:
                             conn.commit()
-                        
-                        # Sleep to avoid hitting 5 RPM free tier limit
-                        time.sleep(13)
-                            
+
+                        # Small delay to stay well under NVIDIA's rate limits
+                        time.sleep(2)
+
                 except Exception as api_err:
                     print(f"  - Error generating description: {api_err}")
-                    time.sleep(13)
-                    
+                    time.sleep(2)
+
             conn.commit()
-            print(f"Successfully generated and updated {updates} sites using Gemini.")
-            
+            print(f"Successfully generated and updated {updates} sites using NVIDIA.")
+
     except Exception as e:
         conn.rollback()
         print(f"Database error: {e}")

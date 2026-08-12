@@ -425,7 +425,7 @@ class FakeCursor:
             self._results = attendees
             self._result = None
 
-        elif q.startswith("with clustered_sites as"):
+        elif "st_clusterdbscan" in q:
             # trails_service.get_dynamic_trails, warmed on every login.
             # fake_db_store doesn't model heritage_sites/regions/PostGIS, so
             # this always returns no trails - callers only assert on the

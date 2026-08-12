@@ -51,14 +51,20 @@ export default function GlobeHome() {
             ? getNearestCity(t.sites[0].latitude, t.sites[0].longitude) 
             : 'Maharashtra';
             
+          // Walking pace (~15 min/km) plus a dwell time per stop - a rough
+          // but real estimate, built from the backend's actual sequential
+          // haversine distance instead of a flat guess.
+          const walkingMinutes = t.distance_km * 15
+          const dwellMinutes = t.sites.length * 15
+
           return {
             id: t.trail_id.toString(),
             name: t.name,
             theme: 'Dynamic Cluster',
             region: cityRegion,
             era: 'Various',
-          distanceKm: t.sites.length > 1 ? 5.0 : 0,
-          durationMin: t.sites.length * 30,
+          distanceKm: t.distance_km,
+          durationMin: Math.round(walkingMinutes + dwellMinutes),
           description: `An auto-generated trail clustering ${t.sites.length} heritage sites within a 5km radius.`,
           sites: t.sites.map(s => ({
             id: s.id,

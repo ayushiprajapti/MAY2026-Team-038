@@ -6,16 +6,13 @@ import csv
 import re
 import psycopg2
 from tavily import TavilyClient
-import google.generativeai as genai
 from dotenv import load_dotenv
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from config import settings
+from rag.llm_client import generate_answer
 
 load_dotenv()
-
-# Using gemini-2.5-flash-lite for free tier requests
-MODEL_NAME = 'gemini-2.5-flash-lite'
 
 def search_tavily(query):
     print(f"Searching Tavily for: '{query}'")
@@ -49,10 +46,7 @@ def search_tavily(query):
 def extract_sites_with_ai(text):
     if not text:
         return []
-    
-    genai.configure(api_key=os.environ.get("GEMINI_API_KEY"))
-    model = genai.GenerativeModel(MODEL_NAME)
-    
+
     prompt = f"""
     Analyze the following web page text and extract any hidden or lesser-known heritage/historical sites located in Pune, India.
     Return the result strictly as a JSON array of objects. Do not include markdown codeblocks, just raw JSON.
@@ -70,12 +64,15 @@ def extract_sites_with_ai(text):
     """
     
     try:
-        response = model.generate_content(
-            prompt,
-            generation_config=genai.types.GenerationConfig(temperature=0.2)
-        )
-        result_text = response.text.strip()
-        
+        # Higher max_tokens than the RAG chat default (1024): this prompt
+        # can return several sites' worth of JSON objects, and a truncated
+        # array fails json.loads() below - silently discarding real results
+        # instead of erroring loudly.
+        result_text = generate_answer(
+            [{"role": "user", "content": prompt}],
+            max_tokens=4096,
+        ).strip()
+
         # Clean up possible markdown wrappers
         if result_text.startswith("```json"):
             result_text = result_text[7:]
@@ -83,11 +80,11 @@ def extract_sites_with_ai(text):
             result_text = result_text[3:]
         if result_text.endswith("```"):
             result_text = result_text[:-3]
-            
+
         sites = json.loads(result_text.strip())
         return sites
     except Exception as e:
-        print(f"Error extracting data with Gemini: {e}")
+        print(f"Error extracting data with NVIDIA: {e}")
         return []
 
 def normalize_name(name):

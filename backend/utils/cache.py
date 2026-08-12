@@ -55,7 +55,7 @@ def cached(ttl_seconds: float) -> Callable:
                 return pickle.loads(cached_value)
 
             value = func(*args, **kwargs)
-            client.setex(key, int(ttl_seconds) or 1, pickle.dumps(value))
+            client.set(key, pickle.dumps(value), ex=int(ttl_seconds) or 1)
             return value
 
         def cache_clear() -> None:

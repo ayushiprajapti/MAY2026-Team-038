@@ -15,6 +15,7 @@ class TrailClusterResponse(BaseModel):
     trail_id: int
     name: str
     region: str | None = None
+    distance_km: float
     sites: list[TrailSiteResponse]
 
 class DynamicTrailsResponse(BaseModel):
