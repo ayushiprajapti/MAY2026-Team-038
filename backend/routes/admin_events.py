@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, Response, status
+from fastapi import APIRouter, Depends, File, Response, UploadFile, status
 from psycopg2.extensions import connection
 
 from database import get_db
@@ -9,12 +9,27 @@ from schemas.events import (
     AdminEventsListResponse,
     CreateEventRequest,
     EventRegistrantsResponse,
+    ImageUploadResponse,
     UpdateEventRequest,
 )
 from services import event_service
+from services.image_service import ImageFolder, upload_image
 from utils.auth import require_roles
 
 router = APIRouter(prefix="/events/admin", tags=["admin-events"])
+
+
+@router.post(
+    "/upload-image",
+    response_model=ImageUploadResponse,
+    status_code=201,
+)
+def upload_event_image(
+    file: UploadFile = File(...),
+    current_user: dict = Depends(require_roles("system_admin")),
+):
+    image_url = upload_image(file, ImageFolder.EVENT)
+    return {"image_url": image_url}
 
 
 @router.get("/", response_model=AdminEventsListResponse)

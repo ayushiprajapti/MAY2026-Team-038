@@ -13,10 +13,18 @@ DEFAULT_SIGNUP_ROLE = "registered_member"
 
 
 def create_user(conn: connection, data: SignupRequest) -> dict:
+    # Emails are case-insensitive identifiers - normalize to lowercase
+    # before both the duplicate check and the INSERT so "User@Example.com"
+    # and "user@example.com" are always the same account. Without this, a
+    # user who signs up with mixed-case letters and later types their email
+    # in a different case at login gets a bogus 401 "Invalid email or
+    # password" - this is the login bug being fixed here.
+    email = data.email.strip().lower()
+
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(
             "SELECT id FROM users WHERE email = %s",
-            (data.email,),
+            (email,),
         )
 
         if cur.fetchone():
@@ -52,7 +60,7 @@ def create_user(conn: connection, data: SignupRequest) -> dict:
             """,
             (
                 new_id,
-                data.email,
+                email,
                 password_hash,
                 data.full_name,
                 data.phone,
@@ -79,6 +87,12 @@ def authenticate_user(
     email: str,
     password: str,
 ) -> dict:
+    # Match the same case-insensitive normalization used at signup, so a
+    # user who signed up as "User@Example.com" can log in with
+    # "user@example.com" (or any other casing) instead of getting a bogus
+    # 401.
+    normalized_email = email.strip().lower()
+
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(
             """
@@ -92,7 +106,7 @@ def authenticate_user(
             FROM users
             WHERE email = %s
             """,
-            (email,),
+            (normalized_email,),
         )
 
         user = cur.fetchone()

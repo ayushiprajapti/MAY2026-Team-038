@@ -50,15 +50,16 @@ function ProtectedRoute() {
   return <Outlet />;
 }
 
-// "/" is the public homepage, but a logged-in user on this app is always
-// staff (Login.jsx sends every successful login to /admin-dashboard,
-// regardless of role) - so an already-authenticated visitor landing on "/"
-// (fresh page load, server restart, etc.) belongs on the admin side too,
-// not on the public homepage.
+// "/" is the public homepage. A logged-in staff user (anything but a plain
+// registered_member) belongs on the admin side, so redirect them there on a
+// fresh page load; registered_members stay on the public homepage like any
+// other visitor.
 function HomeOrAdminRedirect() {
   const hasToken = localStorage.getItem("intach_token");
+  const storedUser = localStorage.getItem("intach_user");
+  const role = storedUser ? JSON.parse(storedUser).role : null;
 
-  if (hasToken) {
+  if (hasToken && role !== "registered_member") {
     return <Navigate to="/admin-dashboard" replace />;
   }
 

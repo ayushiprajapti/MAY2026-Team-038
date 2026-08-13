@@ -45,6 +45,7 @@ def _site_row(
         "id": uuid4(),
         "name": name,
         "category": "built",
+        "theme_names": [],
         "image_url": None,
         "description": f"{name} description",
         "region_name": region,

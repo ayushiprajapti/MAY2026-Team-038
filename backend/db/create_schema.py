@@ -147,6 +147,7 @@ CREATE TABLE events (
     registration_deadline TIMESTAMPTZ,
     coordinator_id UUID,
     status event_status,
+    image_url TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 

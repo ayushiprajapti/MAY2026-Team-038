@@ -47,3 +47,45 @@ def test_dashboard_events_requires_auth():
 def test_recent_volunteers_requires_auth():
     response = client.get("/admin/dashboard/recent-volunteers")
     assert response.status_code == 401
+
+
+def test_get_member_stats_is_cached():
+    dashboard_service.get_member_stats.cache_clear()
+    conn, cursor = _mock_conn({"total_members": 3, "new_this_week": 1})
+
+    try:
+        dashboard_service.get_member_stats(conn)
+        dashboard_service.get_member_stats(conn)
+
+        assert cursor.execute.call_count == 1
+    finally:
+        dashboard_service.get_member_stats.cache_clear()
+
+
+def test_member_stats_requires_auth():
+    response = client.get("/admin/dashboard/member-stats")
+    assert response.status_code == 401
+
+
+def test_get_sales_trend_is_cached():
+    dashboard_service.get_sales_trend.cache_clear()
+    conn, cursor = _mock_conn({"total_members": 0, "new_this_week": 0})
+    cursor.fetchall.return_value = [{"month": "2026-01", "total_cents": 100}]
+
+    try:
+        dashboard_service.get_sales_trend(conn, 6)
+        dashboard_service.get_sales_trend(conn, 6)
+
+        assert cursor.execute.call_count == 1
+    finally:
+        dashboard_service.get_sales_trend.cache_clear()
+
+
+def test_sales_trend_requires_auth():
+    response = client.get("/admin/dashboard/sales-trend")
+    assert response.status_code == 401
+
+
+def test_sales_trend_rejects_out_of_range_months():
+    response = client.get("/admin/dashboard/sales-trend", params={"months": 25})
+    assert response.status_code in (401, 422)

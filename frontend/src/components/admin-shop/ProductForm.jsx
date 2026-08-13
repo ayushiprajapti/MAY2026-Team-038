@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { uploadProductImage } from "../../api/shop";
 
 export default function ProductForm({ onAddProduct, onClose }) {
   const [sku, setSku] = useState("");
@@ -7,7 +8,7 @@ export default function ProductForm({ onAddProduct, onClose }) {
   const [category, setCategory] = useState("Books");
   const [priceInRupees, setPriceInRupees] = useState("");
   const [stockQuantity, setStockQuantity] = useState("");
-  const [images, setImages] = useState([]); // array of { name, dataUrl }
+  const [images, setImages] = useState([]); // array of { name, url, uploading }
   const [error, setError] = useState("");
   const fileInputRef = useRef(null);
   const dragIndex = useRef(null); // index of the card being dragged
@@ -43,20 +44,29 @@ export default function ProductForm({ onAddProduct, onClose }) {
     setDragOverIndex(null);
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
     if (!files.length) return;
 
-    files.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        setImages((prev) => [...prev, { name: file.name, dataUrl: ev.target.result }]);
-      };
-      reader.readAsDataURL(file);
-    });
-
     // Reset the input so the same file can be re-selected if removed
     e.target.value = "";
+
+    for (const file of files) {
+      const placeholder = { name: file.name, url: null, uploading: true };
+      setImages((prev) => [...prev, placeholder]);
+
+      try {
+        const { image_url } = await uploadProductImage(file);
+        setImages((prev) =>
+          prev.map((img) =>
+            img === placeholder ? { name: file.name, url: image_url, uploading: false } : img
+          )
+        );
+      } catch (err) {
+        setError(err.message || "Image upload failed.");
+        setImages((prev) => prev.filter((img) => img !== placeholder));
+      }
+    }
   };
 
   const removeImage = (index) => {
@@ -86,6 +96,11 @@ export default function ProductForm({ onAddProduct, onClose }) {
       return;
     }
 
+    if (images.some((img) => img.uploading)) {
+      setError("Please wait for image uploads to finish.");
+      return;
+    }
+
     // Convert price in Rupees to price_cents for DBML schema
     const priceCents = Math.round(price * 100);
 
@@ -97,11 +112,9 @@ export default function ProductForm({ onAddProduct, onClose }) {
       category,
       price_cents: priceCents,
       stock_quantity: stock,
-      // First image used as primary; fall back to placeholder if none uploaded.
-      // Data-URLs work for this prototype but are not durable — there is no
-      // image upload/storage endpoint on the backend yet.
+      // First uploaded image used as primary; fall back to placeholder if none uploaded.
       image_url: images.length > 0
-        ? images[0].dataUrl
+        ? images[0].url
         : "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=400",
     });
 
@@ -304,12 +317,18 @@ export default function ProductForm({ onAddProduct, onClose }) {
                           dragIndex.current === idx ? "opacity-40" : "opacity-100",
                         ].join(" ")}
                       >
-                        <img
-                          src={img.dataUrl}
-                          alt={img.name}
-                          draggable={false}
-                          className="w-full h-12 object-cover rounded border border-heritage-border/40 pointer-events-none"
-                        />
+                        {img.uploading ? (
+                          <div className="w-full h-12 flex items-center justify-center rounded border border-heritage-border/40 bg-heritage-cream/20 text-[8px] text-heritage-charcoal/50">
+                            Uploading…
+                          </div>
+                        ) : (
+                          <img
+                            src={img.url}
+                            alt={img.name}
+                            draggable={false}
+                            className="w-full h-12 object-cover rounded border border-heritage-border/40 pointer-events-none"
+                          />
+                        )}
                         {/* Primary badge */}
                         {idx === 0 && (
                           <span className="absolute bottom-0.5 left-0.5 bg-heritage-bronze/90 text-white text-[8px] font-semibold px-1 rounded leading-4">

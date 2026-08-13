@@ -3,6 +3,35 @@ import { startSession, sendMessage } from '../api/chat';
 import { ApiError } from '../api/client';
 import './FloatingChatbot.css';
 
+function BotIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="4" y="8" width="16" height="12" rx="2" />
+      <path d="M12 8V4" />
+      <circle cx="12" cy="3" r="1" fill="currentColor" stroke="none" />
+      <circle cx="9" cy="14" r="1.2" fill="currentColor" stroke="none" />
+      <circle cx="15" cy="14" r="1.2" fill="currentColor" stroke="none" />
+      <path d="M2 13h2M20 13h2" />
+    </svg>
+  );
+}
+
+function ChatIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+    </svg>
+  );
+}
+
+function CloseIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M18 6 6 18M6 6l12 12" />
+    </svg>
+  );
+}
+
 export default function FloatingChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
@@ -55,13 +84,13 @@ export default function FloatingChatbot() {
         <div className="floating-chat-window">
           <div className="floating-chat-header">
             <h3>Heritage Assistant</h3>
-            <button className="close-chat-btn" onClick={() => setIsOpen(false)}>✕</button>
+            <button className="close-chat-btn" onClick={() => setIsOpen(false)} aria-label="Close chat"><CloseIcon /></button>
           </div>
 
           <div className="floating-chat-messages">
             {messages.map((msg, idx) => (
               <div key={idx} className={`chat-message ${msg.sender === 'user' ? 'user-message' : 'bot-message'}`}>
-                {msg.sender === 'bot' && <div className="message-avatar">🤖</div>}
+                {msg.sender === 'bot' && <div className="message-avatar"><BotIcon /></div>}
                 <div className="message-bubble">
                   {msg.text.split('\n').map((line, i) => (
                     <span key={i}>{line}<br /></span>
@@ -95,7 +124,7 @@ export default function FloatingChatbot() {
 
       {!isOpen && (
         <button className="floating-chat-trigger with-text" onClick={() => setIsOpen(true)}>
-          <span className="trigger-icon">💬</span> Ask Assistant
+          <span className="trigger-icon"><ChatIcon /></span> Ask Assistant
         </button>
       )}
     </div>

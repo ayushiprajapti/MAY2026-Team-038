@@ -5,6 +5,7 @@ class TrailSiteResponse(BaseModel):
     id: UUID
     name: str
     category: str | None = None
+    themes: list[str] = []
     latitude: float
     longitude: float
     image_url: str | None = None

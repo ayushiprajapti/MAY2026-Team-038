@@ -16,9 +16,9 @@ export default function Login() {
     setIsLoading(true);
 
     try {
-      await login(email, password);
+      const user = await login(email, password);
       window.dispatchEvent(new Event("auth-change"));
-      navigate("/admin-dashboard");
+      navigate(user.role === "registered_member" ? "/" : "/admin-dashboard");
     } catch (err) {
       setError(err instanceof ApiError ? err.detail : "Something went wrong, please try again.");
     } finally {

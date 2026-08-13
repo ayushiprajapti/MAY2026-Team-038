@@ -1,7 +1,7 @@
 import { useState } from "react";
 import eventIllustration from "../../assets/event-illustration.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { create, update } from "../../api/events";
+import { create, update, uploadEventImage } from "../../api/events";
 import { ApiError } from "../../api/client";
 
 const EVENT_TYPES = [
@@ -24,10 +24,34 @@ export default function EventCreateForm() {
   const eventToEdit = state?.event;
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imageUrl, setImageUrl] = useState(eventToEdit?.image_url || "");
+  const [imageUploading, setImageUploading] = useState(false);
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    e.target.value = "";
+    if (!file) return;
+
+    setImageUploading(true);
+    setError("");
+    try {
+      const { image_url } = await uploadEventImage(file);
+      setImageUrl(image_url);
+    } catch (err) {
+      setError(err instanceof ApiError ? err.detail : "Image upload failed.");
+    } finally {
+      setImageUploading(false);
+    }
+  };
 
   const saveEvent = async (formEvent) => {
     formEvent.preventDefault();
     setError("");
+
+    if (imageUploading) {
+      setError("Please wait for the image upload to finish.");
+      return;
+    }
 
     const form = new FormData(formEvent.currentTarget);
     const registrationDeadlineRaw = form.get("registrationDeadline");
@@ -42,6 +66,7 @@ export default function EventCreateForm() {
       registration_deadline: registrationDeadlineRaw ? new Date(registrationDeadlineRaw).toISOString() : null,
       event_type: form.get("category"),
       description: form.get("description") || null,
+      image_url: imageUrl || null,
     };
 
     setIsSubmitting(true);
@@ -191,6 +216,29 @@ export default function EventCreateForm() {
                     ))}
                   </select>
                 </label>
+              </div>
+
+              <div className="block text-sm font-semibold text-[#4B3328]">
+                Event Image
+                <div className="mt-1 flex items-center gap-4">
+                  {imageUrl && !imageUploading && (
+                    <img
+                      src={imageUrl}
+                      alt="Event preview"
+                      className="h-16 w-16 rounded-lg border border-[#D7C3A8] object-cover"
+                    />
+                  )}
+                  <label className="cursor-pointer rounded-lg border border-[#D7C3A8] bg-[#FFF8EC] px-4 py-2.5 text-sm font-medium text-[#4B3328] transition hover:bg-[#F3E2C6]">
+                    {imageUploading ? "Uploading…" : imageUrl ? "Change image" : "Upload image"}
+                    <input
+                      type="file"
+                      accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp"
+                      className="hidden"
+                      disabled={imageUploading}
+                      onChange={handleImageChange}
+                    />
+                  </label>
+                </div>
               </div>
 
               <label className="block text-sm font-semibold text-[#4B3328]">

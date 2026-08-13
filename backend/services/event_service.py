@@ -41,6 +41,7 @@ def list_all_events(conn: connection) -> dict:
                 e.registration_deadline,
                 e.coordinator_id,
                 e.status,
+                e.image_url,
                 COUNT(er.id) FILTER (
                     WHERE er.status IN ('confirmed', 'waitlisted')
                 ) AS registration_count
@@ -102,9 +103,10 @@ def create_event(conn: connection, data: CreateEventRequest, coordinator_id: str
                 registration_deadline,
                 coordinator_id,
                 status,
+                image_url,
                 created_at
             )
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'published', now())
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 'published', %s, now())
             RETURNING
                 id,
                 title,
@@ -118,7 +120,8 @@ def create_event(conn: connection, data: CreateEventRequest, coordinator_id: str
                 participant_limit,
                 registration_deadline,
                 coordinator_id,
-                status
+                status,
+                image_url
             """,
             (
                 new_id,
@@ -133,6 +136,7 @@ def create_event(conn: connection, data: CreateEventRequest, coordinator_id: str
                 data.participant_limit,
                 data.registration_deadline,
                 coordinator_id,
+                data.image_url,
             ),
         )
         row = dict(cur.fetchone())
@@ -183,7 +187,8 @@ def update_event(conn: connection, event_id: str, data: UpdateEventRequest) -> d
                 participant_limit,
                 registration_deadline,
                 coordinator_id,
-                status
+                status,
+                image_url
             """,
             values,
         )
@@ -329,6 +334,7 @@ def list_upcoming_events(
                 e.participant_limit,
                 e.registration_deadline,
                 e.status,
+                e.image_url,
                 GREATEST(
                     e.participant_limit - COALESCE(
                         SUM(er.attendee_count) FILTER (WHERE er.status = 'confirmed'),
@@ -570,7 +576,8 @@ def list_user_event_history(conn: connection, user_id: str) -> list[dict]:
                 e.event_date,
                 e.start_time,
                 e.end_time,
-                e.status            AS event_status
+                e.status            AS event_status,
+                e.image_url
             FROM event_registrations AS er
             JOIN events AS e ON e.id = er.event_id
             WHERE er.user_id = %s

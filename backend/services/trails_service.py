@@ -21,12 +21,19 @@ SELECT
     hs.image_url,
     hs.description,
     r.name AS region_name,
+    COALESCE(theme_agg.theme_names, ARRAY[]::text[]) AS theme_names,
     ST_Y(hs.location::geometry) AS latitude,
     ST_X(hs.location::geometry) AS longitude,
     -- Group into clusters where points are within 5km (5000 meters) of each other
     ST_ClusterDBSCAN(ST_Transform(hs.location::geometry, 3857), eps := 5000, minpoints := 1) OVER () AS dbscan_cluster_id
 FROM heritage_sites hs
 LEFT JOIN regions r ON hs.region_id = r.id
+LEFT JOIN LATERAL (
+    SELECT array_agg(t.name ORDER BY t.name) AS theme_names
+    FROM heritage_site_themes hst
+    JOIN themes t ON t.id = hst.theme_id
+    WHERE hst.site_id = hs.id
+) theme_agg ON true
 WHERE hs.status = 'approved'
   AND hs.location IS NOT NULL
 ORDER BY dbscan_cluster_id, hs.name;
@@ -99,6 +106,7 @@ def get_dynamic_trails(conn: connection) -> list[TrailClusterResponse]:
                 id=row["id"],
                 name=row["name"],
                 category=row["category"],
+                themes=list(row["theme_names"] or []),
                 latitude=row["latitude"],
                 longitude=row["longitude"],
                 image_url=row["image_url"],

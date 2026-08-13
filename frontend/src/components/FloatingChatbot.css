@@ -36,7 +36,8 @@
 }
 
 .trigger-icon {
-  font-size: 1.5rem;
+  display: inline-flex;
+  align-items: center;
 }
 
 .floating-chat-window {
@@ -76,7 +77,9 @@
   background: transparent;
   border: none;
   color: #fff;
-  font-size: 1.2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   opacity: 0.7;
   transition: opacity 0.2s;
@@ -112,7 +115,15 @@
 }
 
 .message-avatar {
-  font-size: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(214, 159, 76, 0.15);
+  color: #d69f4c;
+  flex-shrink: 0;
   align-self: flex-end;
 }
 
