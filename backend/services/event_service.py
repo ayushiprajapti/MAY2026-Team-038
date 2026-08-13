@@ -145,6 +145,7 @@ def create_event(conn: connection, data: CreateEventRequest, coordinator_id: str
     # New event has no registrations yet
     row["registration_count"] = 0
     list_all_events.cache_clear()
+    list_upcoming_events.cache_clear()
     return row
 
 
@@ -216,6 +217,7 @@ def update_event(conn: connection, event_id: str, data: UpdateEventRequest) -> d
         row["registration_count"] = cur.fetchone()["registration_count"]
 
     list_all_events.cache_clear()
+    list_upcoming_events.cache_clear()
     return row
 
 
@@ -247,6 +249,7 @@ def delete_event(conn: connection, event_id: str) -> None:
         conn.commit()
 
     list_all_events.cache_clear()
+    list_upcoming_events.cache_clear()
 
 
 def list_event_registrants(conn: connection, event_id: str) -> dict:

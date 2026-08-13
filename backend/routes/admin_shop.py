@@ -49,6 +49,7 @@ def create_product(
         str(current_user["id"]),
     )
     shop_service.list_products.cache_clear()
+    shop_service.search_products.cache_clear()
     return result
 
 
@@ -68,6 +69,8 @@ def update_product(
         payload,
     )
     shop_service.list_products.cache_clear()
+    shop_service.get_product.cache_clear()
+    shop_service.search_products.cache_clear()
     return result
 
 
@@ -82,6 +85,8 @@ def delete_product(
 ):
     shop_service.delete_product(conn, str(product_id))
     shop_service.list_products.cache_clear()
+    shop_service.get_product.cache_clear()
+    shop_service.search_products.cache_clear()
 
 
 @router.get("/orders")

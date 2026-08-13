@@ -6,6 +6,7 @@ from psycopg2.extensions import connection
 from psycopg2.extras import RealDictCursor
 
 from database import pool
+from services.trails_service import get_dynamic_trails
 from utils.cache import cached
 
 SELECT_COLUMNS = """
@@ -172,6 +173,10 @@ def approve_submission(
         result = cur.fetchone()
 
     get_pending_submissions.cache_clear()
+    # A site's approval status change adds/removes it from the pool
+    # get_dynamic_trails clusters, so a stale trails cache would keep
+    # showing the old set of sites for up to its 5-minute TTL otherwise.
+    get_dynamic_trails.cache_clear()
     return result
 
 
@@ -201,6 +206,10 @@ def reject_submission(
         result = cur.fetchone()
 
     get_pending_submissions.cache_clear()
+    # A site's approval status change adds/removes it from the pool
+    # get_dynamic_trails clusters, so a stale trails cache would keep
+    # showing the old set of sites for up to its 5-minute TTL otherwise.
+    get_dynamic_trails.cache_clear()
     return result
 
 
@@ -225,4 +234,8 @@ def delete_submission(conn: connection, submission_id: UUID):
         result = cur.fetchone()
 
     get_pending_submissions.cache_clear()
+    # A site's approval status change adds/removes it from the pool
+    # get_dynamic_trails clusters, so a stale trails cache would keep
+    # showing the old set of sites for up to its 5-minute TTL otherwise.
+    get_dynamic_trails.cache_clear()
     return result
