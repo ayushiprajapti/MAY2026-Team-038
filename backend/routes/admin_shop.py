@@ -1,21 +1,36 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, File, UploadFile
 from psycopg2.extensions import connection
 
 from database import get_db
 from schemas.shop import (
     CreateProductRequest,
+    ImageUploadResponse,
     ProductResponse,
     UpdateProductRequest,
 )
 from services import shop_service
+from services.image_service import ImageFolder, upload_image
 from utils.auth import require_roles
 
 router = APIRouter(
     prefix="/shop/admin",
     tags=["admin-shop"],
 )
+
+
+@router.post(
+    "/products/upload-image",
+    response_model=ImageUploadResponse,
+    status_code=201,
+)
+def upload_product_image(
+    file: UploadFile = File(...),
+    current_user: dict = Depends(require_roles("shop_admin")),
+):
+    image_url = upload_image(file, ImageFolder.SHOP)
+    return {"image_url": image_url}
 
 
 @router.post(
@@ -34,6 +49,7 @@ def create_product(
         str(current_user["id"]),
     )
     shop_service.list_products.cache_clear()
+    shop_service.search_products.cache_clear()
     return result
 
 
@@ -53,6 +69,8 @@ def update_product(
         payload,
     )
     shop_service.list_products.cache_clear()
+    shop_service.get_product.cache_clear()
+    shop_service.search_products.cache_clear()
     return result
 
 
@@ -67,6 +85,8 @@ def delete_product(
 ):
     shop_service.delete_product(conn, str(product_id))
     shop_service.list_products.cache_clear()
+    shop_service.get_product.cache_clear()
+    shop_service.search_products.cache_clear()
 
 
 @router.get("/orders")

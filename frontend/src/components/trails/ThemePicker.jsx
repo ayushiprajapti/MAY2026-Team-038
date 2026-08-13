@@ -31,7 +31,7 @@ export default function ThemePicker({ themes, theme, onTheme }) {
         <input
           ref={inputRef}
           className="region-picker__input"
-          placeholder="All types"
+          placeholder="All monument types"
           value={open ? query : theme || ''}
           onFocus={() => {
             setOpen(true)
@@ -55,7 +55,7 @@ export default function ThemePicker({ themes, theme, onTheme }) {
         <ul className="region-picker__list">
           <li>
             <button type="button" onClick={() => pick(null)}>
-              All types
+              All monument types
             </button>
           </li>
           {filtered.length === 0 && <li className="region-picker__empty">No types match "{query}"</li>}

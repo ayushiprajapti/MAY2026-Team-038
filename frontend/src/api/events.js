@@ -1,7 +1,13 @@
-import { apiFetch } from "./client";
+import { apiFetch, apiFetchForm } from "./client";
 
 export async function list() {
   return apiFetch("/events/admin/");
+}
+
+export async function uploadEventImage(file) {
+  const form = new FormData();
+  form.append("file", file);
+  return apiFetchForm("/events/admin/upload-image", form);
 }
 
 export async function create(payload) {

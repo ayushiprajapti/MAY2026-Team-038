@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 from fastapi.testclient import TestClient
 
@@ -101,3 +101,61 @@ def test_update_product_requires_auth():
 def test_admin_orders_requires_auth():
     response = client.get("/shop/admin/orders")
     assert response.status_code == 401
+
+
+def test_delete_product_requires_auth():
+    response = client.delete(f"/shop/admin/products/{RANDOM_PRODUCT_ID}")
+    assert response.status_code == 401
+
+
+def test_delete_product_rejects_malformed_id_when_authorized():
+    from utils.auth import get_current_user
+
+    app.dependency_overrides[get_current_user] = lambda: {"id": RANDOM_PRODUCT_ID}
+    try:
+        with patch("utils.auth.get_user_roles", return_value=["shop_admin"]):
+            response = client.delete("/shop/admin/products/not-a-uuid")
+    finally:
+        app.dependency_overrides.pop(get_current_user, None)
+
+    assert response.status_code == 422
+
+
+def _admin_override():
+    """Bypass auth+role check via dependency_overrides/patch (no real
+    token/DB user needed) - require_roles() re-queries user_roles for the
+    live user id, so get_current_user alone isn't enough."""
+    from utils.auth import get_current_user
+
+    app.dependency_overrides[get_current_user] = lambda: {"id": RANDOM_PRODUCT_ID}
+    return patch("utils.auth.get_user_roles", return_value=["shop_admin"])
+
+
+def test_delete_product_success_when_authorized():
+    from utils.auth import get_current_user
+
+    with _admin_override(), patch.object(shop_service, "delete_product") as mock_delete:
+        try:
+            response = client.delete(f"/shop/admin/products/{RANDOM_PRODUCT_ID}")
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
+    assert response.status_code == 204
+    mock_delete.assert_called_once()
+
+
+def test_delete_product_returns_404_for_missing_product_when_authorized():
+    from fastapi import HTTPException
+    from utils.auth import get_current_user
+
+    with _admin_override(), patch.object(
+        shop_service,
+        "delete_product",
+        side_effect=HTTPException(status_code=404, detail="Product not found"),
+    ):
+        try:
+            response = client.delete(f"/shop/admin/products/{RANDOM_PRODUCT_ID}")
+        finally:
+            app.dependency_overrides.pop(get_current_user, None)
+
+    assert response.status_code == 404

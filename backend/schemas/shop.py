@@ -6,6 +6,9 @@ from pydantic import BaseModel, Field
 
 # ---------- Product ----------
 
+class ImageUploadResponse(BaseModel):
+    image_url: str
+
 class ProductResponse(BaseModel):
     id: UUID
     sku: str

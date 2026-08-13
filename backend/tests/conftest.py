@@ -115,6 +115,31 @@ class FakeCursor:
             ]
             self._result = None
 
+        elif q.startswith("update users set"):
+            # auth_service.update_user_profile — dynamic PATCH; infer the
+            # updated columns from the SET clause, same approach as the
+            # "update events set" branch below.
+            set_part = q.split("where")[0].split("set")[1]
+            cols = re.findall(r"(\w+) = %s", set_part)
+            user_id = params[-1]
+            match = next(
+                (u for u in self.store["users"] if u["id"] == user_id),
+                None,
+            )
+            if match is None:
+                self._result = None
+            else:
+                for col, val in zip(cols, params[:-1]):
+                    match[col] = val
+                self._result = {
+                    "id": match["id"],
+                    "email": match["email"],
+                    "full_name": match["full_name"],
+                    "phone": match.get("phone"),
+                    "is_active": match.get("is_active", True),
+                }
+            self._results = []
+
         # ── event service queries (added; existing patterns above are unchanged) ──
 
         elif q.startswith("select e.id, e.title,"):
@@ -145,13 +170,14 @@ class FakeCursor:
             self._results = []
 
         elif q.startswith("insert into events ( id, title,"):
-            # create_event — INSERT (12 params: id, title, description, event_type,
+            # create_event — INSERT (13 params: id, title, description, event_type,
             #                        site_id, venue, event_date, start_time, end_time,
-            #                        participant_limit, registration_deadline, coordinator_id)
+            #                        participant_limit, registration_deadline,
+            #                        coordinator_id, image_url)
             (
                 event_id, title, description, event_type, site_id, venue,
                 event_date, start_time, end_time, participant_limit,
-                registration_deadline, coordinator_id,
+                registration_deadline, coordinator_id, image_url,
             ) = params
             new_event = {
                 "id": event_id,
@@ -166,6 +192,7 @@ class FakeCursor:
                 "participant_limit": participant_limit,
                 "registration_deadline": registration_deadline,
                 "coordinator_id": coordinator_id,
+                "image_url": image_url,
                 "status": "published",
             }
             self.store.setdefault("events", []).append(new_event)

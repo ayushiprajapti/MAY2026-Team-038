@@ -3,9 +3,22 @@ import TrailsMap from './TrailsMap.jsx'
 import FilterBar from '../components/trails/FilterBar.jsx'
 import TrailPanel from '../components/trails/TrailPanel.jsx'
 import FloatingChatbot from '../components/FloatingChatbot.jsx'
-import { themes } from '../data/trails.js'
 import { apiFetch } from '../api/client.js'
 import './GlobeHome.css'
+
+// Trails don't have a theme of their own — pick the monument type shared by
+// the most sites in the cluster, falling back to "Mixed Heritage" when the
+// sites carry no theme tags at all (some approved sites predate tagging).
+function dominantTheme(sites) {
+  const counts = {}
+  for (const s of sites) {
+    for (const theme of s.themes || []) {
+      counts[theme] = (counts[theme] || 0) + 1
+    }
+  }
+  const ranked = Object.entries(counts).sort((a, b) => b[1] - a[1])
+  return ranked.length > 0 ? ranked[0][0] : 'Mixed Heritage'
+}
 
 const CITY_COORDS = {
   'Pune': [18.5204, 73.8567],
@@ -57,20 +70,12 @@ export default function GlobeHome() {
           const walkingMinutes = t.distance_km * 15
           const dwellMinutes = t.sites.length * 15
 
-          return {
-            id: t.trail_id.toString(),
-            name: t.name,
-            theme: 'Dynamic Cluster',
-            region: cityRegion,
-            era: 'Various',
-          distanceKm: t.distance_km,
-          durationMin: Math.round(walkingMinutes + dwellMinutes),
-          description: `An auto-generated trail clustering ${t.sites.length} heritage sites within a 5km radius.`,
-          sites: t.sites.map(s => ({
+          const mappedSites = t.sites.map(s => ({
             id: s.id,
             name: s.name,
             built: 'Unknown',
             type: s.category || 'Site',
+            themes: s.themes || [],
             icon: s.category === 'built' ? 'wada' : 'site',
             signification: s.description || 'No description available',
             narration: {
@@ -80,6 +85,17 @@ export default function GlobeHome() {
             lon: s.longitude,
             image_url: s.image_url
           }))
+
+          return {
+            id: t.trail_id.toString(),
+            name: t.name,
+            theme: dominantTheme(mappedSites),
+            region: cityRegion,
+            era: 'Various',
+          distanceKm: t.distance_km,
+          durationMin: Math.round(walkingMinutes + dwellMinutes),
+          description: `An auto-generated trail clustering ${t.sites.length} heritage sites within a 5km radius.`,
+          sites: mappedSites
         }
       })
       setTrails(mappedTrails)
@@ -126,6 +142,11 @@ export default function GlobeHome() {
     return Array.from(r).sort();
   }, [trails]);
 
+  const dynamicThemes = useMemo(() => {
+    const t = new Set(trails.map(tr => tr.theme).filter(Boolean));
+    return Array.from(t).sort();
+  }, [trails]);
+
   return (
     <div className="home">
       <div className="home__hero-quote">
@@ -135,7 +156,7 @@ export default function GlobeHome() {
       <div className="home__toolbar">
         <FilterBar
           regions={dynamicRegions}
-          themes={themes}
+          themes={dynamicThemes}
           region={region}
           theme={theme}
           onRegion={handleRegion}

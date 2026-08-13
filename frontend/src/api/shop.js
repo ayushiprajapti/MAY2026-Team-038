@@ -1,4 +1,4 @@
-import { apiFetch } from "./client";
+import { apiFetch, apiFetchForm } from "./client";
 
 export async function listProducts() {
   return apiFetch("/shop/products");
@@ -43,4 +43,10 @@ export async function deleteProduct(id) {
 
 export async function getAllOrders() {
   return apiFetch("/shop/admin/orders");
+}
+
+export async function uploadProductImage(file) {
+  const form = new FormData();
+  form.append("file", file);
+  return apiFetchForm("/shop/admin/products/upload-image", form);
 }

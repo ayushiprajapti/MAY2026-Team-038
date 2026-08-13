@@ -43,6 +43,7 @@ def list_products(conn: connection) -> list[dict]:
         return cur.fetchall()
 
 
+@cached(ttl_seconds=60)
 def get_product(conn: connection, product_id: str) -> dict:
     with conn.cursor(cursor_factory=RealDictCursor) as cur:
         cur.execute(
@@ -87,6 +88,7 @@ def _escape_like(query: str) -> str:
     return query.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
 
 
+@cached(ttl_seconds=60)
 def search_products(conn: connection, query: str) -> list[dict]:
     pattern = f"%{_escape_like(query)}%"
 

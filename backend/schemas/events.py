@@ -31,6 +31,11 @@ class CreateEventRequest(BaseModel):
     registration_deadline: datetime | None = None
     event_type: EventType
     description: str | None = None
+    image_url: str | None = None
+
+
+class ImageUploadResponse(BaseModel):
+    image_url: str
 
 
 class UpdateEventRequest(BaseModel):
@@ -51,6 +56,7 @@ class UpdateEventRequest(BaseModel):
     event_type: EventType | None = None
     description: str | None = None
     status: EventStatus | None = None
+    image_url: str | None = None
 
 
 class AdminEventResponse(BaseModel):
@@ -67,6 +73,7 @@ class AdminEventResponse(BaseModel):
     registration_deadline: datetime | None
     coordinator_id: UUID | None
     status: str
+    image_url: str | None = None
     registration_count: int
 
 
@@ -143,6 +150,7 @@ class PublicEventResponse(BaseModel):
     participant_limit: int
     registration_deadline: datetime | None
     status: str
+    image_url: str | None = None
 
     # Derived: participant_limit − confirmed/waitlisted registrations
     seats_left: int
@@ -202,3 +210,4 @@ class UserRegistrationResponse(BaseModel):
     start_time: time
     end_time: time | None
     event_status: str           # draft | published | cancelled | completed
+    image_url: str | None = None

@@ -12,6 +12,9 @@ class Settings(BaseSettings):
     cors_origins: str = "http://localhost:5173"
     nvidia_api_key: str = ""
     redis_url: str = "redis://localhost:6379/0"
+    cloudinary_cloud_name: str = ""
+    cloudinary_api_key: str = ""
+    cloudinary_api_secret: str = ""
 
 
 settings = Settings()
