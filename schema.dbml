@@ -1,0 +1,370 @@
+Enum role_name {
+  registered_member
+  volunteer
+  event_coordinator
+  heritage_expert
+  shop_admin
+  system_admin
+}
+
+Enum heritage_category {
+  built
+  natural
+  craft
+  intangible
+}
+
+Enum site_status {
+  pending_review
+  approved
+  rejected
+}
+
+Enum event_type {
+  heritage_walk
+  workshop
+  quiz
+  competition
+  cultural_event
+}
+
+Enum event_status {
+  draft
+  published
+  cancelled
+  completed
+}
+
+Enum registration_status {
+  confirmed
+  waitlisted
+  cancelled
+}
+
+Enum order_status {
+  pending
+  paid
+  shipped
+  delivered
+  cancelled
+}
+
+Enum payment_purpose {
+  event_registration
+  shop_order
+}
+
+Enum payment_status {
+  initiated
+  succeeded
+  failed
+  refunded
+}
+
+Enum chat_role {
+  user
+  assistant
+}
+
+// ---------- Identity & Access ----------
+
+Table languages {
+  code text [pk]
+  name text
+}
+
+Table users {
+  id uuid [pk]
+  full_name text
+  email text [unique]
+  phone text
+  password_hash text
+  preferred_language_code text
+  created_at timestamptz
+  is_active boolean
+}
+
+Table user_roles {
+  user_id uuid [pk]
+  role role_name [pk]
+}
+
+// ---------- Heritage Catalogue ----------
+
+Table regions {
+  id uuid [pk]
+  name text [unique]
+  boundary "geography(polygon)"
+  description text
+}
+
+Table themes {
+  id uuid [pk]
+  name text [unique]
+  description text
+}
+
+Table heritage_sites {
+  id uuid [pk]
+  name text
+  category heritage_category
+  location "geography(point)"
+  address text
+  construction_period text
+  historical_significance text
+  description text
+  image_url text
+  status site_status
+  submitted_by uuid
+  reviewed_by uuid
+  reviewed_at timestamptz
+  review_notes text
+  region_id uuid
+  created_at timestamptz
+  updated_at timestamptz
+}
+
+Table heritage_site_themes {
+  site_id uuid [pk]
+  theme_id uuid [pk]
+}
+
+// ---------- Trails & Voice Guide ----------
+
+Table heritage_trails {
+  id uuid [pk]
+  name text
+  region_id uuid
+  theme_id uuid
+  created_by uuid
+  created_at timestamptz
+}
+
+Table heritage_trail_stops {
+  trail_id uuid [pk]
+  site_id uuid
+  sequence_order int [pk]
+}
+
+Table voice_guide_scripts {
+  id uuid [pk]
+  site_id uuid
+  language_code text
+  script_text text
+  audio_url text
+  generated_at timestamptz
+
+  Indexes {
+    (site_id, language_code) [unique]
+  }
+}
+
+// ---------- Events & Registration ----------
+
+Table events {
+  id uuid [pk]
+  title text
+  description text
+  event_type event_type
+  site_id uuid
+  venue text
+  event_date date
+  start_time time
+  end_time time
+  participant_limit int
+  registration_deadline timestamptz
+  coordinator_id uuid
+  status event_status
+  image_url text
+  created_at timestamptz
+}
+
+Table event_registrations {
+  id uuid [pk]
+  event_id uuid
+  user_id uuid
+  status registration_status
+  first_name text
+  last_name text
+  email text
+  phone text
+  attendee_count int
+  note text
+  receive_event_updates boolean
+  registered_at timestamptz
+  payment_id uuid
+
+  Indexes {
+    (event_id, user_id) [unique]
+  }
+}
+
+// ---------- Shop & Payments ----------
+
+Table products {
+  id uuid [pk]
+  sku text [unique]
+  name text
+  description text
+  category text
+  price_cents int
+  stock_quantity int
+  image_url text
+  is_active boolean
+  rating decimal
+  reviews int
+  story text
+  material text
+  origin text
+  dimensions text
+  care text
+  created_by uuid
+  created_at timestamptz
+  updated_at timestamptz
+}
+
+Table inventory_logs {
+  id uuid [pk]
+  product_id uuid
+  change_qty int
+  reason text
+  created_by uuid
+  created_at timestamptz
+}
+
+Table orders {
+  id uuid [pk]
+  customer_id uuid
+  status order_status
+  total_cents int
+  shipping_address text
+  payment_id uuid
+  placed_at timestamptz
+}
+
+Table order_items {
+  id uuid [pk]
+  order_id uuid
+  product_id uuid
+  quantity int
+  unit_price_cents int
+}
+
+Table payments {
+  id uuid [pk]
+  payer_id uuid
+  purpose payment_purpose
+  amount_cents int
+  currency text
+  status payment_status
+  gateway_reference text
+  created_at timestamptz
+}
+
+// ---------- AI Chatbot (RAG) ----------
+
+Table chat_sessions {
+  id uuid [pk]
+  user_id uuid
+  started_at timestamptz
+  ended_at timestamptz
+}
+
+Table chat_messages {
+  id uuid [pk]
+  session_id uuid
+  role chat_role
+  content text
+  referenced_site_ids "uuid[]"
+  created_at timestamptz
+}
+
+Table heritage_site_embeddings {
+  id uuid [pk]
+  site_id uuid
+  content_chunk text
+  embedding "vector(1024)"
+  created_at timestamptz
+
+  Indexes {
+    site_id [unique]
+  }
+}
+
+// ---------- Relationships ----------
+
+Ref: users.preferred_language_code > languages.code
+Ref: user_roles.user_id > users.id
+
+Ref: heritage_sites.submitted_by > users.id
+Ref: heritage_sites.reviewed_by > users.id
+Ref: heritage_sites.region_id > regions.id
+Ref: heritage_site_themes.site_id > heritage_sites.id
+Ref: heritage_site_themes.theme_id > themes.id
+
+Ref: heritage_trails.region_id > regions.id
+Ref: heritage_trails.theme_id > themes.id
+Ref: heritage_trails.created_by > users.id
+Ref: heritage_trail_stops.trail_id > heritage_trails.id
+Ref: heritage_trail_stops.site_id > heritage_sites.id
+Ref: voice_guide_scripts.site_id > heritage_sites.id
+Ref: voice_guide_scripts.language_code > languages.code
+
+Ref: events.site_id > heritage_sites.id
+Ref: events.coordinator_id > users.id
+Ref: event_registrations.event_id > events.id
+Ref: event_registrations.user_id > users.id
+Ref: event_registrations.payment_id > payments.id
+
+Ref: products.created_by > users.id
+Ref: inventory_logs.product_id > products.id
+Ref: inventory_logs.created_by > users.id
+Ref: orders.customer_id > users.id
+Ref: orders.payment_id > payments.id
+Ref: order_items.order_id > orders.id
+Ref: order_items.product_id > products.id
+Ref: payments.payer_id > users.id
+
+Ref: chat_sessions.user_id > users.id
+Ref: chat_messages.session_id > chat_sessions.id
+Ref: heritage_site_embeddings.site_id > heritage_sites.id
+
+// ---------- Layout groups (mirrors the domain lanes in Database_ERD.html) ----------
+
+TableGroup identity_access {
+  languages
+  users
+  user_roles
+}
+
+TableGroup heritage_catalogue {
+  regions
+  themes
+  heritage_sites
+  heritage_site_themes
+}
+
+TableGroup trails_voice_guide {
+  heritage_trails
+  heritage_trail_stops
+  voice_guide_scripts
+}
+
+TableGroup events_registration {
+  events
+  event_registrations
+}
+
+TableGroup shop_payments {
+  products
+  inventory_logs
+  orders
+  order_items
+  payments
+}
+
+TableGroup ai_chatbot {
+  chat_sessions
+  chat_messages
+  heritage_site_embeddings
+}
