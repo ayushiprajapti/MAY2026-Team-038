@@ -25,8 +25,20 @@ def get_db() -> Iterator[psycopg2.extensions.connection]:
     try:
         yield conn
         conn.commit()
+    except (psycopg2.OperationalError, psycopg2.InterfaceError):
+        # The connection itself is dead - e.g. Neon's pooled endpoint
+        # silently drops idle connections after some minutes, and
+        # SimpleConnectionPool has no health check on getconn(). Closing
+        # it here (instead of falling through to putconn() below) stops
+        # the same broken connection from being recycled back into the
+        # pool and handed to the next request, which otherwise turns one
+        # dropped connection into every subsequent request 500ing until
+        # the whole process is restarted.
+        conn.close()
+        raise
     except Exception:
         conn.rollback()
         raise
     finally:
-        pool.putconn(conn)
+        if not conn.closed:
+            pool.putconn(conn)
