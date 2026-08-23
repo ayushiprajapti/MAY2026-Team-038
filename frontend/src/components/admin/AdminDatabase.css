@@ -121,3 +121,32 @@
   color: rgba(43, 33, 24, 0.6);
   font-style: italic;
 }
+
+/* map markers for AdminDatabase */
+.site-marker-wrap {
+  background: transparent;
+  border: none;
+}
+.site-marker {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(36, 26, 16, 0.88);
+  border: 1.5px solid #c8862e;
+  border-color: var(--ochre, #c8862e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 0 2px rgba(200, 134, 46, 0.15);
+  transition: transform 0.15s ease;
+}
+.site-marker:hover {
+  transform: scale(1.08);
+}
+.site-marker--active {
+  background: #c8862e;
+  background: var(--ochre, #c8862e);
+  border-color: #d1b764;
+  border-color: var(--brass-bright, #d1b764);
+  box-shadow: 0 0 14px rgba(226, 185, 105, 0.75);
+}

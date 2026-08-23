@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { approve, reject } from "../../api/heritage";
 import { ApiError } from "../../api/client";
 
 export default function VolunteerUploads({ uploads: initialUploads = [], onReviewCountChange }) {
   const [uploads, setUploads] = useState(initialUploads);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   // Keep local state in sync when the parent re-fetches
   React.useEffect(() => {
@@ -41,12 +43,12 @@ export default function VolunteerUploads({ uploads: initialUploads = [], onRevie
             Pending conservation reviews and heritage site uploads
           </p>
         </div>
-        <a
-          href="/admin-review"
+        <Link
+          to="/admin-review"
           className="text-heritage-red font-sans text-sm font-bold hover:underline transition-all flex items-center gap-1 cursor-pointer"
         >
           View All Pending ({activeReviews})
-        </a>
+        </Link>
       </div>
 
       {error && (
@@ -82,7 +84,10 @@ export default function VolunteerUploads({ uploads: initialUploads = [], onRevie
                     : "border-heritage-border/30 opacity-30 pointer-events-none scale-95"
                 }`}
               >
-                <div className="h-48 w-full overflow-hidden relative border-b border-heritage-border/20">
+                <div 
+                  className="h-48 w-full overflow-hidden relative border-b border-heritage-border/20 cursor-pointer"
+                  onClick={() => navigate("/admin-review")}
+                >
                   <img
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-in-out"
                     src={upload.image_url}

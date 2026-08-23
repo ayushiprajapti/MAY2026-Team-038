@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function formatDate(dateStr) {
   return new Date(`${dateStr}T00:00:00`).toLocaleDateString("en-IN", {
@@ -18,6 +19,7 @@ const statusBg = (status) => {
 };
 
 export default function EventsPanel({ todayEvents = [], upcomingEvents = [] }) {
+  const navigate = useNavigate();
   const rows = [
     ...todayEvents.map((e) => ({ ...e, timingLabel: "Today" })),
     ...upcomingEvents.map((e) => ({ ...e, timingLabel: "Upcoming" })),
@@ -90,10 +92,10 @@ export default function EventsPanel({ todayEvents = [], upcomingEvents = [] }) {
       </div>
 
       <button
-        onClick={() => alert("Redirecting to full Chapter Calendar...")}
+        onClick={() => navigate("/admin/events")}
         className="w-full mt-6 py-3 border border-heritage-bronze text-heritage-bronze font-sans text-xs font-semibold uppercase tracking-wider rounded hover:bg-heritage-bronze hover:text-white transition-all duration-300 shadow-sm cursor-pointer"
       >
-        View Full Calendar
+        View All Details
       </button>
     </div>
   );
