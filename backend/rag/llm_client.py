@@ -25,16 +25,22 @@ def embed_texts(texts: list[str], input_type: str) -> list[list[float]]:
     """input_type must be 'query' (embedding a user question) or 'passage'
     (embedding a site chunk during indexing) - nv-embedqa-e5-v5 is an
     asymmetric retrieval model and gives poor results if these are swapped."""
-    response = requests.post(
-        EMBEDDINGS_URL,
-        headers=_headers(),
-        json={"input": texts, "model": EMBEDDING_MODEL, "input_type": input_type},
-        timeout=TIMEOUT_SECONDS,
-    )
-    response.raise_for_status()
-    data = response.json()["data"]
-    ordered = sorted(data, key=lambda item: item["index"])
-    return [item["embedding"] for item in ordered]
+    all_embeddings = []
+    # Batch requests into chunks of 50 to avoid API limits (400 Bad Request)
+    batch_size = 50
+    for i in range(0, len(texts), batch_size):
+        batch_texts = texts[i : i + batch_size]
+        response = requests.post(
+            EMBEDDINGS_URL,
+            headers=_headers(),
+            json={"input": batch_texts, "model": EMBEDDING_MODEL, "input_type": input_type, "encoding_format": "float", "truncate": "END"},
+            timeout=TIMEOUT_SECONDS,
+        )
+        response.raise_for_status()
+        data = response.json()["data"]
+        ordered = sorted(data, key=lambda item: item["index"])
+        all_embeddings.extend([item["embedding"] for item in ordered])
+    return all_embeddings
 
 
 def generate_answer(messages: list[dict[str, str]], max_tokens: int = 1024) -> str:
