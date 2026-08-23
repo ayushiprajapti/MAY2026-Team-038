@@ -480,11 +480,7 @@ export default function UploadHeritage() {
                     ))}
                   </ul>
 
-                  <p className="mt-2 text-[11px] text-amber-700">
-                    Image storage is not yet supported by the current backend
-                    submission API. The selected files are not sent to the
-                    database yet.
-                  </p>
+
                 </div>
               )}
             </div>

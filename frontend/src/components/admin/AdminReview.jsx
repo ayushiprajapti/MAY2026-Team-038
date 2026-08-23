@@ -282,48 +282,27 @@ function AdminReview() {
                   </tbody>
                 </table>
 
-                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mt-6 border-t border-heritage-border/30 pt-4 font-sans text-xs select-none">
-                  <div className="text-heritage-charcoal/60 font-medium">
-                    Showing {filteredSubmissions.length === 0 ? 0 : startIndex + 1} to{" "}
-                    {Math.min(startIndex + ITEMS_PER_PAGE, filteredSubmissions.length)} of{" "}
-                    {filteredSubmissions.length} submissions
-                  </div>
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mt-6 border-t border-heritage-border/30 pt-4 font-sans text-xs select-none text-heritage-charcoal/70 font-medium">
+                  <span>
+                    Page {currentPage} of {totalPages} &middot; {filteredSubmissions.length} submission{filteredSubmissions.length === 1 ? '' : 's'}
+                  </span>
                   {totalPages > 1 && (
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex gap-2">
                       <button
-                        onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
-                        disabled={currentPage === 1}
-                        aria-label="Previous page"
-                        className="p-1.5 border border-heritage-border/60 text-heritage-charcoal hover:bg-heritage-cream rounded-md disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-95 cursor-pointer"
+                        type="button"
+                        onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                        disabled={currentPage <= 1}
+                        className="px-3 py-1.5 border border-heritage-border/60 hover:bg-heritage-cream rounded-md disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 active:scale-95 cursor-pointer font-medium"
                       >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                        </svg>
+                        Previous
                       </button>
-                      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                        <button
-                          key={page}
-                          onClick={() => setCurrentPage(page)}
-                          aria-label={`Go to page ${page}`}
-                          aria-current={currentPage === page ? "page" : undefined}
-                          className={`w-7 h-7 flex items-center justify-center border rounded-md font-semibold transition-all active:scale-95 cursor-pointer ${
-                            currentPage === page
-                              ? "bg-heritage-red text-white border-heritage-red shadow-sm"
-                              : "border-heritage-border/60 text-heritage-charcoal hover:bg-heritage-cream hover:text-heritage-red"
-                          }`}
-                        >
-                          {page}
-                        </button>
-                      ))}
                       <button
-                        onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
-                        disabled={currentPage === totalPages}
-                        aria-label="Next page"
-                        className="p-1.5 border border-heritage-border/60 text-heritage-charcoal hover:bg-heritage-cream rounded-md disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-95 cursor-pointer"
+                        type="button"
+                        onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                        disabled={currentPage >= totalPages}
+                        className="px-3 py-1.5 border border-heritage-border/60 hover:bg-heritage-cream rounded-md disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 active:scale-95 cursor-pointer font-medium"
                       >
-                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                        </svg>
+                        Next
                       </button>
                     </div>
                   )}

@@ -260,47 +260,27 @@ export default function ProductList({ products, onToggleActive, onDeleteProduct,
         </div>
 
         {/* Pagination Controls */}
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mt-6 border-t border-heritage-border/30 pt-4 font-sans text-xs select-none">
-          <div className="text-heritage-charcoal/60 font-medium">
-            Showing {filteredProducts.length === 0 ? 0 : startIndex + 1} to {Math.min(startIndex + itemsPerPage, filteredProducts.length)} of {filteredProducts.length} entries
-          </div>
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mt-6 border-t border-heritage-border/30 pt-4 font-sans text-xs select-none text-heritage-charcoal/70 font-medium">
+          <span>
+            Page {currentPage} of {totalPages} &middot; {filteredProducts.length} product{filteredProducts.length === 1 ? '' : 's'}
+          </span>
           {totalPages > 1 && (
-            <div className="flex items-center gap-1.5">
+            <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-                disabled={currentPage === 1}
-                className="p-1.5 border border-heritage-border/60 text-heritage-charcoal hover:bg-heritage-cream rounded-md disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150 active:scale-95 cursor-pointer"
-                title="Previous Page"
+                disabled={currentPage <= 1}
+                className="px-3 py-1.5 border border-heritage-border/60 hover:bg-heritage-cream rounded-md disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 active:scale-95 cursor-pointer"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                </svg>
+                Previous
               </button>
-              {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((page) => (
-                <button
-                  key={page}
-                  type="button"
-                  onClick={() => setCurrentPage(page)}
-                  className={`w-7 h-7 flex items-center justify-center border rounded-md font-semibold transition-all duration-150 active:scale-95 cursor-pointer ${
-                    currentPage === page
-                      ? "bg-heritage-red text-white border-heritage-red shadow-sm"
-                      : "border-heritage-border/60 text-heritage-charcoal hover:bg-heritage-cream hover:text-heritage-red"
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
               <button
                 type="button"
                 onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages}
-                className="p-1.5 border border-heritage-border/60 text-heritage-charcoal hover:bg-heritage-cream rounded-md disabled:opacity-30 disabled:cursor-not-allowed transition-all duration-150 active:scale-95 cursor-pointer"
-                title="Next Page"
+                disabled={currentPage >= totalPages}
+                className="px-3 py-1.5 border border-heritage-border/60 hover:bg-heritage-cream rounded-md disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-150 active:scale-95 cursor-pointer"
               >
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
+                Next
               </button>
             </div>
           )}
